@@ -1,11 +1,9 @@
-
-import Hello from '@/components/Hello'
+import Utils from 'src/libs/utils.js'
 
 export default [
   {
     path: '/',
-    name: 'Hello',
-    component: Hello
+    component: Utils.getPath('index/index')
   }
 ]
 
