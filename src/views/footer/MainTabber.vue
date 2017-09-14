@@ -1,8 +1,8 @@
 <template>
-    <tabbar>
+    <tabbar class="footer">
       <tabbar-item v-for="(item, index) in tabbars" :key="index">
-        <img slot="icon" src="../../assets/logo.png">
-        <span slot="label">{{item.label}}</span>
+        <img slot="icon" :src="item.icon">
+        <p slot="label">{{item.label}}</p>
       </tabbar-item>
     </tabbar>
 </template>
@@ -28,25 +28,34 @@ export default {
         {
           label: '首页',
           url: '/',
-          icon: ''
+          icon: 'static/logo.png'
         },
         {
           label: '任务大厅',
           url: '/mission',
-          icon: ''
+          icon: 'static/logo.png'
         },
         {
           label: '我的任务',
           url: '/myMission',
-          icon: ''
+          icon: 'static/logo.png'
         },
         {
           label: '个人中心',
           url: '/member',
-          icon: ''
+          icon: 'static/logo.png'
         }
       ]
     }
   }
 }
 </script>
+
+<style lang="less" scoped>
+.footer{
+  position: fixed;
+  left: 0;
+  bottom: 0;
+}
+</style>
+
