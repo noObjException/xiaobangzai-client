@@ -1,6 +1,6 @@
 <template>
-  <div class="container">
-    <swiper :list="swipers"></swiper>
+  <div>
+    <swiper :list="swipers" auto></swiper>
 
     <flexbox>
       <flexbox-item v-for="(item, index) in navs" :key="index">
@@ -15,49 +15,56 @@
       </flexbox-item>
     </flexbox>
 
-    <group>
-      <cell>
-        <img slot="icon" width="20" style="display:block;margin-right:5px;" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAC4AAAAuCAMAAABgZ9sFAAAAVFBMVEXx8fHMzMzr6+vn5+fv7+/t7e3d3d2+vr7W1tbHx8eysrKdnZ3p6enk5OTR0dG7u7u3t7ejo6PY2Njh4eHf39/T09PExMSvr6+goKCqqqqnp6e4uLgcLY/OAAAAnklEQVRIx+3RSRLDIAxE0QYhAbGZPNu5/z0zrXHiqiz5W72FqhqtVuuXAl3iOV7iPV/iSsAqZa9BS7YOmMXnNNX4TWGxRMn3R6SxRNgy0bzXOW8EBO8SAClsPdB3psqlvG+Lw7ONXg/pTld52BjgSSkA3PV2OOemjIDcZQWgVvONw60q7sIpR38EnHPSMDQ4MjDjLPozhAkGrVbr/z0ANjAF4AcbXmYAAAAASUVORK5CYII=">
-
-        <marquee>
-          <marquee-item v-for="(item, index) in notices" :key="index">{{item.title}}</marquee-item>
-        </marquee>
-      </cell>
-    </group>
+    <div class="notice">
+    <flexbox>
+      <flexbox-item :span="1">
+        <icon type="info"></icon>
+      </flexbox-item>
+      <flexbox-item :span="9">
+        <swiper auto height="30px" direction="vertical" :show-dots="false">
+          <swiper-item v-for="(item, index) in notices" :key="index">
+            <router-link :to="item.url">
+            {{item.title}}
+            </router-link>
+            </swiper-item>
+        </swiper>
+      </flexbox-item>
+    </flexbox>
+    </div>
 
     <div class="cube">
       <flexbox>
         <flexbox-item>
-          <router-link :to="cubes[0].url" class="cube-left">
+          <router-link :to="String(cubes.left.url)" class="cube-left">
             <div class="icon">
-              <img :src="BASE_IMG + cubes[0].image">
+              <img :src="BASE_IMG + cubes.left.image">
             </div>
-            <h3>{{cubes[0].title}}</h3>
-            <p>{{cubes[0].desc}}</p>
+            <h3>{{cubes.left.title}}</h3>
+            <p>{{cubes.left.desc}}</p>
           </router-link>
         </flexbox-item>
 
         <flexbox-item>
           <flexbox>
             <flexbox-item style="margin-bottom:10px">
-              <router-link :to="cubes[1].url" class="cube-right">
+              <router-link :to="String(cubes.top.url)" class="cube-right">
                 <div class="icon">
-                  <img :src="BASE_IMG + cubes[1].image">
+                  <img :src="BASE_IMG + cubes.top.image">
                 </div>
-                <h3>{{cubes[1].title}}</h3>
-                <p>{{cubes[1].desc}}</p>
+                <h3>{{cubes.top.title}}</h3>
+                <p>{{cubes.top.desc}}</p>
               </router-link>
             </flexbox-item>
           </flexbox>
 
           <flexbox>
             <flexbox-item>
-              <router-link :to="cubes[2].url" class="cube-right">
+              <router-link :to="String(cubes.bottom.url)" class="cube-right">
                 <div class="icon">
-                  <img :src="BASE_IMG + cubes[2].image">
+                  <img :src="BASE_IMG + cubes.bottom.image">
                 </div>
-                <h3>{{cubes[2].title}}</h3>
-                <p>{{cubes[2].desc}}</p>
+                <h3>{{cubes.bottom.title}}</h3>
+                <p>{{cubes.bottom.desc}}</p>
               </router-link>
             </flexbox-item>
           </flexbox>
@@ -65,13 +72,12 @@
       </flexbox>
     </div>
 
-    <main-tabber></main-tabber>
+    
   </div>
 </template>
 
 <script>
-import { Swiper, SwiperItem, Flexbox, FlexboxItem, Group, Cell, Marquee, MarqueeItem } from 'vux'
-import MainTabber from '../footer/MainTabber'
+import { Swiper, SwiperItem, Flexbox, FlexboxItem, Group, Cell, Marquee, MarqueeItem, Icon } from 'vux'
 
 export default {
   data () {
@@ -80,19 +86,23 @@ export default {
       swipers: [],
       navs: [],
       notices: [],
-      cubes: []
+      cubes: {
+        left: [],
+        top: [],
+        bottom: []
+      }
     }
   },
   components: {
     Swiper,
     SwiperItem,
-    MainTabber,
     Flexbox,
     FlexboxItem,
     Group,
     Cell,
     Marquee,
-    MarqueeItem
+    MarqueeItem,
+    Icon
   },
   created () {
     this.initData()
@@ -108,7 +118,11 @@ export default {
         }))
         this.navs = data.navs
         this.notices = data.notices
-        this.cubes = data.cubes
+        this.cubes = {
+          left: data.cubes[0],
+          top: data.cubes[1],
+          bottom: data.cubes[2]
+        }
       })
     }
   }
@@ -117,10 +131,6 @@ export default {
 </script>
 
 <style lang="less" scoped>
-.container {
-  margin-bottom: 20%;
-}
-
 .navs {
   text-align: center;
   padding-top: 10px;
@@ -172,5 +182,11 @@ export default {
       font-size: 12px;
     }
   }
+}
+
+.notice{
+  border-top: 1px solid #000;
+  border-bottom: 1px solid #000;
+  line-height: 30px;
 }
 </style>

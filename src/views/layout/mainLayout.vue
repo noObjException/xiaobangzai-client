@@ -1,24 +1,28 @@
 <template>
-    <tabbar class="footer">
-      <tabbar-item v-for="(item, index) in tabbars" :key="index" :link="item.url">
-        <img slot="icon" :src="item.icon">
-        <p slot="label">{{item.label}}</p>
-      </tabbar-item>
-    </tabbar>
+    <div style="height: 100%;">
+        <view-box ref="viewBox">
+        <x-header slot="header">youbang</x-header>
+
+            <router-view></router-view>
+
+            <tabbar slot="bottom" style="position:fixed;">
+                <tabbar-item v-for="(item, index) in tabbars" :key="index" :link="item.url">
+                    <img slot="icon" :src="item.icon">
+                    <p slot="label">{{item.label}}</p>
+                </tabbar-item>
+            </tabbar>
+        </view-box>
+    </div>
 </template>
 
 <script>
-import { Tabbar, TabbarItem } from 'vux'
-
+import { XHeader, ViewBox, Tabbar, TabbarItem } from 'vux'
 export default {
   components: {
+    XHeader,
+    ViewBox,
     Tabbar,
     TabbarItem
-  },
-  ready () {
-
-  },
-  methods: {
   },
   data () {
     return {
@@ -49,11 +53,7 @@ export default {
 }
 </script>
 
-<style lang="less" scoped>
-.footer{
-  // position: fixed;
-  // left: 0;
-  // bottom: 0;
-}
+<style>
+
 </style>
 
