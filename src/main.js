@@ -5,9 +5,11 @@ import FastClick from 'fastclick'
 import VueRouter from 'vue-router'
 import routes from './router'
 import App from './App'
+import Http from 'src/libs/fetch.js'
+
+Vue.use(Http)
 
 Vue.use(VueRouter)
-
 const router = new VueRouter({
   routes
 })
