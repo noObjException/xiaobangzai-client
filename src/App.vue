@@ -3,11 +3,23 @@
     <transition name="router-fade" mode="out-in">
       <router-view></router-view>
     </transition>
+    <loading v-model="isLoading"></loading>
   </div>
 </template>
 
 <script>
+import { Loading } from 'vux'
+import { mapGetters } from 'vuex'
+
 export default {
+  components: {
+    Loading
+  },
+  computed: {
+    ...mapGetters([
+      'isLoading'
+    ])
+  }
 }
 </script>
 
