@@ -77,7 +77,7 @@
 </template>
 
 <script>
-import { Swiper, SwiperItem, Flexbox, FlexboxItem, Group, Cell, Marquee, MarqueeItem, Icon } from 'vux'
+import { Swiper, SwiperItem, Flexbox, FlexboxItem, Group, Cell, Icon } from 'vux'
 
 export default {
   data () {
@@ -100,8 +100,6 @@ export default {
     FlexboxItem,
     Group,
     Cell,
-    Marquee,
-    MarqueeItem,
     Icon
   },
   created () {
