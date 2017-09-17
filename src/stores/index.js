@@ -6,7 +6,7 @@ import mutations from './mutations'
 import getters from './getters'
 Vue.use(Vuex)
 const state = {
-  openid: 'oSdVwwRQoGXAyOvUkondEeZEknok', // 用户openid
+  openid: 'openid10086111', // 用户openid
   token: '', // api请求token
   userInfo: null, // 用户信息
   addAddress: '',

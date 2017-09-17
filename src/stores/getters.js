@@ -1,3 +1,4 @@
 export default {
-  isLoading: state => state.isLoading
+  isLoading: state => state.isLoading,
+  openid: state => state.openid
 }

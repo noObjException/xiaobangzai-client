@@ -1,8 +1,8 @@
 <template>
   <div>
     <div class="avatar">
-      <img src="../../assets/logo.png" />
-      <p>陈总</p>
+      <img :src="avatar"/>
+      <p>{{nickname}}</p>
     </div>
     <group>
       <cell title="我的订单" value="查看全部任务" is-link>
@@ -44,10 +44,10 @@
     </div>
 
     <group>
-      <cell title="我的余额" value="9999" is-link>
+      <cell title="我的余额" :value="balance" is-link>
         <img slot="icon" width="20" src="../../assets/logo.png" />
       </cell>
-      <cell title="我的积分" value="9999" is-link>
+      <cell title="我的积分" :value="credit" is-link>
         <img slot="icon" width="20" src="../../assets/logo.png" />
       </cell>
     </group>
@@ -69,6 +69,8 @@
 
 <script>
 import { Badge, Group, Cell, Grid, GridItem } from 'vux'
+import { mapGetters } from 'vuex'
+
 export default {
   components: {
     Badge,
@@ -79,6 +81,32 @@ export default {
   },
   data () {
     return {
+      avatar: '../../../static/logo.png',
+      nickname: '',
+      balance: 0.00,
+      credit: 0
+    }
+  },
+  computed: {
+    ...mapGetters([
+      'openid'
+    ])
+  },
+  created () {
+    this.initData()
+  },
+  methods: {
+    async initData () {
+      await this.$http.get('/members/' + this.openid).then(res => {
+        let data = res.data
+
+        if (data.avatar) {
+          this.avatar = data.avatar
+        }
+        this.nickname = data.nickname
+        this.balance = data.balance
+        this.credit = data.credit
+      })
     }
   }
 }
