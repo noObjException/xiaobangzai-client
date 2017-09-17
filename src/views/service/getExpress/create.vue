@@ -1,13 +1,15 @@
 <template>
   <div>
     <group>
-      <cell :link="'/addressList'" :inline-desc="'请选择您的收货地址'"></cell>
+      <cell v-if="!choosedAddress" link="/address" inline-desc="请选择您的收货地址"></cell>
+      <cell v-else link="/address/list" :title="choosedAddress.realname+ ' '+choosedAddress.mobile" :inline-desc="choosedAddress.college+ ' ' +choosedAddress.area">
+      </cell>
     </group>
 
     <group>
-      <popup-picker title="快递公司" :placeholder="'必选'" :data="expressCompanys" v-model="formData.expressCompany" :value-text-align="'right'"></popup-picker>
-      <cell title="物品信息" @click.native="inputInfo" is-link></cell>
-      <popup-picker title="送达时间" :placeholder="'必选'" :data="sendTime" v-model="formData.sendValue" :value-text-align="'right'"></popup-picker>
+      <popup-radio title="快递公司" :options="expressCompanys" v-model="formData.expressCompany" value-text-align="right"></popup-radio>
+      <cell title="物品信息" @click.native="inputInfo" :value="info" is-link></cell>
+      <popup-radio title="送达时间" :options="arriveTimes" v-model="formData.arriveTime" value-text-align="right"></popup-radio>
     </group>
 
     <group>
@@ -16,10 +18,10 @@
 
     <group>
       <cell :inline-desc="'增加 '+formData.addMoney+' 元运费'" :primary="'content'">
-        <range v-model="addMoney" :min="0" :max="10" :step="0.5"></range>
+        <range v-model="formData.addMoney" :min="0" :max="10" :step="0.5"></range>
       </cell>
     </group>
-
+    
     <load-more :background-color="'#fbf9fe'" :show-loading="false" :tip="'亲,您可以加价让快递员优先配送哦'"></load-more>
 
     <box :gap="'10px 10px'">
@@ -27,47 +29,45 @@
       <load-more :background-color="'#fbf9fe'" :show-loading="false" :tip="'注:一件一单,重量小于3kg,超出此重量,每公斤额外收取1元费用'"></load-more>
     </box>
 
-    <div v-transfer-dom>
-      <popup v-model="show" height="100%">
-        <div class="info-container">
-          <p>物品类型</p>
+    <popup v-model="show" height="100%">
+      <div class="info-container">
+        <p>物品类型</p>
 
-          <flexbox :gutter="0" wrap="wrap">
-            <flexbox-item :span="1/3" v-for="(item, index) in expressTypes" :key="index">
-              <x-button plain mini @click.native="chooseType(item.name)">{{item.name}}</x-button>
-            </flexbox-item>
-            </flexbox-item>
-          </flexbox>
+        <div class="info-type">
+            <div class="info-type-item" v-for="(item, index) in expressTypes" :key="index">
+              <x-button mini :type="isChoose(item.title)" @click.native="chooseType(item.title)">{{item.title}}</x-button>
+            </div>
         </div>
-        <group>
-          <x-input title="其他:" v-model="other"></x-input>
-        </group>
+      </div>
 
-        <group>
-          <selector title="物品重量" :options="weights" v-model="weight"></selector>
-        </group>
+      <group>
+        <x-input title="其他:" v-model="formData.other"></x-input>
+      </group>
 
-        <group>
-          <x-button type="primary" @click.native="fillInfo">确定</x-button>
-        </group>
+      <group>
+        <selector title="物品重量" :options="expressWeights" v-model="formData.expressWeight"></selector>
+      </group>
 
-      </popup>
-    </div>
+      <group>
+        <x-button type="primary" @click.native="fillInfo">确定</x-button>
+        <x-button type="default" @click.native="cencel">取消</x-button>
+      </group>
+
+    </popup>
   </div>
 </template>
 <script>
-import { Selector, PopupRadio, XButton, TransferDom, Popup, Group, Cell, PopupPicker, XInput, XTextarea, Range, Box, LoadMore, Flexbox, FlexboxItem } from 'vux'
+import { Selector, PopupRadio, XButton, Popup, Group, Cell, XInput, XTextarea, Range, Box, LoadMore, Flexbox, FlexboxItem } from 'vux'
+import { mapGetters } from 'vuex'
 
 export default {
   components: {
     Selector,
     PopupRadio,
     XButton,
-    TransferDom,
     Popup,
     Group,
     Cell,
-    PopupPicker,
     XInput,
     XTextarea,
     Range,
@@ -78,29 +78,52 @@ export default {
   },
   data () {
     return {
-      sendTime: ['马上', '尽快', '立刻'],
-      expressCompanys: ['中通快递', '圆通快递', '顺丰快递'],
+      arriveTimes: [],
+      expressCompanys: [],
       show: false,
-      weights: ['1kg', '2kg'],
+      expressWeights: [],
       expressTypes: [],
       formData: {
-        sendValue: '',
+        arriveTime: '马上',
         expressCompany: '',
         other: '',
         expressType: '',
-        weight: '',
-        addMoney: 1,
+        expressWeight: '',
+        addMoney: 0,
         remark: ''
       }
     }
   },
+  created () {
+    this.initData()
+  },
+  computed: {
+    ...mapGetters([
+      'choosedAddress',
+      'openid'
+    ]),
+    info () {
+      let type = this.formData.expressType
+      let weight = this.formData.expressWeight
+      return type || weight ? type + '/' + weight : ''
+    }
+  },
   methods: {
+    async initData () {
+      this.$http.get('/getExpress/initData').then(res => {
+        let data = res.data
+        this.expressCompanys = data.expressCompanys
+        this.arriveTimes = data.arriveTimes
+      })
+    },
     createMission () {
       this.$router.push('/missionConfirm/getExpress')
     },
     inputInfo () {
-      this.$http.get('/expressTypes').then(res => {
-        this.expressTypes = res.data
+      this.$http.get('/getExpress/initInfoData').then(res => {
+        let data = res.data
+        this.expressTypes = data.expressTypes
+        this.expressWeights = data.expressWeights
       })
       this.show = true
     },
@@ -108,7 +131,16 @@ export default {
       this.show = false
     },
     chooseType (name) {
-      this.expressType = name
+      this.formData.expressType = name
+    },
+    isChoose (name) {
+      return this.formData.expressType === name ? 'primary' : 'default'
+    },
+    cencel () {
+      this.formData.expressType = ''
+      this.formData.other = ''
+      this.formData.expressWeight = ''
+      this.show = false
     }
   }
 }
@@ -118,11 +150,14 @@ export default {
 .info-container {
   padding: 12px;
   background-color: #fff;
-}
-
-.vux-flexbox-item {
-  text-align: center;
-  margin-bottom: 10px;
+  .info-type{
+    display: flex;
+    flex-wrap: wrap;
+    .info-type-item{
+      margin-right: 4px;
+      margin-top: 6px;
+    }
+  }
 }
 </style>
 

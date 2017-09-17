@@ -26,6 +26,14 @@ export default [
         component: Utils.getPath('service/getExpress/create')
       }
     ]
+  },
+  {
+    path: '/address',
+    component: Utils.getPath('address/list')
+  },
+  {
+    path: '/address/edit',
+    component: Utils.getPath('address/edit')
   }
 ]
 
