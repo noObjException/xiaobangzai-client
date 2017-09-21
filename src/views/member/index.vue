@@ -47,7 +47,7 @@
       <cell title="我的余额" :value="balance" is-link>
         <img slot="icon" width="20" src="../../assets/logo.png" />
       </cell>
-      <cell title="我的积分" :value="credit" is-link>
+      <cell title="我的积分" :value="credit" is-link link="/member/credit">
         <img slot="icon" width="20" src="../../assets/logo.png" />
       </cell>
     </group>

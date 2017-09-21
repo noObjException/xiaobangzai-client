@@ -18,6 +18,10 @@ export default [
     component: Utils.getPath('member/index')
   },
   {
+    path: '/member/credit',
+    component: Utils.getPath('member/credit')
+  },
+  {
     path: '/service',
     component: serviceLayout,
     children: [
