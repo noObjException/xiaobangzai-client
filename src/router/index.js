@@ -10,22 +10,30 @@ export default [
       {
         path: '',
         component: Utils.getPath('index/index')
-      },
-      {
-        path: 'member',
-        component: Utils.getPath('member/index')
       }
     ]
+  },
+  {
+    path: '/member',
+    component: Utils.getPath('member/index')
   },
   {
     path: '/service',
     component: serviceLayout,
     children: [
       {
-        path: 'getExpress',
+        path: 'getExpress/create',
         component: Utils.getPath('service/getExpress/create')
       }
     ]
+  },
+  {
+    path: '/service/getExpress/pay',
+    component: Utils.getPath('service/getExpress/pay')
+  },
+  {
+    path: '/service/getExpress/result',
+    component: Utils.getPath('service/getExpress/result')
   },
   {
     path: '/address',
