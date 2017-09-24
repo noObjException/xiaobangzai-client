@@ -22,6 +22,10 @@ export default [
     component: Utils.getPath('member/credit')
   },
   {
+    path: '/member/mission',
+    component: Utils.getPath('member/mission')
+  },
+  {
     path: '/service',
     component: serviceLayout,
     children: [

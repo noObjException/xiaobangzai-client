@@ -5,7 +5,7 @@
       <p>{{nickname}}</p>
     </div>
     <group>
-      <cell title="我的订单" value="查看全部任务" is-link>
+      <cell title="我的订单" value="查看全部任务" is-link link="/member/mission">
         <img slot="icon" width="20" src="../../assets/logo.png" />
       </cell>
     </group>
