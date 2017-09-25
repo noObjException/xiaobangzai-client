@@ -15,7 +15,7 @@
           <x-button @click.native="routeTo('/')">返回首页</x-button>
         </flexbox-item>
         <flexbox-item>
-          <x-button type="primary">查看详情</x-button>
+          <x-button type="primary" @click.native="routeTo('/member/mission/detail?id='+info.id)">查看详情</x-button>
         </flexbox-item>
       </flexbox>
     </box>
@@ -46,7 +46,7 @@ export default {
       })
     },
     routeTo (url) {
-      this.$router.push('/')
+      this.$router.push(url)
     }
   },
   data () {

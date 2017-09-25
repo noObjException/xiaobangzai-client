@@ -1,7 +1,7 @@
 <template>
   <div>
     <div class="avatar">
-      <img :src="avatar" />
+      <img :src="avatar"/>
       <p>{{nickname}}</p>
     </div>
     <group>
