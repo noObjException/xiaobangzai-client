@@ -1,45 +1,19 @@
 <template>
   <div>
     <div class="avatar">
-      <img :src="avatar"/>
+      <img :src="avatar" />
       <p>{{nickname}}</p>
     </div>
     <group>
-      <cell title="我的订单" value="查看全部任务" is-link link="/member/mission">
+      <cell title="我的订单" value="查看全部任务" is-link link="/member/mission?status=all">
         <img slot="icon" width="20" src="../../assets/logo.png" />
       </cell>
     </group>
 
     <div class="menu">
-      <div class="menu-item">
-        <router-link to="/">
-          <img src="../../assets/logo.png" />
-          <p>待支付</p>
-        </router-link>
-      </div>
-      <div class="menu-item">
-        <router-link to="/">
-          <img src="../../assets/logo.png" />
-          <p>待接单</p>
-        </router-link>
-      </div>
-      <div class="menu-item">
-        <router-link to="/">
-          <img src="../../assets/logo.png" />
-          <p>配送中</p>
-        </router-link>
-      </div>
-      <div class="menu-item">
-        <router-link to="/">
-          <img src="../../assets/logo.png" />
-          <p>已完成</p>
-        </router-link>
-      </div>
-      <div class="menu-item vux-1px-l">
-        <router-link to="/">
-          <img src="../../assets/logo.png" />
-          <p>已取消</p>
-        </router-link>
+      <div class="menu-item" @click="routeTo(item.status)" v-for="(item, index) in menus" :key="index">
+        <img :src="item.img" />
+        <p>{{item.label}}</p>
       </div>
     </div>
 
@@ -84,7 +58,28 @@ export default {
       avatar: '../../../static/logo.png',
       nickname: '',
       balance: 0.00,
-      credit: 0
+      credit: 0,
+      menus: [{
+        label: '待支付',
+        img: '../../../static/logo.png',
+        status: 'waitPay'
+      }, {
+        label: '待接单',
+        img: '../../../static/logo.png',
+        status: 'waitOrder'
+      }, {
+        label: '配送中',
+        img: '../../../static/logo.png',
+        status: 'processing'
+      }, {
+        label: '已完成',
+        img: '../../../static/logo.png',
+        status: 'completed'
+      }, {
+        label: '已取消',
+        img: '../../../static/logo.png',
+        status: 'cencel'
+      }]
     }
   },
   computed: {
@@ -107,6 +102,9 @@ export default {
         this.balance = data.balance
         this.credit = data.credit
       })
+    },
+    routeTo (status) {
+      this.$router.push({path: '/member/mission', query: {status: status}})
     }
   }
 }

@@ -23,7 +23,11 @@ export default [
   },
   {
     path: '/member/mission',
-    component: Utils.getPath('member/mission')
+    component: Utils.getPath('member/mission/list')
+  },
+  {
+    path: '/member/mission/detail',
+    component: Utils.getPath('member/mission/detail')
   },
   {
     path: '/service',
