@@ -13,11 +13,14 @@
             <cell title="订单编号:" :value="item.order_num"></cell>
             <cell title="快递公司:" :value="item.express_com"></cell>
             <cell title="货物信息:" :value="item.express_type"></cell>
-            <cell title="收获地址:" :value="item.college+' '+item.area+' '+item.detail" value-align="right" align-items="flex-start"></cell>
+            <cell title="收货地址:" :value="item.college+' '+item.area+' '+item.detail" value-align="right" align-items="flex-start"></cell>
             <cell title="订单金额:" :value="'￥ '+item.total_price"></cell>
             <cell>
                 <x-button mini>取消订单</x-button>
-                <x-button mini type="warn">立即支付</x-button>
+                <x-button mini type="warn" v-if="item.status === '待支付'">立即支付</x-button>
+                <x-button mini type="warn" v-if="item.status === '配送中'">确认收货</x-button>
+                <x-button mini type="warn" v-if="item.status === '待接单'">追加赏金</x-button>
+                <x-button mini type="warn" v-if="item.status === '已完成'">评价</x-button>
             </cell>
         </group>
     </div>
