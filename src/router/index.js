@@ -54,6 +54,10 @@ export default [
   {
     path: '/address/edit',
     component: Utils.getPath('address/edit')
+  },
+  {
+    path: '/staff',
+    component: Utils.getPath('staff/index')
   }
 ]
 

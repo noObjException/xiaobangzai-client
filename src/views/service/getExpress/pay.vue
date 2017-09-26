@@ -8,7 +8,7 @@
             <cell title="快递公司:" :value="info.express_com"></cell>
             <cell title="物品信息:" :value="info.express_type+'/'+info.express_weight"></cell>
             <cell title="送达时间:" :value="info.arrive_time"></cell>
-            <cell title="跑腿赏金:" :value="'￥ '+info.add_money"></cell>
+            <cell title="跑腿赏金:" :value="'￥ '+info.bounty"></cell>
             <x-textarea title="备注信息:" v-model="info.remark" readonly></x-textarea>
         </group>
 

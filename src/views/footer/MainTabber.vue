@@ -35,7 +35,7 @@ export default {
         },
         {
           label: '我的任务',
-          url: '/myMission',
+          url: '/staff',
           icon: 'static/logo.png'
         },
         {

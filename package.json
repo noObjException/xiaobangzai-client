@@ -1,5 +1,5 @@
 {
-  "name": "vux",
+  "name": "youbang",
   "version": "1.0.0",
   "description": "A Vue.js project",
   "author": "zhuwj <767839489@qq.com>",
@@ -20,7 +20,7 @@
     "vue-router": "^2.2.0",
     "vuex": "^2.4.0",
     "vuex-i18n": "^1.3.1",
-    "vux": "^2.2.1"
+    "vux": "^2.6.4"
   },
   "devDependencies": {
     "autoprefixer": "^6.7.2",

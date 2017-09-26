@@ -92,7 +92,7 @@ export default {
         express_com: '',
         express_type: '',
         express_weight: '',
-        add_money: 0,
+        bounty: 0,
         remark: ''
       }
     }

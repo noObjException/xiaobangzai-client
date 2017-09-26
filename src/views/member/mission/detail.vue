@@ -13,7 +13,7 @@
             <cell title="物品信息:" :value="info.express_type+'/'+info.express_weight"></cell>
             <cell title="送达时间:" :value="info.arrive_time"></cell>
             <cell title="跑腿赏金:">
-                <span class="text-danger">￥ {{info.add_money}}</span>
+                <span class="text-danger">￥ {{info.bounty}}</span>
             </cell>
             <cell title="备注信息:" :value="info.remark"></cell>
         </group>
@@ -25,9 +25,11 @@
                 <span class="text-danger">￥ {{info.total_price}}</span>
             </cell>
             <cell>
-                <x-button mini>撤销订单</x-button>
-                <x-button mini>追加赏金</x-button>
-                <x-button mini type="warn">立即支付</x-button>
+                <x-button mini v-if="info.status === '未支付'">撤销订单</x-button>
+                <x-button mini type="warn" v-if="info.status === '未接单'">追加赏金</x-button>
+                <x-button mini type="warn" v-if="info.status === '未支付'">立即支付</x-button>
+                <x-button mini type="warn" v-if="info.status === '配送中'">确认收货</x-button>
+                <x-button mini type="warn" v-if="info.status === '已完成'">评价</x-button>
             </cell>
         </group>
     </div>
