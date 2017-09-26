@@ -1,36 +1,44 @@
 <template>
   <div>
-        <tab :line-width="2">
-            <tab-item :selected="item.value === currentStatus" v-for="(item, index) in status" @on-item-click="switchStatus" :key="index">
-                {{item.label}}
-            </tab-item>
-        </tab>
+    <tab :line-width="2">
+      <tab-item :selected="item.value === currentStatus" v-for="(item, index) in status" @on-item-click="switchStatus" :key="index">
+        {{item.label}}
+      </tab-item>
+    </tab>
 
+    <!-- <loadmore :bottom-method="loadMore" :bottom-all-loaded="allLoaded" ref="loadmore"> -->
+      <div>
         <group :title="'下单时间: '+item.created_at" label-width="5em" v-for="(item, index) in lists" :key="index">
-            <router-link :to="'mission/detail?id='+item.id" style="color: #000;">
-              <cell title="订单状态:">
-                  <span class="text-danger">{{item.status}}</span>
-              </cell>
-              <cell title="订单编号:" :value="item.order_num"></cell>
-              <cell title="快递公司:" :value="item.express_com"></cell>
-              <cell title="货物信息:" :value="item.express_type"></cell>
-              <cell title="收货地址:" :value="item.college+' '+item.area+' '+item.detail" value-align="right" align-items="flex-start"></cell>
-              <cell title="订单金额:" :value="'￥ '+item.total_price"></cell>
-            </router-link>
-            <cell>
-                <x-button mini>取消订单</x-button>
-                <x-button mini type="warn" v-if="item.status === '待支付'">立即支付</x-button>
-                <x-button mini type="warn" v-if="item.status === '配送中'">确认收货</x-button>
-                <x-button mini type="warn" v-if="item.status === '待接单'">追加赏金</x-button>
-                <x-button mini type="warn" v-if="item.status === '已完成'">评价</x-button>
+          <router-link :to="'mission/detail?id='+item.id" style="color: #000;">
+            <cell title="订单状态:">
+              <span class="text-danger">{{item.status}}</span>
             </cell>
+            <cell title="订单编号:" :value="item.order_num"></cell>
+            <cell title="快递公司:" :value="item.express_com"></cell>
+            <cell title="货物信息:" :value="item.express_type"></cell>
+            <cell title="收货地址:" :value="item.college+' '+item.area+' '+item.detail" value-align="right" align-items="flex-start"></cell>
+            <cell title="订单金额:" :value="'￥ '+item.total_price"></cell>
+          </router-link>
+          <cell>
+            <div>
+              <x-button mini v-if="item.status === '待支付'" @click.native="cancel(item.id)">取消订单</x-button>
+              <x-button mini type="warn" v-if="item.status === '待支付'" @click.native="pay(item.id)">立即支付</x-button>
+              <x-button mini type="warn" v-else-if="item.status === '配送中'" @click.native="finish(item.id)">确认收货</x-button>
+              <x-button mini type="warn" v-else-if="item.status === '待接单'" @click.native="addBounty(item.id)">追加赏金</x-button>
+              <x-button mini type="warn" v-else-if="item.status === '已完成'" @click.native="addComment(item.id)">评价</x-button>
+            </div>
+          </cell>
         </group>
-    </div>
+      </div>
+   <!-- </loadmore> -->
+
+  </div>
 </template>
 
 <script>
 import { Tab, TabItem, Group, Cell, XButton } from 'vux'
 import { mapGetters } from 'vuex'
+import Loadmore from 'vue-loadmore'
 
 export default {
   components: {
@@ -38,52 +46,90 @@ export default {
     TabItem,
     Group,
     Cell,
-    XButton
+    XButton,
+    Loadmore
   },
   data () {
     return {
       status: [
-          {label: '全部', value: 'all'},
-          {label: '待支付', value: 'waitPay'},
-          {label: '待接单', value: 'waitOrder'},
-          {label: '配送中', value: 'processing'},
-          {label: '已完成', value: 'completed'}],
+        { label: '全部', value: 'all' },
+        { label: '待支付', value: 'waitPay' },
+        { label: '待接单', value: 'waitOrder' },
+        { label: '配送中', value: 'processing' },
+        { label: '已完成', value: 'completed' }],
       lists: [],
-      currentStatus: ''
+      currentStatus: '',
+      currentPage: 1,
+      totalPages: '',
+      allLoaded: false,
+      winHeight: ''
     }
   },
   computed: {
     ...mapGetters([
       'openid'
-    ])
+    ]),
+    queryParams () {
+      return {
+        openid: this.openid,
+        per_page: 15,
+        status: this.currentStatus,
+        page: this.currentPage
+      }
+    }
   },
   created () {
     this.getMissionLists()
   },
+  mounted () {
+  },
   methods: {
-    async getMissionLists (index = 0) {
-      let state = this.$route.query.status
-      if (index) {
-        state = this.status[index].value
-      }
-      this.currentStatus = state
+    async loadMore () {
+      console.log('加载更多...')
+      this.currentPage += 1
 
-      let params = {openid: this.openid, status: state}
-      await this.$http.get('/memberMissions', {params: params}).then(res => {
+      if (this.currentPage === this.totalPages) {
+        this.allLoaded = true
+      }
+
+      setTimeout(() => {
+        this.$http.get('/getExpress', { params: this.queryParams }).then(res => {
+          this.lists = this.lists.concat(res.data)
+        })
+      }, 1000)
+    },
+    async getMissionLists (index = -1) {
+      let status = this.$route.query.status
+      if (index >= 0) {
+        status = this.status[index].value
+      }
+      this.currentStatus = status
+
+      await this.$http.get('/getExpress', { params: this.queryParams }).then(res => {
         this.lists = res.data
+        this.totalPages = res.meta.pagination.total_pages
+        this.$router.push({ path: '/member/mission', query: { status: status } })
       })
     },
-    switchStatus (index) {
+    async switchStatus (index) {
       this.getMissionLists(index)
+    },
+    async pay (id) {
+
+    },
+    async finish (id) {
+
+    },
+    async addBounty (id) {
+
+    },
+    async addComment (id) {
+
+    },
+    async cancel (id) {
+
     }
   }
 }
 </script>
-
-<style lang="less" scoped>
-.left-icon{
-    margin-right: 6px;
-    width: 18px;
-}
-</style>
 

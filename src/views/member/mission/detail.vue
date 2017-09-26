@@ -59,7 +59,7 @@ export default {
     async initData () {
       let id = this.$route.query.id
 
-      await this.$http.get('/memberMissions/' + id).then(res => {
+      await this.$http.get('/getExpress/' + id).then(res => {
         this.info = res.data
       })
     }
