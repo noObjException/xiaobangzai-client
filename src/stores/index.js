@@ -12,7 +12,8 @@ const state = {
   token: '', // api请求token
   userInfo: null, // 用户信息
   choosedAddress: Utils.getLocalStorage('choosedAddress'),
-  isLoading: false
+  isLoading: false,
+  expressMissionInfo: Utils.getLocalStorage('expressMissionInfo')
 }
 export default new Vuex.Store({
   state,

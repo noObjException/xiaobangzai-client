@@ -1,6 +1,7 @@
 import {
     UPDATE_LOADING_STATUS,
-    CHOOSED_ADDRESS
+    CHOOSED_ADDRESS,
+    EXPRESS_MISSION_INFO
 } from './mutations-types.js'
 
 export default {
@@ -9,6 +10,9 @@ export default {
   },
   [CHOOSED_ADDRESS] (state, address) {
     state.choosedAddress = address
+  },
+  [EXPRESS_MISSION_INFO] (state, payload) {
+    state.expressMissionInfo = payload
   }
 }
 

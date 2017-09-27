@@ -21,13 +21,13 @@
       <cell title="我的余额" :value="balance" is-link>
         <img slot="icon" width="20" src="../../assets/logo.png" />
       </cell>
-      <cell title="我的积分" :value="credit" is-link link="/member/credit">
+      <cell title="我的积分" :value="credit" link="/member/credit">
         <img slot="icon" width="20" src="../../assets/logo.png" />
       </cell>
     </group>
 
     <group>
-      <cell title="我的资料" is-link>
+      <cell title="个人认证" link="/staff/identify">
         <img slot="icon" width="20" src="../../assets/logo.png" />
       </cell>
       <cell title="我的地址" is-link>

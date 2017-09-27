@@ -1,5 +1,6 @@
 export default {
   isLoading: state => state.isLoading,
   openid: state => state.openid,
-  choosedAddress: state => state.choosedAddress
+  choosedAddress: state => state.choosedAddress,
+  expressMissionInfo: state => state.expressMissionInfo
 }

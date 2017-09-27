@@ -27,6 +27,14 @@ FastClick.attach(document.body)
 
 Vue.config.productionTip = false
 
+Vue.mixin({
+  methods: {
+    routeTo (url) {
+      router.push({path: url})
+    }
+  }
+})
+
 /* eslint-disable no-new */
 new Vue({
   router,
