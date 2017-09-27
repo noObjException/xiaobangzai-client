@@ -16,8 +16,8 @@
     </group>
 
     <group>
-      <cell :inline-desc="'增加 '+formData.add_money+' 元运费'" primary="content">
-        <range v-model="formData.add_money" :min="0" :max="10" :step="0.5"></range>
+      <cell :inline-desc="'增加 '+formData.bounty+' 元运费'" primary="content">
+        <range v-model="formData.bounty" :min="0" :max="10" :step="0.5"></range>
       </cell>
     </group>
     

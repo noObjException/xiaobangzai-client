@@ -21,7 +21,7 @@
         </group>
 
         <box gap="40px 6px">
-            <x-button type="primary" @click.native="pay">立即支付</x-button>
+            <x-button type="primary" @click.native="pay(info.id)">立即支付</x-button>
         </box>
     </div>
 </template>
@@ -61,19 +61,6 @@ export default {
 
       await this.$http.get('/getExpress/' + id).then(res => {
         this.info = res.data
-      })
-    },
-    async pay () {
-      let id = this.$route.query.id
-      await this.$http.put('/getExpress/pay/' + id, this.formData).then(res => {
-        this.$vux.toast.show({
-          text: '支付成功',
-          onShow () {
-
-          }
-        })
-
-        this.$router.push({path: '/service/getExpress/result', query: {id: id}})
       })
     }
   }

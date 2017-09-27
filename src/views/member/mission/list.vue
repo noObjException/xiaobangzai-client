@@ -40,6 +40,7 @@ import { Tab, TabItem, Group, Cell, XButton, ConfirmPlugin, ToastPlugin } from '
 import { mapGetters } from 'vuex'
 import Vue from 'vue'
 import Loadmore from 'vue-loadmore'
+import mixin from './mixin.js'
 
 Vue.use(ConfirmPlugin)
 Vue.use(ToastPlugin)
@@ -53,6 +54,7 @@ export default {
     XButton,
     Loadmore
   },
+  mixins: [mixin],
   data () {
     return {
       status: [
@@ -117,48 +119,6 @@ export default {
     },
     async switchStatus (index) {
       this.getMissionLists(index)
-    },
-    async pay (id) {
-
-    },
-    async completed (id) {
-      let that = this
-      this.$vux.confirm.show({
-        title: '确认收货',
-        content: '您确认要收货吗?',
-        onConfirm () {
-          that.$http.put('/getExpress/completed/' + id).then(res => {
-            that.$vux.toast.show({
-              text: '订单完成',
-              onShow () {
-                that.$router.push({path: '/member/mission/detail', query: {id: id}})
-              }
-            })
-          })
-        }
-      })
-    },
-    async addBounty (id) {
-      let that = this
-      this.$vux.confirm.show({
-        title: '追加赏金',
-        onConfirm () {
-          that.$http.put('/getExpress/addBounty/' + id).then(res => {
-            that.$vux.toast.show({
-              text: '订单完成',
-              onShow () {
-                that.$router.push({path: '/member/mission/detail', query: {id: id}})
-              }
-            })
-          })
-        }
-      })
-    },
-    async addComment (id) {
-
-    },
-    async cancel (id) {
-
     }
   }
 }
