@@ -24,7 +24,7 @@
     <load-more background-color="#fbf9fe" :show-loading="false" tip="亲,您可以加价让快递员优先配送哦"></load-more>
 
     <box gap="40px 6px">
-      <x-button type="primary" @click.native="createMission">确认下单</x-button>
+      <x-button type="primary" @click.native="routeTo('/service/getExpress/create')">确定</x-button>
       <load-more background-color="#fbf9fe" :show-loading="false" tip="注:一件一单,重量小于3kg,超出此重量,每公斤额外收取1元费用"></load-more>
     </box>
 
@@ -34,10 +34,10 @@
 
         <div class="info-type">
             <div class="info-type-item" v-for="(item, index) in expressTypes" :key="index">
-              <x-button mini :type="isChoose(item.title)" @click.native="chooseType(item.title)">{{item.title}}</x-button>
+              <x-button mini :type="isChoosed(item)" @click.native="chooseType(item)">{{item}}</x-button>
             </div>
             <div class="info-type-item" >
-              <x-button mini :type="isChoose()" @click.native="chooseType()">其他</x-button>
+              <x-button mini :type="isChoosed()" @click.native="chooseType()">其他</x-button>
             </div>
         </div>
       </div>
@@ -103,7 +103,8 @@ export default {
   computed: {
     ...mapGetters([
       'choosedAddress',
-      'openid'
+      'openid',
+      'expressMissionInfo'
     ]),
     info () {
       let type = this.formData.express_type
@@ -115,41 +116,46 @@ export default {
     }
   },
   beforeRouteLeave (to, from, next) {
+    let data = this.formData
+    data['address'] = this.choosedAddress
+    data['openid'] = this.openid
+    this.$store.dispatch('saveExpressMissionInfo', data)
     next()
   },
   methods: {
     async initData () {
-      this.$http.get('/getExpress/initData').then(res => {
+      await this.$http.get('/expressMission/index').then(res => {
         let data = res.data
         this.expressCompanys = data.expressCompanys
         this.arriveTimes = data.arriveTimes
-      })
-    },
-    async createMission () {
-      let data = this.formData
-      data['address'] = this.choosedAddress
-      data['openid'] = this.openid
-      await this.$http.post('/getExpress', data).then(res => {
-        let id = res.data.id
+        this.expressTypes = data.expressTypes
+        this.expressWeights = data.expressWeights
+        this.formData.express_type = this.expressTypes[0]
+        this.formData.express_weight = this.expressWeights[0]
 
-        this.$vux.toast.show({
-          type: 'text',
-          text: '下单成功',
-          position: 'middle'
-        })
-
-        this.$router.push({path: '/service/getExpress/create', query: {id: id}})
+        // 回填缓存中的信息
+        if (!this.expressMissionInfo) {
+          return true
+        }
+        let expressCom = this.expressMissionInfo.express_com
+        if (this.expressCompanys.indexOf(expressCom) !== -1) {
+          this.formData.express_com = expressCom
+        }
+        let arriveTime = this.expressMissionInfo.arrive_time
+        if (this.arriveTimes.indexOf(arriveTime) !== -1) {
+          this.formData.arrive_time = arriveTime
+        }
+        let expressType = this.expressMissionInfo.express_type
+        if (this.expressTypes.indexOf(expressType) !== -1) {
+          this.formData.express_type = expressType
+        }
+        let expressWeight = this.expressMissionInfo.express_weight
+        if (this.expressWeights.indexOf(expressWeight) !== -1) {
+          this.formData.express_weight = expressWeight
+        }
       })
     },
     async inputInfo () {
-      await this.$http.get('/getExpress/initInfoData').then(res => {
-        let data = res.data
-        this.expressTypes = data.expressTypes
-        this.expressWeights = data.expressWeights
-
-        this.formData.express_type = this.expressTypes[0].title
-        this.formData.express_weight = this.expressWeights[0]
-      })
       this.show = true
     },
     fillInfo () {
@@ -158,12 +164,11 @@ export default {
     chooseType (name = '') {
       this.formData.express_type = name
     },
-    isChoose (name = '') {
+    isChoosed (name = '') {
       return this.formData.express_type === name ? 'primary' : 'default'
     },
     cencel () {
       this.formData.express_type = ''
-      this.formData.other = ''
       this.formData.express_weight = ''
       this.show = false
     }

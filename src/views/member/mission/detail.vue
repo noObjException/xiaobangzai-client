@@ -19,8 +19,6 @@
         </group>
 
         <group>
-            <cell title="优惠券:" value="暂无可用的优惠券" is-link></cell>
-            <cell title="积分抵扣:" value="无积分抵扣" is-link></cell>
             <cell title="价格总计:">
                 <span class="text-danger">￥ {{info.total_price}}</span>
             </cell>

@@ -20,7 +20,9 @@ router.beforeEach(function (to, from, next) {
 })
 
 router.afterEach(function (to) {
-  store.commit('UPDATE_LOADING_STATUS', {isLoading: false})
+  setTimeout(() => {
+    store.commit('UPDATE_LOADING_STATUS', {isLoading: false})
+  }, 500)
 })
 
 FastClick.attach(document.body)
@@ -29,8 +31,8 @@ Vue.config.productionTip = false
 
 Vue.mixin({
   methods: {
-    routeTo (url) {
-      router.push({path: url})
+    routeTo (url, query = {}) {
+      router.push({path: url, query: query})
     }
   }
 })
