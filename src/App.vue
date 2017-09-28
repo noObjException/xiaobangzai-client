@@ -25,6 +25,7 @@ export default {
 
 <style lang="less">
 @import '~vux/src/styles/reset.less';
+@import './styles/theme.less';
 @import './styles/commons.less';
  .router-fade-enter-active, .router-fade-leave-active {
   transition: opacity .3s;

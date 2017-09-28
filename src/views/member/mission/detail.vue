@@ -24,9 +24,9 @@
             </cell>
             <cell>
                 <x-button mini v-if="info.status === '待支付'" @click.native="cancel(info.id)">取消订单</x-button>
-                <x-button mini type="warn" v-if="info.status === '待接单'" @click.native="pay(info.id)">追加赏金</x-button>
-                <x-button mini type="warn" v-if="info.status === '待支付'" @click.native="completed(info.id)">立即支付</x-button>
-                <x-button mini type="warn" v-if="info.status === '配送中'" @click.native="addBounty(info.id)">确认收货</x-button>
+                <x-button mini type="warn" v-if="info.status === '待接单'" @click.native="addBounty(info.id)">追加赏金</x-button>
+                <x-button mini type="warn" v-if="info.status === '待支付'" @click.native="pay(info.id)">立即支付</x-button>
+                <x-button mini type="warn" v-if="info.status === '配送中'" @click.native="completed(info.id)">确认收货</x-button>
                 <x-button mini type="warn" v-if="info.status === '已完成'" @click.native="addComment(info.id)">评价</x-button>
             </cell>
         </group>

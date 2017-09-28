@@ -2,37 +2,51 @@
     <div>
         <div class="credit">
             <div class="title">当前积分</div>
-            <div class="content">666</div>
+            <div class="content">{{totalCredit}}</div>
         </div>
 
         <group>
-            <cell :title="item.title" :value="item.value" :inline-desc="item.created_at" v-for="(item, index) in lists" :key="index"></cell>
+            <cell :title="item.title" :inline-desc="item.created_at" v-for="(item, index) in lists" :key="index">
+              <span v-if="item.value > 0" class="text-danger">
+                + {{item.value}}
+              </span>
+              <span v-else>
+                - {{Math.abs(item.value)}}
+              </span>
+            </cell>
         </group>
     </div>
 </template>
 
 <script>
 import { Group, Cell } from 'vux'
+import { mapGetters } from 'vuex'
 
 export default {
   data () {
     return {
-      lists: [
-        {
-          title: '使用积分抵扣',
-          value: '-20',
-          created_at: '2017-09-02 12:33'
-        },
-        {
-          title: '使用积分抵扣',
-          value: '-20',
-          created_at: '2017-09-02 12:33'
-        }
-      ]
+      totalCredit: 0,
+      lists: []
     }
   },
   components: {
     Group, Cell
+  },
+  computed: {
+    ...mapGetters([
+      'openid'
+    ])
+  },
+  created () {
+    this.initData()
+  },
+  methods: {
+    async initData () {
+      await this.$http.get('/creditRecords/' + this.openid).then(res => {
+        this.lists = res.data
+        this.totalCredit = res.meta.total_credit
+      })
+    }
   }
 }
 </script>

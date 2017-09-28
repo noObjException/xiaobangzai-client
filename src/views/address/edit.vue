@@ -37,9 +37,9 @@ export default {
     return {
       addresses: [],
       formData: {
-        realname: '不科学',
-        mobile: '13766666666',
-        detail: '发水电费',
+        realname: '',
+        mobile: '',
+        detail: '',
         is_default: true,
         address: []
       }
