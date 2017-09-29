@@ -40,15 +40,13 @@ export default {
     return {
       info: {},
       showPayType: false,
-      payTypes: [
-        {
-          label: '微信支付',
-          value: 'WECHAT_PAY'
-        }, {
-          label: '余额支付',
-          value: 'BALANCE_PAY'
-        }
-      ]
+      payTypes: [{
+        label: '微信支付',
+        value: 'WECHAT_PAY'
+      }, {
+        label: '余额支付',
+        value: 'BALANCE_PAY'
+      }]
     }
   },
   mixins: [mixin],

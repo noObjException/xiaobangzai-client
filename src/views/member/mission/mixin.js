@@ -32,15 +32,6 @@ export default {
             that.$router.push({path: '/service/getExpress/result', query: {id: id}})
           }
         })
-      }).catch(error => {
-        let data = error.response.data
-        this.$vux.toast.show({
-          type: 'text',
-          text: data.message,
-          position: 'middle',
-          isShowMask: true
-        })
-        return Promise.reject(error)
       })
     },
     async addBounty (id) {

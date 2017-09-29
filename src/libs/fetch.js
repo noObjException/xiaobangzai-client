@@ -19,7 +19,7 @@ fetch.interceptors.request.use(request => {
 }, error => {
   // Do something with request error
   console.log(error) // for debug
-  Promise.reject(error)
+  return Promise.reject(error)
 })
 
 fetch.interceptors.response.use(
@@ -27,10 +27,11 @@ fetch.interceptors.response.use(
     return response.data
   },
   error => {
-    // let data = error.response.data
+    let data = error.response.data
     // let status = error.response.code
+    alert(data.message)
     console.log(error.response)
-    Promise.reject(error)
+    return Promise.reject(error)
   }
 )
 

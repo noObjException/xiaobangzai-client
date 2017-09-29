@@ -6,35 +6,51 @@
     </div>
     <group>
       <cell title="我的订单" value="查看全部任务" link="/member/mission?status=all">
-        <img slot="icon" src="../../assets/logo.png" class="cell-icon"/>
+        <x-icon slot="icon" type="android-list" class="cell-icon"></x-icon>
       </cell>
     </group>
 
     <div class="menu">
-      <div class="menu-item" @click="routeTo(item.status)" v-for="(item, index) in menus" :key="index">
-        <img :src="item.img" />
-        <p>{{item.label}}</p>
+      <div class="menu-item" @click="routeTo('waitPay')">
+        <x-icon slot="icon" type="speedometer"></x-icon>
+        <p>待支付</p>
+      </div>
+      <div class="menu-item" @click="routeTo('waitOrder')">
+        <x-icon slot="icon" type="ios-calculator-outline"></x-icon>
+        <p>待接单</p>
+      </div>
+      <div class="menu-item" @click="routeTo('processing')">
+        <x-icon slot="icon" type="android-send"></x-icon>
+        <p>配送中</p>
+      </div>
+      <div class="menu-item" @click="routeTo('completed')">
+        <x-icon slot="icon" type="ios-checkmark-outline"></x-icon>
+        <p>已完成</p>
+      </div>
+      <div class="menu-item" @click="routeTo('cancel')">
+        <x-icon slot="icon" type="android-cancel"></x-icon>
+        <p>已取消</p>
       </div>
     </div>
 
     <group>
       <cell title="我的余额" :value="balance" is-link>
-        <img slot="icon" src="../../assets/logo.png" class="cell-icon"/>
+        <x-icon slot="icon" type="social-usd-outline" class="cell-icon"></x-icon>
       </cell>
       <cell title="我的积分" :value="credit" link="/member/credit">
-        <img slot="icon" src="../../assets/logo.png" class="cell-icon"/>
+        <x-icon slot="icon" type="social-euro-outline" class="cell-icon"></x-icon>
       </cell>
     </group>
 
     <group>
       <cell title="个人认证" link="/staff/identify">
-        <img slot="icon" src="../../assets/logo.png" class="cell-icon"/>
+        <x-icon slot="icon" type="android-clipboard" class="cell-icon"></x-icon>
       </cell>
       <cell title="我的地址" is-link>
-        <img slot="icon" src="../../assets/logo.png" class="cell-icon"/>
+        <x-icon slot="icon" type="ios-location" class="cell-icon"></x-icon>
       </cell>
       <cell title="关于我们" is-link>
-        <img slot="icon" src="../../assets/logo.png" class="cell-icon"/>
+        <x-icon slot="icon" type="android-alert" class="cell-icon"></x-icon>
       </cell>
     </group>
 
@@ -58,28 +74,7 @@ export default {
       avatar: '../../../static/logo.png',
       nickname: '',
       balance: 0.00,
-      credit: 0,
-      menus: [{
-        label: '待支付',
-        img: '../../../static/logo.png',
-        status: 'waitPay'
-      }, {
-        label: '待接单',
-        img: '../../../static/logo.png',
-        status: 'waitOrder'
-      }, {
-        label: '配送中',
-        img: '../../../static/logo.png',
-        status: 'processing'
-      }, {
-        label: '已完成',
-        img: '../../../static/logo.png',
-        status: 'completed'
-      }, {
-        label: '已取消',
-        img: '../../../static/logo.png',
-        status: 'cencel'
-      }]
+      credit: 0
     }
   },
   computed: {
@@ -95,7 +90,7 @@ export default {
       await this.$http.get('/members/' + this.openid).then(res => {
         let data = res.data
 
-        if (data.avatar) {
+        if (data.avatar.length !== 0) {
           this.avatar = data.avatar
         }
         this.nickname = data.nickname
@@ -111,7 +106,7 @@ export default {
 </script>
 
 <style lang="less" scoped>
-@import '~vux/src/styles/1px.less';
+// @import '~vux/src/styles/1px.less';
 .avatar {
   text-align: center;
   background-color: #88843f;
@@ -133,10 +128,10 @@ export default {
     width: 20%;
     text-align: center;
     padding: 10px 0;
-    img {
-      width: 30px;
-      height: 24px;
-    }
+    // img {
+    //   width: 30px;
+    //   height: 24px;
+    // }
     p {
       font-size: 12px;
       color: #000;
