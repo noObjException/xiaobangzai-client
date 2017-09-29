@@ -28,10 +28,9 @@ fetch.interceptors.response.use(
   },
   error => {
     // let data = error.response.data
-    // let status = error.response.status
-
+    // let status = error.response.code
     console.log(error.response)
-    return Promise.reject(error)
+    Promise.reject(error)
   }
 )
 

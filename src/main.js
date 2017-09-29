@@ -20,9 +20,7 @@ router.beforeEach(function (to, from, next) {
 })
 
 router.afterEach(function (to) {
-  setTimeout(() => {
-    store.commit('UPDATE_LOADING_STATUS', {isLoading: false})
-  }, 500)
+  store.commit('UPDATE_LOADING_STATUS', {isLoading: false})
 })
 
 FastClick.attach(document.body)

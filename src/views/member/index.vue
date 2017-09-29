@@ -5,8 +5,8 @@
       <p>{{nickname}}</p>
     </div>
     <group>
-      <cell title="我的订单" value="查看全部任务" is-link link="/member/mission?status=all">
-        <img slot="icon" width="20" src="../../assets/logo.png" />
+      <cell title="我的订单" value="查看全部任务" link="/member/mission?status=all">
+        <img slot="icon" src="../../assets/logo.png" class="cell-icon"/>
       </cell>
     </group>
 
@@ -19,22 +19,22 @@
 
     <group>
       <cell title="我的余额" :value="balance" is-link>
-        <img slot="icon" width="20" src="../../assets/logo.png" />
+        <img slot="icon" src="../../assets/logo.png" class="cell-icon"/>
       </cell>
       <cell title="我的积分" :value="credit" link="/member/credit">
-        <img slot="icon" width="20" src="../../assets/logo.png" />
+        <img slot="icon" src="../../assets/logo.png" class="cell-icon"/>
       </cell>
     </group>
 
     <group>
       <cell title="个人认证" link="/staff/identify">
-        <img slot="icon" width="20" src="../../assets/logo.png" />
+        <img slot="icon" src="../../assets/logo.png" class="cell-icon"/>
       </cell>
       <cell title="我的地址" is-link>
-        <img slot="icon" width="20" src="../../assets/logo.png" />
+        <img slot="icon" src="../../assets/logo.png" class="cell-icon"/>
       </cell>
       <cell title="关于我们" is-link>
-        <img slot="icon" width="20" src="../../assets/logo.png" />
+        <img slot="icon" src="../../assets/logo.png" class="cell-icon"/>
       </cell>
     </group>
 
@@ -142,6 +142,11 @@ export default {
       color: #000;
     }
   }
+}
+.cell-icon{
+  width: 18px;
+  vertical-align:middle;
+  margin-right: 4px;
 }
 </style>
 

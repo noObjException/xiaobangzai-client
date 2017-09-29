@@ -1,25 +1,37 @@
 <template>
-  <div>
-      <group>
-          <cell title="订单编号:" :value="info.order_num"></cell>
-          <cell title="订单金额:">
-              <span class="text-danger">
-                ￥ {{info.total_price}}
-              </span>
-          </cell>
-      </group>
+    <div>
+        <group>
+            <cell :title="info.realname+ ' '+info.mobile" :inline-desc="info.college+ ' ' +info.area"></cell>
+        </group>
 
-      <group>
-          <cell title="微信支付" is-link><img slot="icon" width="20" src="../../../../static/logo.png"/></cell>
-          <cell title="余额支付" :value="'当前余额:'+member.credit" is-link @click.native="pay('CREDIT_PAY')"><img slot="icon" width="20" src="../../../../static/logo.png"></cell>
-      </group>
-  </div>
+        <group labelWidth="90px">
+            <cell title="快递公司:" :value="info.express_com"></cell>
+            <cell title="物品信息:" :value="info.express_type+'/'+info.express_weight"></cell>
+            <cell title="送达时间:" :value="info.arrive_time"></cell>
+            <cell title="配送费用:" :value="'￥ '+info.price"></cell>
+            <cell title="跑腿赏金:" :value="'￥ '+info.bounty"></cell>
+            <cell title="备注信息:" :value="info.remark" value-align="left"></cell>
+        </group>
+
+        <group>
+            <cell title="应付金额:" :value="'￥ '+totalPrice"></cell>
+        </group>
+
+        <box gap="40px 6px">
+            <x-button type="primary" @click.native="showPayType = true">立即支付</x-button>
+        </box>
+
+        <actionsheet v-model="showPayType" :menus="payTypes" @on-click-menu="handlePay" show-cancel>
+          <p slot="header">请选择支付方式</p>
+        </actionsheet>
+    </div>
 </template>
 
 <script>
-import { Group, Cell, ToastPlugin } from 'vux'
-import { mapGetters } from 'vuex'
+import { Group, Cell, XButton, Box, ToastPlugin, Actionsheet } from 'vux'
 import Vue from 'vue'
+import { mapGetters } from 'vuex'
+import mixin from 'src/mixins/expressMission.js'
 
 Vue.use(ToastPlugin)
 
@@ -27,17 +39,31 @@ export default {
   data () {
     return {
       info: {},
-      member: {}
+      showPayType: false,
+      payTypes: [
+        {
+          label: '微信支付',
+          value: 'WECHAT_PAY'
+        }, {
+          label: '余额支付',
+          value: 'BALANCE_PAY'
+        }
+      ]
     }
   },
+  mixins: [mixin],
   components: {
-    Group,
-    Cell
+    Group, Cell, XButton, Box, Actionsheet
   },
   computed: {
     ...mapGetters([
       'openid'
-    ])
+    ]),
+    totalPrice () {
+      let price = 0
+      price = this.info.price
+      return price
+    }
   },
   created () {
     this.initData()
@@ -48,26 +74,11 @@ export default {
       await this.$http.get('/getExpress/' + id).then(res => {
         this.info = res.data
       })
-      await this.$http.get('/members/' + this.openid).then(res => {
-        this.member = res.data
-      })
     },
-    async pay (payType) {
-      await this.$http.put('/expressMission/pay/' + this.info.id, {pay_type: payType}).then(res => {
-        let that = this
-        that.$vux.toast.show({
-          text: '支付成功',
-          position: 'middle',
-          onShow () {
-            that.routeTo('/service/getExpress/result', {id: that.info.id})
-          }
-        })
-      })
+    async handlePay (payType) {
+      this.pay(this.info.id, payType)
     }
   }
 }
 </script>
 
-<style>
-
-</style>

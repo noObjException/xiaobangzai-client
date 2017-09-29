@@ -23,24 +23,15 @@ export default {
         }
       })
     },
-    async pay (id) {
+    async pay (id, payType) {
       let that = this
-      await this.$http.put('/expressMission/pay/' + id, this.formData).then(res => {
+      await this.$http.put('/expressMission/pay/' + id, {pay_type: payType}).then(res => {
         this.$vux.toast.show({
           text: '支付成功',
           onShow () {
             that.$router.push({path: '/service/getExpress/result', query: {id: id}})
           }
         })
-      }).catch(error => {
-        let data = error.response.data
-        this.$vux.toast.show({
-          type: 'text',
-          text: data.message,
-          position: 'middle',
-          isShowMask: true
-        })
-        return Promise.reject(error)
       })
     },
     async addBounty (id) {
