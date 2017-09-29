@@ -1,11 +1,16 @@
 <template>
     <div>
         <div class="mission-status">
-            <div class="content">{{info.status}}</div>
+            <div class="content">
+                <x-icon slot="icon" type="android-bus" class="g-icon" size="30"></x-icon>
+                {{info.status}}
+            </div>
         </div>
 
         <group>
-            <cell :title="info.realname+ ' '+info.mobile" :inline-desc="info.college+ ' ' +info.area+ ' ' +info.detail"></cell>
+            <cell :title="info.realname+ ' '+info.mobile" :inline-desc="info.college+ ' ' +info.area+ ' ' +info.detail">
+                <x-icon slot="icon" type="ios-location-outline"></x-icon>
+            </cell>
         </group>
 
         <group labelWidth="90px">
@@ -77,6 +82,9 @@ export default {
         text-align: center;
         padding: 40px 0;
         font-size: 20px;
+        .g-icon{
+            color: #fff;
+        }
     }
 }
 </style>
