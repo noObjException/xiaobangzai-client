@@ -2,7 +2,7 @@
     <div>
         <tab :line-width="2" active-color='#fc378c'>
             <tab-item disabled @click.native="goToMember()">
-                <img src="../../assets/logo.png"class="avatar"/>
+                <x-icon type="android-person" class="avatar"></x-icon>
             </tab-item>
             <tab-item :selected="index === 0" v-for="(item, index) in services" @click="demo2 = item" :key="index">{{item}}</tab-item>
         </tab>

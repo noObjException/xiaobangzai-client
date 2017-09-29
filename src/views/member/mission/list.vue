@@ -114,7 +114,6 @@ export default {
       await this.$http.get('/getExpress', { params: this.queryParams }).then(res => {
         this.lists = res.data
         this.totalPages = res.meta.pagination.total_pages
-        this.$router.push({ path: '/member/mission', query: { status: status } })
       })
     },
     async switchStatus (index) {
