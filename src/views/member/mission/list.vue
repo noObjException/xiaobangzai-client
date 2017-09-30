@@ -7,40 +7,43 @@
     </tab>
 
     <!-- <loadmore :bottom-method="loadMore" :bottom-all-loaded="allLoaded" ref="loadmore"> -->
-      <!-- <div> -->
-        <group :title="'下单时间: '+item.created_at" label-width="5em" v-for="(item, index) in lists" :key="index">
-          <router-link :to="'mission/detail?id='+item.id" style="color: #000;">
-            <cell title="订单状态:">
-              <span class="text-danger">{{item.status}}</span>
-            </cell>
-            <cell title="订单编号:" :value="item.order_num"></cell>
-            <cell title="快递公司:" :value="item.express_com"></cell>
-            <cell title="货物信息:" :value="item.express_type"></cell>
-            <cell title="收货地址:" :value="item.college+' '+item.area+' '+item.detail" value-align="right" align-items="flex-start"></cell>
-            <cell title="订单金额:" :value="'￥ '+item.total_price"></cell>
-          </router-link>
-          <cell>
-            <div>
-              <x-button mini v-if="item.status === '待支付'" @click.native="cancel(item.id)">取消订单</x-button>
-              <x-button mini type="warn" v-if="item.status === '待支付'" @click.native="pay(item.id)">立即支付</x-button>
-              <x-button mini type="warn" v-else-if="item.status === '配送中'" @click.native="completed(item.id)">确认收货</x-button>
-              <x-button mini type="warn" v-else-if="item.status === '待接单'" @click.native="addBounty(item.id)">追加赏金</x-button>
-              <x-button mini type="warn" v-else-if="item.status === '已完成'" @click.native="addComment(item.id)">评价</x-button>
-            </div>
-          </cell>
-        </group>
-      <!-- </div> -->
-   <!-- </loadmore> -->
+    <!-- <div> -->
+    <group :title="'下单时间: '+item.created_at" label-width="5em" v-for="(item, index) in lists" :key="index">
+      <router-link :to="'mission/detail?id='+item.id" style="color: #000;">
+        <cell title="订单状态:">
+          <span class="text-danger">{{item.status}}</span>
+        </cell>
+        <cell title="订单编号:" :value="item.order_num"></cell>
+        <cell title="快递公司:" :value="item.express_com"></cell>
+        <cell title="货物信息:" :value="item.express_type"></cell>
+        <cell title="收货地址:" :value="item.college+' '+item.area+' '+item.detail" value-align="right" align-items="flex-start"></cell>
+        <cell title="订单金额:" :value="'￥ '+item.total_price"></cell>
+      </router-link>
+      <cell>
+        <div>
+          <x-button mini v-if="item.status === '待支付'" @click.native="cancel(item.id)">取消订单</x-button>
+          <x-button mini type="warn" v-if="item.status === '待支付'" @click.native="payType(item.id)">立即支付</x-button>
+          <x-button mini type="warn" v-else-if="item.status === '配送中'" @click.native="completed(item.id)">确认收货</x-button>
+          <x-button mini type="warn" v-else-if="item.status === '待接单'" @click.native="addBounty(item.id)">追加赏金</x-button>
+          <x-button mini type="warn" v-else-if="item.status === '已完成'" @click.native="addComment(item.id)">评价</x-button>
+        </div>
+      </cell>
+    </group>
+    <!-- </div> -->
+    <!-- </loadmore> -->
 
+    <actionsheet v-model="showPayType" :menus="payTypes" @on-click-menu="handlePay" show-cancel>
+      <p slot="header">请选择支付方式</p>
+    </actionsheet>
   </div>
 </template>
 
 <script>
-import { Tab, TabItem, Group, Cell, XButton, ConfirmPlugin, ToastPlugin } from 'vux'
+import { Tab, TabItem, Group, Cell, XButton, ConfirmPlugin, ToastPlugin, Actionsheet } from 'vux'
 import { mapGetters } from 'vuex'
 import Vue from 'vue'
 import Loadmore from 'vue-loadmore'
-import mixin from './mixin.js'
+import mixin from 'src/mixins/expressMission.js'
 
 Vue.use(ConfirmPlugin)
 Vue.use(ToastPlugin)
@@ -52,7 +55,8 @@ export default {
     Group,
     Cell,
     XButton,
-    Loadmore
+    Loadmore,
+    Actionsheet
   },
   mixins: [mixin],
   data () {
@@ -68,7 +72,16 @@ export default {
       currentPage: 1,
       totalPages: '',
       allLoaded: false,
-      winHeight: ''
+      winHeight: '',
+      showPayType: false,
+      payTypes: [{
+        label: '微信支付',
+        value: 'WECHAT_PAY'
+      }, {
+        label: '余额支付',
+        value: 'BALANCE_PAY'
+      }],
+      payId: 0
     }
   },
   computed: {
@@ -118,6 +131,13 @@ export default {
     },
     async switchStatus (index) {
       this.getMissionLists(index)
+    },
+    async payType (id) {
+      this.showPayType = true
+      this.payId = id
+    },
+    async handlePay (payType) {
+      this.pay(this.payId, payType)
     }
   }
 }

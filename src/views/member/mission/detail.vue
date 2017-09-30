@@ -30,28 +30,40 @@
             <cell>
                 <x-button mini v-if="info.status === '待支付'" @click.native="cancel(info.id)">取消订单</x-button>
                 <x-button mini type="warn" v-if="info.status === '待接单'" @click.native="addBounty(info.id)">追加赏金</x-button>
-                <x-button mini type="warn" v-if="info.status === '待支付'" @click.native="pay(info.id)">立即支付</x-button>
+                <x-button mini type="warn" v-if="info.status === '待支付'" @click.native="showPayType = true">立即支付</x-button>
                 <x-button mini type="warn" v-if="info.status === '配送中'" @click.native="completed(info.id)">确认收货</x-button>
                 <x-button mini type="warn" v-if="info.status === '已完成'" @click.native="addComment(info.id)">评价</x-button>
             </cell>
         </group>
+
+        <actionsheet v-model="showPayType" :menus="payTypes" @on-click-menu="handlePay" show-cancel>
+            <p slot="header">请选择支付方式</p>
+        </actionsheet>
     </div>
 </template>
 
 <script>
-import { Group, Cell, XButton } from 'vux'
+import { Group, Cell, XButton, Actionsheet } from 'vux'
 import { mapGetters } from 'vuex'
-import mixin from './mixin.js'
+import mixin from 'src/mixins/expressMission.js'
 
 export default {
   data () {
     return {
-      info: {}
+      info: {},
+      showPayType: false,
+      payTypes: [{
+        label: '微信支付',
+        value: 'WECHAT_PAY'
+      }, {
+        label: '余额支付',
+        value: 'BALANCE_PAY'
+      }]
     }
   },
   mixins: [mixin],
   components: {
-    Group, Cell, XButton
+    Group, Cell, XButton, Actionsheet
   },
   computed: {
     ...mapGetters([
@@ -69,6 +81,9 @@ export default {
       await this.$http.get('/getExpress/' + id).then(res => {
         this.info = res.data
       })
+    },
+    async handlePay (payType) {
+      this.pay(this.info.id, payType)
     }
   }
 }
@@ -82,7 +97,7 @@ export default {
         text-align: center;
         padding: 40px 0;
         font-size: 20px;
-        .g-icon{
+        .g-icon {
             color: #fff;
         }
     }
