@@ -4,12 +4,14 @@
       <img src="../../../static/logo.png" />
       <p>陈总</p>
     </div>
-    <grid :cols='2'>
-      <grid-item label="余额: 999.00"></grid-item>
-      <grid-item label="信誉点:5 9"></grid-item>
-    </grid>
+    <group gutter="0">
+      <grid :cols='2'>
+        <grid-item label="余额: 999.00"></grid-item>
+        <grid-item label="信誉点:59"></grid-item>
+      </grid>
+    </group>
 
-    <group>
+    <group gutter="6px">
       <cell title="任务大厅" value="全部任务" link="/staff/mission/list"></cell>
       <grid :cols='4' class="menus">
         <grid-item label="67">

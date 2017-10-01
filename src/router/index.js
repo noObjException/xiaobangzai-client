@@ -71,6 +71,10 @@ export default [
   {
     path: '/staff/mission/list',
     component: Utils.getPath('staff/mission/list')
+  },
+  {
+    path: '/staff/mission/detail',
+    component: Utils.getPath('staff/mission/detail')
   }
 ]
 
