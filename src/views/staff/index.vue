@@ -10,7 +10,7 @@
     </grid>
 
     <group>
-      <cell title="任务大厅" value="全部任务" link="/all"></cell>
+      <cell title="任务大厅" value="全部任务" link="/staff/mission/list"></cell>
       <grid :cols='4' class="menus">
         <grid-item label="67">
           <p class="menu-item">已接单</p>

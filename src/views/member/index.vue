@@ -115,6 +115,7 @@ export default {
     border: 1px solid #fff;
     border-radius: 50%;
     width: 80px;
+    height: 80px;
   }
   p {
     color: #fff;

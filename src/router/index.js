@@ -9,8 +9,8 @@ export default [
     children: [
       {
         path: '',
-        redirect: '/service/getExpress/create'
-        // component: Utils.getPath('index/index')
+        // redirect: '/service/getExpress/create'
+        component: Utils.getPath('index/index')
       }
     ]
   },
@@ -67,6 +67,10 @@ export default [
   {
     path: '/staff/identify',
     component: Utils.getPath('staff/identify')
+  },
+  {
+    path: '/staff/mission/list',
+    component: Utils.getPath('staff/mission/list')
   }
 ]
 
