@@ -6,31 +6,30 @@
       </tab-item>
     </tab>
 
-    <!-- <loadmore :bottom-method="loadMore" :bottom-all-loaded="allLoaded" ref="loadmore"> -->
-    <!-- <div> -->
-    <group :title="'下单时间: '+item.created_at" label-width="5em" v-for="(item, index) in lists" :key="index">
-      <router-link :to="'mission/detail?id='+item.id" style="color: #000;">
-        <cell title="订单状态:">
-          <span class="text-danger">{{item.status}}</span>
+    <div v-infinite-scroll="loadMore" :infinite-scroll-disabled="allLoaded" :infinite-scroll-immediate-check='false' :infinite-scroll-distance='10'>
+      <group :title="'下单时间: '+item.created_at" label-width="5em" v-for="(item, index) in lists" :key="index">
+        <router-link :to="'mission/detail?id='+item.id" style="color: #000;">
+          <cell title="订单状态:">
+            <span class="text-danger">{{item.status}}</span>
+          </cell>
+          <cell title="订单编号:" :value="item.order_num"></cell>
+          <cell title="快递公司:" :value="item.express_com"></cell>
+          <cell title="货物信息:" :value="item.express_type"></cell>
+          <cell title="收货地址:" :value="item.college+' '+item.area+' '+item.detail" value-align="right" align-items="flex-start"></cell>
+          <cell title="订单金额:" :value="'￥ '+item.total_price"></cell>
+        </router-link>
+        <cell>
+          <div>
+            <x-button mini v-if="item.status === '待支付'" @click.native="cancel(item.id)">取消订单</x-button>
+            <x-button mini type="warn" v-if="item.status === '待支付'" @click.native="payType(item.id)">立即支付</x-button>
+            <x-button mini type="warn" v-else-if="item.status === '配送中'" @click.native="completed(item.id)">确认收货</x-button>
+            <x-button mini type="warn" v-else-if="item.status === '待接单'" @click.native="addBounty(item.id)">追加赏金</x-button>
+            <x-button mini type="warn" v-else-if="item.status === '已完成'" @click.native="addComment(item.id)">评价</x-button>
+          </div>
         </cell>
-        <cell title="订单编号:" :value="item.order_num"></cell>
-        <cell title="快递公司:" :value="item.express_com"></cell>
-        <cell title="货物信息:" :value="item.express_type"></cell>
-        <cell title="收货地址:" :value="item.college+' '+item.area+' '+item.detail" value-align="right" align-items="flex-start"></cell>
-        <cell title="订单金额:" :value="'￥ '+item.total_price"></cell>
-      </router-link>
-      <cell>
-        <div>
-          <x-button mini v-if="item.status === '待支付'" @click.native="cancel(item.id)">取消订单</x-button>
-          <x-button mini type="warn" v-if="item.status === '待支付'" @click.native="payType(item.id)">立即支付</x-button>
-          <x-button mini type="warn" v-else-if="item.status === '配送中'" @click.native="completed(item.id)">确认收货</x-button>
-          <x-button mini type="warn" v-else-if="item.status === '待接单'" @click.native="addBounty(item.id)">追加赏金</x-button>
-          <x-button mini type="warn" v-else-if="item.status === '已完成'" @click.native="addComment(item.id)">评价</x-button>
-        </div>
-      </cell>
-    </group>
-    <!-- </div> -->
-    <!-- </loadmore> -->
+      </group>
+      <load-more background-color="#fbf9fe" :show-loading="false" tip="没有更多了" v-if="allLoaded"></load-more>
+    </div>
 
     <actionsheet v-model="showPayType" :menus="payTypes" @on-click-menu="handlePay" show-cancel>
       <p slot="header">请选择支付方式</p>
@@ -39,10 +38,11 @@
 </template>
 
 <script>
-import { Tab, TabItem, Group, Cell, XButton, ConfirmPlugin, ToastPlugin, Actionsheet } from 'vux'
+import { Tab, TabItem, Group, Cell, XButton, ConfirmPlugin, ToastPlugin, Actionsheet, LoadMore } from 'vux'
 import { mapGetters } from 'vuex'
+import { InfiniteScroll } from 'mint-ui'
 import Vue from 'vue'
-import Loadmore from 'vue-loadmore'
+Vue.use(InfiniteScroll)
 import mixin from 'src/mixins/expressMission.js'
 
 Vue.use(ConfirmPlugin)
@@ -55,8 +55,8 @@ export default {
     Group,
     Cell,
     XButton,
-    Loadmore,
-    Actionsheet
+    Actionsheet,
+    LoadMore
   },
   mixins: [mixin],
   data () {
@@ -72,7 +72,6 @@ export default {
       currentPage: 1,
       totalPages: '',
       allLoaded: false,
-      winHeight: '',
       showPayType: false,
       payTypes: [{
         label: '微信支付',
@@ -100,24 +99,19 @@ export default {
   created () {
     this.getMissionLists()
   },
-  mounted () {
-  },
   methods: {
     async loadMore () {
-      console.log('加载更多...')
-      this.currentPage += 1
-
       if (this.currentPage === this.totalPages) {
         this.allLoaded = true
-      }
-
-      setTimeout(() => {
+      } else {
+        this.currentPage += 1
         this.$http.get('/getExpress', { params: this.queryParams }).then(res => {
           this.lists = this.lists.concat(res.data)
         })
-      }, 1000)
+      }
     },
     async getMissionLists (index = -1) {
+      this.currentPage = 1
       let status = this.$route.query.status
       if (index >= 0) {
         status = this.status[index].value

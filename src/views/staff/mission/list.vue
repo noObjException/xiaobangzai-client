@@ -24,7 +24,7 @@
                 <x-icon slot="icon" type="cash" class="g-icon" size="20"></x-icon>
                 <span slot="title" class="text-danger">￥{{item.total_price}}</span>
                 <span>
-                    <x-button mini type="warn" @click.native="acceptOrder(info.id, {openid: openid})">立即接单</x-button>
+                    <x-button mini type="warn" @click.native="acceptOrder(item.id, {openid: openid})">立即接单</x-button>
                 </span>
             </cell>
         </group>
@@ -33,7 +33,11 @@
 
 <script>
 import { Group, Cell, XButton } from 'vux'
+import { mapGetters } from 'vuex'
 import mixin from 'src/mixins/expressMission.js'
+import { InfiniteScroll } from 'mint-ui'
+import Vue from 'vue'
+Vue.use(InfiniteScroll)
 
 export default {
   data () {
@@ -43,6 +47,11 @@ export default {
   },
   components: {
     Group, Cell, XButton
+  },
+  computed: {
+    ...mapGetters([
+      'openid'
+    ])
   },
   mixins: [mixin],
   created () {
