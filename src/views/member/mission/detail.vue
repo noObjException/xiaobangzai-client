@@ -21,6 +21,7 @@
             <cell title="跑腿赏金:">
                 <span class="text-danger">￥ {{info.bounty}}</span>
             </cell>
+            <cell title="开始时间:" :value="info.start_time"></cell>
             <cell title="备注信息:" :value="info.remark"></cell>
         </group>
 

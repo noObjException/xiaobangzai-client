@@ -31,7 +31,7 @@
             </cell>
             <cell>
                 <span>
-                    <x-button mini type="warn">立即接单</x-button>
+                    <x-button mini type="warn" @click.native="acceptOrder(info.id, {openid: openid})">立即接单</x-button>
                 </span>
             </cell>
         </group>
@@ -40,6 +40,8 @@
 
 <script>
 import { Group, Cell, XButton } from 'vux'
+import { mapGetters } from 'vuex'
+import mixin from 'src/mixins/expressMission.js'
 
 export default {
   data () {
@@ -50,13 +52,19 @@ export default {
   components: {
     Group, Cell, XButton
   },
+  mixins: [mixin],
+  computed: {
+    ...mapGetters([
+      'openid'
+    ])
+  },
   created () {
     this.initData()
   },
   methods: {
     async initData () {
       let id = this.$route.query.id
-      await this.$http.get('/missions/' + id).then(res => {
+      await this.$http.get('/getExpress/' + id).then(res => {
         this.info = res.data
       })
     }

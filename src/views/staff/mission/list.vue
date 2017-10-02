@@ -24,7 +24,7 @@
                 <x-icon slot="icon" type="cash" class="g-icon" size="20"></x-icon>
                 <span slot="title" class="text-danger">￥{{item.total_price}}</span>
                 <span>
-                    <x-button mini type="warn">立即接单</x-button>
+                    <x-button mini type="warn" @click.native="acceptOrder(info.id, {openid: openid})">立即接单</x-button>
                 </span>
             </cell>
         </group>
@@ -33,6 +33,7 @@
 
 <script>
 import { Group, Cell, XButton } from 'vux'
+import mixin from 'src/mixins/expressMission.js'
 
 export default {
   data () {
@@ -43,6 +44,7 @@ export default {
   components: {
     Group, Cell, XButton
   },
+  mixins: [mixin],
   created () {
     this.initData()
   },

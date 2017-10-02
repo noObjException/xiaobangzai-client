@@ -75,6 +75,18 @@ export default {
           })
         }
       })
+    },
+    // 接单
+    async acceptOrder (id, data) {
+      let that = this
+      await this.$http.put('/expressMission/acceptOrder/' + id, data).then(res => {
+        this.$vux.toast.show({
+          text: '接单成功',
+          onShow () {
+            that.$router.push({path: '/service/getExpress/result', query: {id: id}})
+          }
+        })
+      })
     }
   }
 }
