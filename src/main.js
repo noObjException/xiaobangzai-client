@@ -7,6 +7,7 @@ import routes from './router'
 import App from './App'
 import store from './stores'
 import Http from 'src/libs/fetch.js'
+import Utils from './libs/utils.js'
 
 Vue.use(Http)
 
@@ -16,6 +17,19 @@ const router = new VueRouter({
 })
 router.beforeEach(function (to, from, next) {
   store.commit('UPDATE_LOADING_STATUS', {isLoading: true})
+
+  // if (to.path === '/auth' && store.state.openid) {
+  //   next('/')
+  //   return false
+  // }
+  // if ((!Utils.getLocalStorage('memberInfo') || !store.state.openid) && to.path !== '/auth') {
+  //   Utils.setLocalStorage('beforeLoginUrl', to.fullPath)
+  //   next('/auth')
+  //   return false
+  // } // else if (!store.state.openid && to.path !== '/auth') {
+  //   next('/auth')
+  //   return false
+  // }
   next()
 })
 
@@ -34,6 +48,19 @@ Vue.mixin({
     }
   }
 })
+
+Vue.prototype.goBeforeLoginUrl = () => {
+  let url = Utils.getLocalStorage('beforeLoginUrl')
+  if (!url || url.indexOf('/auth') !== -1) {
+    router.push('/')
+  } else {
+    if (url === '/') {
+      url = '/'
+    }
+    router.push(url)
+    Utils.setLocalStorage('beforeLoginUrl', '')
+  }
+}
 
 /* eslint-disable no-new */
 new Vue({

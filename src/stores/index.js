@@ -10,7 +10,7 @@ Vue.use(Vuex)
 const state = {
   openid: Utils.getLocalStorage('openid') || 'openid10086111', // 用户openid
   token: '', // api请求token
-  userInfo: null, // 用户信息
+  memberInfo: {id: ''}, // 用户信息
   choosedAddress: Utils.getLocalStorage('choosedAddress'),
   isLoading: false,
   expressMissionInfo: Utils.getLocalStorage('expressMissionInfo')

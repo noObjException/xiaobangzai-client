@@ -99,12 +99,13 @@ export default {
       formData: {
         arrive_time: '',
         express_com: '',
-        express_type: '',
+        express_type: ' ',
         express_weight: '',
         bounty: 0,
         to_where: '',
         remark: ''
-      }
+      },
+      isSubmitted: false
     }
   },
   created () {
@@ -119,17 +120,21 @@ export default {
     info () {
       let type = this.formData.express_type
       let weight = this.formData.express_weight
-      return type || weight ? type + '/' + weight : ''
+      return type || weight ? type + ' ' + weight : ''
     },
     isOtherType () {
       return this.formData.express_type === ''
     }
   },
   beforeRouteLeave (to, from, next) {
-    let data = this.formData
-    data['address'] = this.choosedAddress
-    data['openid'] = this.openid
-    this.$store.dispatch('saveExpressMissionInfo', data)
+    if (this.isSubmitted) {
+      this.$store.dispatch('saveExpressMissionInfo', null)
+    } else {
+      let data = this.formData
+      data['address'] = this.choosedAddress
+      data['openid'] = this.openid
+      this.$store.dispatch('saveExpressMissionInfo', data)
+    }
     next()
   },
   methods: {
@@ -140,7 +145,6 @@ export default {
         this.arriveTimes = data.arriveTimes
         this.expressTypes = data.expressTypes
         this.expressWeights = data.expressWeights
-        this.formData.express_type = this.expressTypes[0]
 
         // 回填缓存中的信息
         if (!this.expressMissionInfo) {
@@ -166,6 +170,7 @@ export default {
       })
     },
     async createMission () {
+      this.isSubmitted = true
       let data = this.formData
       data['address'] = this.choosedAddress
       data['openid'] = this.openid
@@ -174,8 +179,6 @@ export default {
       }
 
       await this.$http.post('/getExpress', data).then(res => {
-        this.$store.dispatch('saveExpressMissionInfo', null)
-
         let id = res.data.id
         let that = this
 

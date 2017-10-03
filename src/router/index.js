@@ -15,6 +15,10 @@ export default [
     ]
   },
   {
+    path: '/auth',
+    component: Utils.getPath('auth/auth')
+  },
+  {
     path: '/member',
     component: Utils.getPath('member/index')
   },
