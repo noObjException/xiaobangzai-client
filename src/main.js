@@ -18,18 +18,20 @@ const router = new VueRouter({
 router.beforeEach(function (to, from, next) {
   store.commit('UPDATE_LOADING_STATUS', {isLoading: true})
 
-  // if (to.path === '/auth' && store.state.openid) {
-  //   next('/')
-  //   return false
-  // }
-  // if ((!Utils.getLocalStorage('memberInfo') || !store.state.openid) && to.path !== '/auth') {
-  //   Utils.setLocalStorage('beforeLoginUrl', to.fullPath)
-  //   next('/auth')
-  //   return false
-  // } // else if (!store.state.openid && to.path !== '/auth') {
-  //   next('/auth')
-  //   return false
-  // }
+  if (to.path === '/auth' && store.state.openid) {
+    console.log('fdfdfdfd')
+    next('/')
+    return false
+  }
+  if ((!Utils.getLocalStorage('memberInfo') || !store.state.openid) && to.path !== '/auth') {
+    Utils.setLocalStorage('beforeLoginUrl', to.fullPath)
+    console.log('fsd')
+    next('/auth')
+    return false
+  } else if (!store.state.openid && to.path !== '/auth') {
+    next('/auth')
+    return false
+  }
   next()
 })
 

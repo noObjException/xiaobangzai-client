@@ -12,6 +12,7 @@ export default {
     }
   },
   created () {
+    console.log('sox/...')
     if (!Utils.getLocalStorage('memberInfo')) {
       let ua = window.navigator.userAgent.toLowerCase()
       console.log(ua.match(/MicroMessenger/i))
