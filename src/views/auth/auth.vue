@@ -3,21 +3,21 @@
 </template>
 
 <script>
-import Utils from 'src/libs/utils.js'
+import { cookie } from 'vux'
 
 export default {
   data () {
     return {
-      BASE_API: process.env.BASE_API
+      BASE_URL: process.env.BASE_URL
     }
   },
   created () {
     console.log('sox/...')
-    if (!Utils.getLocalStorage('memberInfo')) {
+    if (!cookie.get('token')) {
       let ua = window.navigator.userAgent.toLowerCase()
       console.log(ua.match(/MicroMessenger/i))
     //   if (ua.match(/MicroMessenger/i) === 'micromessenger') {
-      window.location.href = this.BASE_API + '/openid'
+      window.location.href = this.BASE_URL + '/openid'
     //   }
     } else {
       this.login()
@@ -25,7 +25,7 @@ export default {
   },
   methods: {
     login () {
-      let url = this.BASE_API + '/authMember'
+      let url = this.BASE_URL + '/authMember'
       this.$http.get(url).then(res => {
         this.$store.commit('memberInfo', res.data)
         setTimeout(() => {

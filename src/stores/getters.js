@@ -3,5 +3,6 @@ export default {
   openid: state => state.openid,
   choosedAddress: state => state.choosedAddress,
   expressMissionInfo: state => state.expressMissionInfo,
-  memberInfo: state => state.memberInfo
+  memberInfo: state => state.memberInfo,
+  token: state => state.token
 }

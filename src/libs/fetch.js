@@ -1,4 +1,5 @@
 import axios from 'axios'
+import store from 'src/stores/'
 
 const fetch = axios.create({
   baseURL: process.env.BASE_API,
@@ -12,9 +13,9 @@ const fetch = axios.create({
 })
 
 fetch.interceptors.request.use(request => {
-//   if (store.getters.token) {
-//     request.headers['Authorization'] = store.getters.token.value
-//   }
+  if (store.getters.token) {
+    request.headers['Authorization'] = store.getters.token.value
+  }
   return request
 }, error => {
   // Do something with request error
@@ -24,6 +25,7 @@ fetch.interceptors.request.use(request => {
 
 fetch.interceptors.response.use(
   response => {
+    console.log(response)
     return response.data
   },
   error => {

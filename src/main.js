@@ -15,7 +15,7 @@ Vue.use(VueRouter)
 const router = new VueRouter({
   routes
 })
-router.beforeEach(function (to, from, next) {
+router.beforeEach((to, from, next) => {
   store.commit('UPDATE_LOADING_STATUS', {isLoading: true})
 
   if (to.path === '/auth' && store.state.openid) {
@@ -23,7 +23,7 @@ router.beforeEach(function (to, from, next) {
     next('/')
     return false
   }
-  if ((!Utils.getLocalStorage('memberInfo') || !store.state.openid) && to.path !== '/auth') {
+  if ((!Utils.getLocalStorage('memberInfo') || !store.state.token) && to.path !== '/auth') {
     Utils.setLocalStorage('beforeLoginUrl', to.fullPath)
     console.log('fsd')
     next('/auth')
@@ -35,7 +35,7 @@ router.beforeEach(function (to, from, next) {
   next()
 })
 
-router.afterEach(function (to) {
+router.afterEach((to) => {
   store.commit('UPDATE_LOADING_STATUS', {isLoading: false})
 })
 
