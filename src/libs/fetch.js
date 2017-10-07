@@ -14,7 +14,7 @@ const fetch = axios.create({
 
 fetch.interceptors.request.use(request => {
   if (store.getters.token) {
-    request.headers['Authorization'] = store.getters.token.value
+    request.headers['Authorization'] = store.getters.token
   }
   return request
 }, error => {
