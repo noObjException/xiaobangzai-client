@@ -8,24 +8,25 @@ import { cookie } from 'vux'
 export default {
   data () {
     return {
-      BASE_URL: process.env.BASE_URL
+      BASE_URL: process.env.BASE_URL,
+      BASE_API: process.env.BASE_API
     }
   },
   created () {
-    console.log('sox/...')
     if (!cookie.get('token')) {
-      let ua = window.navigator.userAgent.toLowerCase()
-      console.log(ua.match(/MicroMessenger/i))
-    //   if (ua.match(/MicroMessenger/i) === 'micromessenger') {
-      window.location.href = this.BASE_URL + '/openid'
-    //   }
+      console.log(cookie.get('token'))
+      // let ua = window.navigator.userAgent.toLowerCase()
+      // if (ua.match(/MicroMessenger/i) === 'micromessenger') {
+      window.location.href = this.BASE_URL + '/token'
+      // }
     } else {
+      console.log('登录')
       this.login()
     }
   },
   methods: {
     login () {
-      let url = this.BASE_URL + '/authMember'
+      let url = this.BASE_API + '/authMember'
       this.$http.get(url).then(res => {
         this.$store.commit('memberInfo', res.data)
         setTimeout(() => {
