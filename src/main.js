@@ -9,6 +9,7 @@ import store from './stores'
 import Http from 'src/libs/fetch.js'
 import Utils from './libs/utils.js'
 import { cookie } from 'vux'
+import { request } from './libs/fetch.js'
 
 Vue.use(Http)
 
@@ -41,7 +42,7 @@ router.beforeEach((to, from, next) => {
   if (!store.getters.memberInfo) {
     console.log('登录...')
     // let url = process.env.BASE_API + '/authMember'
-    Vue.http.get('/authMember').then(res => {
+    request.get('/authMember').then(res => {
       this.$store.commit('MEMBER_INFO', res.data)
       setTimeout(() => {
         this.goBeforeLoginUrl()

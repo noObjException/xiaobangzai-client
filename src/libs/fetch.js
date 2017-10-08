@@ -46,3 +46,5 @@ export default {
 }
 
 export const $http = fetch
+
+export const request = fetch
