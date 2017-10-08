@@ -32,12 +32,14 @@ router.beforeEach((to, from, next) => {
 
     let ua = window.navigator.userAgent.toLowerCase()
     if (ua.match(/MicroMessenger/i) === 'micromessenger') {
+      console.log('授权...')
       window.location.href = process.env.BASE_URL + '/token'
     }
     return false
   }
   // 已有token没有用户信息, 调用接口获取用户信息做登录操作
   if (!store.getters.memberInfo) {
+    console.log('登录...')
     // let url = process.env.BASE_API + '/authMember'
     Vue.$http.get('/authMember').then(res => {
       this.$store.commit('MEMBER_INFO', res.data)
