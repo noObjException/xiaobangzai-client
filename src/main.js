@@ -48,11 +48,8 @@ router.beforeEach((to, from, next) => {
         if (!url || url.indexOf('/auth') !== -1) {
           router.push('/')
         } else {
-          if (url === '/') {
-            url = '/'
-          }
           router.push(url)
-          Utils.setLocalStorage('beforeLoginUrl', '')
+          Utils.removeLocalStorage('beforeLoginUrl', '')
         }
       }, 1500)
     })

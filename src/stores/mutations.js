@@ -4,6 +4,7 @@ import {
     EXPRESS_MISSION_INFO,
     MEMBER_INFO
 } from './mutations-types.js'
+import Utils from 'src/libs/utils.js'
 
 export default {
   [UPDATE_LOADING_STATUS] (state, payload) {
@@ -16,6 +17,7 @@ export default {
     state.expressMissionInfo = payload
   },
   [MEMBER_INFO] (state, payload) {
+    Utils.setLocalStorage('memberInfo', payload)
     state.memberInfo = payload
   }
 }
