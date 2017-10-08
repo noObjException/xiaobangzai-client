@@ -41,11 +41,19 @@ router.beforeEach((to, from, next) => {
   // 已有token没有用户信息, 调用接口获取用户信息做登录操作
   if (!store.getters.memberInfo) {
     console.log('登录...')
-    // let url = process.env.BASE_API + '/authMember'
     request.get('/authMember').then(res => {
       store.commit('MEMBER_INFO', res.data)
       setTimeout(() => {
-        this.goBeforeLoginUrl()
+        let url = Utils.getLocalStorage('beforeLoginUrl')
+        if (!url || url.indexOf('/auth') !== -1) {
+          router.push('/')
+        } else {
+          if (url === '/') {
+            url = '/'
+          }
+          router.push(url)
+          Utils.setLocalStorage('beforeLoginUrl', '')
+        }
       }, 1500)
     })
     return false
@@ -68,19 +76,6 @@ Vue.mixin({
     }
   }
 })
-
-Vue.prototype.goBeforeLoginUrl = () => {
-  let url = Utils.getLocalStorage('beforeLoginUrl')
-  if (!url || url.indexOf('/auth') !== -1) {
-    router.push('/')
-  } else {
-    if (url === '/') {
-      url = '/'
-    }
-    router.push(url)
-    Utils.setLocalStorage('beforeLoginUrl', '')
-  }
-}
 
 /* eslint-disable no-new */
 new Vue({
