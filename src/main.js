@@ -43,7 +43,7 @@ router.beforeEach((to, from, next) => {
     console.log('登录...')
     // let url = process.env.BASE_API + '/authMember'
     request.get('/authMember').then(res => {
-      this.$store.commit('MEMBER_INFO', res.data)
+      store.commit('MEMBER_INFO', res.data)
       setTimeout(() => {
         this.goBeforeLoginUrl()
       }, 1500)
