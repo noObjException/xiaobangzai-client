@@ -41,7 +41,7 @@ router.beforeEach((to, from, next) => {
   if (!store.getters.memberInfo) {
     console.log('登录...')
     // let url = process.env.BASE_API + '/authMember'
-    Vue.$http.get('/authMember').then(res => {
+    Vue.http.get('/authMember').then(res => {
       this.$store.commit('MEMBER_INFO', res.data)
       setTimeout(() => {
         this.goBeforeLoginUrl()
