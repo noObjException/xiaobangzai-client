@@ -9,7 +9,6 @@ import store from './stores'
 import Http from 'src/libs/fetch.js'
 import Utils from './libs/utils.js'
 import { cookie } from 'vux'
-import axios from 'axios'
 
 Vue.use(Http)
 
@@ -39,8 +38,8 @@ router.beforeEach((to, from, next) => {
   }
   // 已有token没有用户信息, 调用接口获取用户信息做登录操作
   if (!store.getters.memberInfo) {
-    let url = process.env.BASE_API + '/authMember'
-    axios.get(url).then(res => {
+    // let url = process.env.BASE_API + '/authMember'
+    Vue.$http.get('/authMember').then(res => {
       this.$store.commit('MEMBER_INFO', res.data)
       setTimeout(() => {
         this.goBeforeLoginUrl()
