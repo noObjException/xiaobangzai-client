@@ -31,11 +31,11 @@ router.beforeEach((to, from, next) => {
   if (!store.getters.token) {
     Utils.setLocalStorage('beforeLoginUrl', to.fullPath)
 
-    let ua = window.navigator.userAgent.toLowerCase()
-    if (ua.match(/MicroMessenger/i) === 'micromessenger') {
-      console.log('授权...')
-      window.location.href = process.env.BASE_URL + '/token'
-    }
+    // let ua = window.navigator.userAgent.toLowerCase()
+    // if (ua.match(/MicroMessenger/i) === 'micromessenger') {
+    console.log('授权...')
+    window.location.href = process.env.BASE_URL + '/token'
+    // }
     return false
   }
   // 已有token没有用户信息, 调用接口获取用户信息做登录操作
