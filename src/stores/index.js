@@ -4,14 +4,13 @@ import mutations from './mutations'
 import actions from './actions'
 import getters from './getters'
 import Utils from 'src/libs/utils.js'
-import { cookie } from 'vux'
 
 Vue.use(Vuex)
 
 const state = {
   openid: Utils.getLocalStorage('openid'), // 用户openid
-  token: cookie.get('token'), // api请求token
-  memberInfo: {id: ''}, // 用户信息
+  token: Utils.getSessionStorage('token'), // api请求token
+  memberInfo: Utils.getLocalStorage('memberInfo'), // 用户信息
   choosedAddress: Utils.getLocalStorage('choosedAddress'),
   isLoading: false,
   expressMissionInfo: Utils.getLocalStorage('expressMissionInfo')

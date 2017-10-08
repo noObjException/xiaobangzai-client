@@ -8,6 +8,7 @@ import App from './App'
 import store from './stores'
 import Http from 'src/libs/fetch.js'
 import Utils from './libs/utils.js'
+import { cookie } from 'vux'
 
 Vue.use(Http)
 
@@ -17,15 +18,33 @@ const router = new VueRouter({
 })
 router.beforeEach((to, from, next) => {
   store.commit('UPDATE_LOADING_STATUS', {isLoading: true})
-  console.log(to)
-  if (to.path === '/auth' && store.state.openid) {
-    next('/')
+
+  // 把token转移到sessionStorage中
+  let token = cookie.get('token')
+  if (token) {
+    Utils.setSessionStorage('token', token)
+    cookie.remove('token')
+  }
+
+  // 没有token就跳转到服务端做微信授权, 利用授权得到的信息生成token
+  if (!store.getters.token) {
+    Utils.setLocalStorage('beforeLoginUrl', to.fullPath)
+
+    let ua = window.navigator.userAgent.toLowerCase()
+    if (ua.match(/MicroMessenger/i) === 'micromessenger') {
+      window.location.href = process.env.BASE_URL + '/token'
+    }
     return false
   }
-  if ((!Utils.getLocalStorage('memberInfo') || !store.state.token) && to.path !== '/auth') {
-    Utils.setLocalStorage('beforeLoginUrl', to.fullPath)
-    console.log('fsd')
-    next('/auth')
+  // 已有token没有用户信息, 调用接口获取用户信息做登录操作
+  if (!store.getters.memberInfo) {
+    let url = process.env.BASE_API + '/authMember'
+    this.$http.get(url).then(res => {
+      this.$store.commit('MEMBER_INFO', res.data)
+      setTimeout(() => {
+        this.goBeforeLoginUrl()
+      }, 1500)
+    })
     return false
   }
   next()

@@ -30,6 +30,38 @@ Util.removeLocalStorage = name => {
   if (!name) return
   window.localStorage.removeItem(name)
 }
+
+/**
+ * 存储sessionStorage
+ */
+Util.setSessionStorage = (key, value) => {
+  if (!key) return
+  if (typeof value !== 'string') {
+    value = JSON.stringify(value)
+  }
+  window.sessionStorage.setItem(key, value)
+}
+
+/**
+ * 获取sessionStorage
+ */
+Util.getSessionStorage = key => {
+  if (!key) return
+  let value = window.sessionStorage.getItem(key)
+  try {
+    value = JSON.parse(value)
+  } catch (e) {}
+  return value
+}
+
+/**
+ * 删除sessionStorage
+ */
+Util.removeSessionStorage = name => {
+  if (!name) return
+  window.sessionStorage.removeItem(name)
+}
+
 /**
  * 设置页面title标签
  */
