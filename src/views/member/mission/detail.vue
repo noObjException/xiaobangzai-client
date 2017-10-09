@@ -21,7 +21,7 @@
             <cell title="跑腿赏金:">
                 <span class="text-danger">￥ {{info.bounty}}</span>
             </cell>
-            <cell title="开始时间:" :value="info.start_time"></cell>
+            <cell title="开始时间:" :value="info.start_time" v-if="info.start_time"></cell>
             <cell title="备注信息:" :value="info.remark"></cell>
         </group>
 
@@ -46,7 +46,6 @@
 
 <script>
 import { Group, Cell, XButton, Actionsheet } from 'vux'
-import { mapGetters } from 'vuex'
 import mixin from 'src/mixins/expressMission.js'
 
 export default {
@@ -66,12 +65,6 @@ export default {
   mixins: [mixin],
   components: {
     Group, Cell, XButton, Actionsheet
-  },
-  computed: {
-    ...mapGetters([
-      'choosedAddress',
-      'openid'
-    ])
   },
   created () {
     this.initData()
