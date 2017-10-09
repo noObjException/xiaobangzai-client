@@ -19,7 +19,6 @@
 
 <script>
 import { Group, PopupPicker, XInput, XButton, Box, XSwitch, XTextarea, ToastPlugin } from 'vux'
-import { mapGetters } from 'vuex'
 import Vue from 'vue'
 Vue.use(ToastPlugin)
 
@@ -45,11 +44,6 @@ export default {
       }
     }
   },
-  computed: {
-    ...mapGetters([
-      'openid'
-    ])
-  },
   created () {
     this.getAddressLists()
   },
@@ -61,7 +55,6 @@ export default {
     },
     async createAddress () {
       const data = this.formData
-      data['openid'] = this.openid
       data['address'] = this.$refs.chooseAddress && this.$refs.chooseAddress.getNameValues()
 
       await this.$http.post('/memberAddress', data).then(res => {
