@@ -1,7 +1,7 @@
 <template>
     <div>
         <tab :line-width="2" active-color='#fc378c'>
-            <tab-item disabled @click.native="goToMember()">
+            <tab-item disabled @click.native="routeTo('/member')">
                 <x-icon type="android-person" class="avatar"></x-icon>
             </tab-item>
             <tab-item :selected="index === 0" v-for="(item, index) in services" @click="demo2 = item" :key="index">{{item}}</tab-item>
@@ -22,11 +22,6 @@ export default {
   data () {
     return {
       services: ['取快递', '任务大厅', '自由市场', '发现好货']
-    }
-  },
-  methods: {
-    goToMember () {
-      this.$router.push('/member')
     }
   }
 }
