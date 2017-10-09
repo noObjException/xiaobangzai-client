@@ -20,7 +20,6 @@
 
 <script>
 import { Group, Cell } from 'vux'
-import { mapGetters } from 'vuex'
 
 export default {
   data () {
@@ -32,17 +31,12 @@ export default {
   components: {
     Group, Cell
   },
-  computed: {
-    ...mapGetters([
-      'openid'
-    ])
-  },
   created () {
     this.initData()
   },
   methods: {
     async initData () {
-      await this.$http.get('/creditRecords/' + this.openid).then(res => {
+      await this.$http.get('/creditRecords').then(res => {
         this.lists = res.data
         this.totalCredit = res.meta.total_credit
       })
