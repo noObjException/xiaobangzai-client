@@ -39,7 +39,6 @@
 
 <script>
 import { Tab, TabItem, Group, Cell, XButton, ConfirmPlugin, ToastPlugin, Actionsheet, LoadMore } from 'vux'
-import { mapGetters } from 'vuex'
 import { InfiniteScroll } from 'mint-ui'
 import Vue from 'vue'
 Vue.use(InfiniteScroll)
@@ -84,12 +83,8 @@ export default {
     }
   },
   computed: {
-    ...mapGetters([
-      'openid'
-    ]),
     queryParams () {
       return {
-        openid: this.openid,
         per_page: 15,
         status: this.currentStatus,
         page: this.currentPage
