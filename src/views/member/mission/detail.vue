@@ -2,7 +2,7 @@
     <div>
         <div class="mission-status">
             <div class="content">
-                <x-icon slot="icon" type="android-bus" class="g-icon" size="30"></x-icon>
+                <x-icon slot="icon" type="android-bus" class="g-icon" size="30" style="fill: #fff;"></x-icon>
                 {{info.status}}
             </div>
         </div>
