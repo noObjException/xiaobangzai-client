@@ -10,7 +10,7 @@
             <cell title="送达时间:" :value="info.arrive_time"></cell>
             <cell title="配送费用:" :value="'￥ '+info.price"></cell>
             <cell title="跑腿赏金:" :value="'￥ '+info.bounty"></cell>
-            <cell title="备注信息:" :value="info.remark" value-align="left"></cell>
+            <cell title="备注信息:" :value="info.remark" value-align="right"></cell>
         </group>
 
         <group>
@@ -30,7 +30,6 @@
 <script>
 import { Group, Cell, XButton, Box, ToastPlugin, Actionsheet } from 'vux'
 import Vue from 'vue'
-import { mapGetters } from 'vuex'
 import mixin from 'src/mixins/expressMission.js'
 
 Vue.use(ToastPlugin)
@@ -54,9 +53,6 @@ export default {
     Group, Cell, XButton, Box, Actionsheet
   },
   computed: {
-    ...mapGetters([
-      'openid'
-    ]),
     totalPrice () {
       let price = 0
       price = this.info.price

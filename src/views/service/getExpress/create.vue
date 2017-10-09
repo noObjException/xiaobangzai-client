@@ -114,7 +114,6 @@ export default {
   computed: {
     ...mapGetters([
       'choosedAddress',
-      'openid',
       'expressMissionInfo'
     ]),
     info () {
@@ -132,7 +131,6 @@ export default {
     } else {
       let data = this.formData
       data['address'] = this.choosedAddress
-      data['openid'] = this.openid
       this.$store.dispatch('saveExpressMissionInfo', data)
     }
     next()
@@ -173,7 +171,6 @@ export default {
       this.isSubmitted = true
       let data = this.formData
       data['address'] = this.choosedAddress
-      data['openid'] = this.openid
       if (!this.validation(data)) {
         return false
       }
