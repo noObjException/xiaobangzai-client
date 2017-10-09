@@ -89,4 +89,17 @@ Util.random_str = len => {
   return str
 }
 
+/**
+ * 是否在微信浏览器中
+ */
+Util.isWechat = () => {
+  let ua = window.navigator.userAgent.toLowerCase()
+  try {
+    let userAgent = ua.match(/MicroMessenger/i)
+    return userAgent[0] === 'micromessenger'
+  } catch (e) {
+    return false
+  }
+}
+
 export default Util

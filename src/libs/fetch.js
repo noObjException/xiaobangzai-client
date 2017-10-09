@@ -25,7 +25,6 @@ fetch.interceptors.request.use(request => {
 
 fetch.interceptors.response.use(
   response => {
-    console.log(response)
     return response.data
   },
   error => {

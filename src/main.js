@@ -31,16 +31,16 @@ router.beforeEach((to, from, next) => {
   if (!store.getters.token) {
     Utils.setLocalStorage('beforeLoginUrl', to.fullPath)
 
-    // let ua = window.navigator.userAgent.toLowerCase()
-    // if (ua.match(/MicroMessenger/i) === 'micromessenger') {
-    console.log('授权...')
-    window.location.href = process.env.BASE_URL + '/token'
-    // }
+    let url = process.env.BASE_URL + '/token'
+    // 用于本地调试
+    if (!Utils.isWechat()) {
+      url += '?openid=' + process.env.TEST_OPENID
+    }
+    window.location.href = url
     return false
   }
   // 已有token没有用户信息, 调用接口获取用户信息做登录操作
   if (!store.getters.memberInfo) {
-    console.log('登录...')
     request.get('/authMember').then(res => {
       store.commit('MEMBER_INFO', res.data)
       setTimeout(() => {
