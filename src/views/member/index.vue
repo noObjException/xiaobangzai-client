@@ -59,7 +59,6 @@
 
 <script>
 import { Badge, Group, Cell, Grid, GridItem } from 'vux'
-import { mapGetters } from 'vuex'
 
 export default {
   components: {
@@ -77,17 +76,12 @@ export default {
       credit: 0
     }
   },
-  computed: {
-    ...mapGetters([
-      'openid'
-    ])
-  },
   created () {
     this.initData()
   },
   methods: {
     async initData () {
-      await this.$http.get('/members/' + this.openid).then(res => {
+      await this.$http.get('/members').then(res => {
         let data = res.data
 
         if (data.avatar.length !== 0) {
