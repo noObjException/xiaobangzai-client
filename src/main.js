@@ -45,7 +45,7 @@ router.beforeEach((to, from, next) => {
       store.commit('MEMBER_INFO', res.data)
       setTimeout(() => {
         let url = Utils.getLocalStorage('beforeLoginUrl')
-        if (!url || url.indexOf('/auth') !== -1) {
+        if (!url) {
           router.push('/')
         } else {
           router.push(url)

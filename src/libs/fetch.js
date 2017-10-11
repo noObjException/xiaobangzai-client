@@ -1,5 +1,6 @@
 import axios from 'axios'
 import store from 'src/stores/'
+import Utils from 'src/libs/utils.js'
 
 const fetch = axios.create({
   baseURL: process.env.BASE_API,
@@ -30,6 +31,12 @@ fetch.interceptors.response.use(
   error => {
     let data = error.response.data
     // let status = error.response.code
+
+    // 临时处理token超时
+    if (data.message === 'Token has expired') {
+      Utils.removeSessionStoreage('token')
+      window.location.reload()
+    }
     alert(data.message)
     console.log(error.response)
     return Promise.reject(error)

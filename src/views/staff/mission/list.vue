@@ -2,11 +2,8 @@
     <div>
         <group v-for="(item, index) in lists" :key="index">
             <router-link :to="'detail?id='+item.id" style="color: #000;">
-                <cell :title="item.realname" :inline-desc="'下单时间: ' + item.created_at">
+                <cell :title="item.realname+' '+item.mobile" :inline-desc="'下单时间: ' + item.created_at">
                     <img slot="icon" :src="item.avatar" class="avatar" />
-                    <span class="text-danger">
-                        {{item.status}}
-                    </span>
                 </cell>
 
                 <cell :title="item.express_com+' '+item.express_type">

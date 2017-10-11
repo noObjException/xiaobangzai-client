@@ -60,10 +60,11 @@
         <x-button type="primary" @click.native="fillInfo">确定</x-button>
         <x-button type="default" @click.native="cencel">取消</x-button>
       </box>
-
     </popup>
+
   </div>
 </template>
+
 <script>
 import { Selector, PopupRadio, XButton, Popup, Group, Cell, XInput, XTextarea, Range, Box, LoadMore, ToastPlugin, Radio } from 'vux'
 import { mapGetters } from 'vuex'
