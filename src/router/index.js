@@ -45,6 +45,10 @@ export default [
       {
         path: 'getExpress/create',
         component: Utils.getPath('service/getExpress/create')
+      },
+      {
+        path: 'getExpress/list',
+        component: Utils.getPath('staff/mission/list')
       }
     ]
   },

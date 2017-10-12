@@ -4,7 +4,7 @@
             <tab-item disabled @click.native="routeTo('/member')">
                 <x-icon type="android-person" class="avatar"></x-icon>
             </tab-item>
-            <tab-item :selected="index === 0" v-for="(item, index) in services" @click="demo2 = item" :key="index">{{item}}</tab-item>
+            <tab-item :selected="index === 0" v-for="(item, index) in services" @click.native="chooseService(item.url)" :key="index">{{item.title}}</tab-item>
         </tab>
 
         <router-view></router-view>
@@ -21,7 +21,17 @@ export default {
   },
   data () {
     return {
-      services: ['取快递', '任务大厅', '自由市场', '发现好货']
+      services: [
+        { title: '取快递', url: '/service/getExpress/create' },
+        { title: '任务大厅', url: '/service/getExpress/list' },
+        { title: '自由市场', url: '' },
+        { title: '二手书籍', url: '' }
+      ]
+    }
+  },
+  methods: {
+    chooseService (url) {
+      this.$router.push(url)
     }
   }
 }
