@@ -148,7 +148,7 @@ export default {
   },
   methods: {
     async initData () {
-      await this.$http.get('/expressMission/index').then(res => {
+      await this.$http.get('/getExpress/create').then(res => {
         let data = res.data
         this.expressCompanys = data.expressCompanys
         this.arriveTimes = data.arriveTimes
