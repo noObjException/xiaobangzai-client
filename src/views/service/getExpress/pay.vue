@@ -1,30 +1,39 @@
 <template>
-    <div>
-        <group>
-            <cell :title="info.realname+ ' '+info.mobile" :inline-desc="info.college+ ' ' +info.area"></cell>
-        </group>
+  <div>
+    <group>
+      <cell :title="info.realname+ ' '+info.mobile" :inline-desc="info.college+ ' ' +info.area"></cell>
+    </group>
 
-        <group labelWidth="90px">
-            <cell title="快递公司:" :value="info.express_com"></cell>
-            <cell title="物品信息:" :value="info.express_type+'/'+info.express_weight"></cell>
-            <cell title="送达时间:" :value="info.arrive_time"></cell>
-            <cell title="配送费用:" :value="'￥ '+info.price"></cell>
-            <cell title="跑腿赏金:" :value="'￥ '+info.bounty"></cell>
-            <cell title="备注信息:" :value="info.remark" value-align="right"></cell>
-        </group>
+    <group labelWidth="90px">
+      <cell title="快递公司:" :value="info.express_com"></cell>
+      <cell title="物品信息:" :value="info.express_type+'/'+info.express_weight"></cell>
+      <cell title="送达时间:" :value="info.arrive_time"></cell>
+      <cell title="配送费用:">
+        <span class="text-danger">￥ {{info.price}}</span>
+      </cell>
+      <cell title="跑腿赏金:">
+        <span class="text-danger">￥ {{info.bounty}}</span>
+      </cell>
+      <cell title="上楼加价:" v-if="info.upstairs_price">
+        <span class="text-danger">￥ {{info.upstairs_price}}</span>
+      </cell>
+      <cell title="备注信息:" :value="info.remark" value-align="right">{{info.remark||'无'}}</cell>
+    </group>
 
-        <group>
-            <cell title="应付金额:" :value="'￥ '+totalPrice"></cell>
-        </group>
+    <group>
+      <cell title="应付金额:">
+        <span class="text-danger">￥ {{totalPrice}}</span>
+      </cell>
+    </group>
 
-        <box gap="40px 6px">
-            <x-button type="primary" @click.native="showPayType = true">立即支付</x-button>
-        </box>
+    <box gap="40px 6px">
+      <x-button type="primary" @click.native="showPayType = true">立即支付</x-button>
+    </box>
 
-        <actionsheet v-model="showPayType" :menus="payTypes" @on-click-menu="handlePay" show-cancel>
-          <p slot="header">请选择支付方式</p>
-        </actionsheet>
-    </div>
+    <actionsheet v-model="showPayType" :menus="payTypes" @on-click-menu="handlePay" show-cancel>
+      <p slot="header">请选择支付方式</p>
+    </actionsheet>
+  </div>
 </template>
 
 <script>
@@ -55,7 +64,7 @@ export default {
   computed: {
     totalPrice () {
       let price = 0
-      price = this.info.price
+      price = this.info.total_price
       return price
     }
   },

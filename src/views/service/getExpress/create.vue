@@ -31,7 +31,7 @@
     </box>
 
     <!-- 物品信息 -->
-    <popup v-model="show" height="100%">
+    <popup v-model="showInfo" height="100%">
       <div class="info-container">
         <p>物品类型:</p>
 
@@ -54,8 +54,8 @@
         <x-input title="取货号:" v-model="formData.pickup_code"></x-input>
       </group>
 
-      <group gutter="6px" title="送到哪儿?">
-        <radio :options="toWheres" v-model="formData.to_where"></radio>
+      <group>
+        <checklist title="额外收费项" :options="extraCostsList" v-model="formData.extra_costs"></checklist>
       </group>
 
       <box gap="80px 6px">
@@ -68,7 +68,7 @@
 </template>
 
 <script>
-import { Selector, PopupRadio, XButton, Popup, Group, Cell, XInput, XTextarea, Range, Box, LoadMore, ToastPlugin, Radio } from 'vux'
+import { Selector, PopupRadio, XButton, Popup, Group, Cell, XInput, XTextarea, Range, Box, LoadMore, ToastPlugin, Checklist } from 'vux'
 import { mapGetters } from 'vuex'
 import Vue from 'vue'
 Vue.use(ToastPlugin)
@@ -86,18 +86,17 @@ export default {
     Range,
     Box,
     LoadMore,
-    Radio
+    Checklist
   },
   data () {
     return {
       arriveTimes: [],
       expressCompanys: [],
-      show: false,
+      showInfo: false,
       expressWeights: [],
       expressTypes: [],
-      toWheres: [
-        { key: '1', value: '送到宿舍(上楼)' },
-        { key: '2', value: '送到楼下' }
+      extraCostsList: [
+        { key: 'upstairs_price', value: '送到宿舍(上楼)' }
       ],
       formData: {
         arrive_time: '',
@@ -106,8 +105,8 @@ export default {
         pickup_code: '',
         express_weight: '',
         bounty: 0,
-        to_where: '',
-        remark: ''
+        remark: '',
+        extra_costs: []
       },
       isSubmitted: false
     }
@@ -211,9 +210,6 @@ export default {
         text = '物品类型不能为空'
       } else if (data.express_weight.length === 0) {
         text = '物品重量不能为空'
-      } else if (data.to_where.length === 0) {
-        text = '请选择是送到楼上还是楼下'
-        width = '12.6em'
       } else if (data.address.length === 0) {
         text = '请选择收货地址'
       } else {
@@ -230,10 +226,10 @@ export default {
       return false
     },
     async inputInfo () {
-      this.show = true
+      this.showInfo = true
     },
     fillInfo () {
-      this.show = false
+      this.showInfo = false
     },
     chooseType (name = '') {
       this.formData.express_type = name
@@ -245,7 +241,7 @@ export default {
       this.formData.express_type = ''
       this.formData.express_weight = ''
       this.formData.to_where = ''
-      this.show = false
+      this.showInfo = false
     }
   }
 }

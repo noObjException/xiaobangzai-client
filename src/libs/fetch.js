@@ -35,8 +35,8 @@ fetch.interceptors.response.use(
     // 临时处理token超时
     if (data.message === 'Token has expired') {
       console.log('token 超时')
-      Utils.removeSessionStoreage('token')
-      Utils.removeLocalStoreage('memberInfo')
+      Utils.removeSessionStorage('token')
+      Utils.removeLocalStorage('memberInfo')
       window.location.reload()
     }
     alert(data.message)
