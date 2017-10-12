@@ -30,6 +30,7 @@
       <load-more background-color="#fbf9fe" :show-loading="false" tip="注:一件一单,重量小于3kg,超出此重量,每公斤额外收取1元费用"></load-more>
     </box>
 
+    <!-- 物品信息 -->
     <popup v-model="show" height="100%">
       <div class="info-container">
         <p>物品类型:</p>
@@ -39,7 +40,7 @@
             <x-button mini :type="isChoosed(item)" @click.native="chooseType(item)">{{item}}</x-button>
           </div>
           <div class="info-type-item">
-            <x-button mini :type="isChoosed()" @click.native="chooseType()">其他</x-button>
+            <x-button mini :type="isOtherType ? 'primary' : 'default'" @click.native="chooseType('other')">其他</x-button>
           </div>
         </div>
       </div>
@@ -50,10 +51,11 @@
 
       <group gutter="6px">
         <selector title="物品重量:" :options="expressWeights" v-model="formData.express_weight"></selector>
+        <x-input title="取货号:" v-model="formData.pickup_code"></x-input>
       </group>
 
       <group gutter="6px" title="送到哪儿?">
-         <radio :options="toWheres" v-model="formData.to_where"></radio>
+        <radio :options="toWheres" v-model="formData.to_where"></radio>
       </group>
 
       <box gap="80px 6px">
@@ -100,7 +102,8 @@ export default {
       formData: {
         arrive_time: '',
         express_com: '',
-        express_type: ' ',
+        express_type: '',
+        pickup_code: '',
         express_weight: '',
         bounty: 0,
         to_where: '',
@@ -123,10 +126,17 @@ export default {
       return type || weight ? type + ' ' + weight : ''
     },
     isOtherType () {
-      return this.formData.express_type === ''
+      let expressType = this.formData.express_type
+      if (this.expressTypes.indexOf(expressType) === -1 && expressType !== '') {
+        if (expressType === 'other') {
+          this.formData.express_type = ''
+        }
+        return true
+      }
     }
   },
   beforeRouteLeave (to, from, next) {
+    // 未提交时离开页面都缓存订单信息, 然后回填, 提交后清空缓存
     if (this.isSubmitted) {
       this.$store.dispatch('saveExpressMissionInfo', null)
     } else {
