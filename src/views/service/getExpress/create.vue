@@ -27,8 +27,15 @@
 
     <box gap="0 6px">
       <x-button type="primary" @click.native="createMission">立即下单</x-button>
-      <load-more background-color="#fbf9fe" :show-loading="false" tip="注:一件一单,重量小于3kg,超出此重量,每公斤额外收取1元费用"></load-more>
     </box>
+
+    <div class="price-rule">
+      <a href="javascript:void(0);" @click="showPriceRule = true">查看计价规则</a>
+    </div>
+    
+    <x-dialog v-model="showPriceRule" hide-on-blur>
+      <p>计价规则</p>
+    </x-dialog>
 
     <!-- 物品信息 -->
     <popup v-model="showInfo" height="100%">
@@ -68,7 +75,7 @@
 </template>
 
 <script>
-import { Selector, PopupRadio, XButton, Popup, Group, Cell, XInput, XTextarea, Range, Box, LoadMore, ToastPlugin, Checklist } from 'vux'
+import { Selector, PopupRadio, XButton, Popup, Group, Cell, XInput, XTextarea, Range, Box, LoadMore, ToastPlugin, Checklist, XDialog } from 'vux'
 import { mapGetters } from 'vuex'
 import Vue from 'vue'
 Vue.use(ToastPlugin)
@@ -86,13 +93,15 @@ export default {
     Range,
     Box,
     LoadMore,
-    Checklist
+    Checklist,
+    XDialog
   },
   data () {
     return {
       arriveTimes: [],
       expressCompanys: [],
       showInfo: false,
+      showPriceRule: false,
       expressWeights: [],
       expressTypes: [],
       extraCostsList: [
@@ -259,6 +268,11 @@ export default {
       margin-top: 6px;
     }
   }
+}
+.price-rule{
+  text-align:center; 
+  font-size: 13px;
+  margin: .5rem auto; 
 }
 </style>
 
