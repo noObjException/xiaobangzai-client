@@ -9,8 +9,8 @@ export default [
     children: [
       {
         path: '',
-        // redirect: '/service/getExpress/create'
-        component: Utils.getPath('index/index')
+        redirect: '/service/getExpress/create'
+        // component: Utils.getPath('index/index')
       }
     ]
   },
