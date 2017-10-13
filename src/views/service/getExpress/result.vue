@@ -3,7 +3,9 @@
     <msg title="支付成功" icon="success" description="您的包裹已整装待发"></msg>
 
     <group>
-      <cell title="实付款" :value="info.total_price"></cell>
+      <cell title="实付款">
+        <span class="text-danger">￥ {{info.total_price}}</span>
+      </cell>
       <cell title="收货人" :value="info.realname"></cell>
       <cell title="手机号" :value="info.mobile"></cell>
       <cell title="收货地址" :value="info.college+' '+info.area"></cell>
