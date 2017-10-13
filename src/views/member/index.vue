@@ -1,7 +1,7 @@
 <template>
   <div>
     <div class="avatar">
-      <img :src="avatar"/>
+      <img :src="avatar" />
       <p>{{nickname}}</p>
     </div>
     <group>
@@ -52,6 +52,9 @@
       <cell title="关于我们" is-link>
         <x-icon slot="icon" type="android-alert" class="cell-icon"></x-icon>
       </cell>
+      <cell title="服务端" link="/staff">
+        <x-icon slot="icon" type="ios-people-outline" class="cell-icon"></x-icon>
+      </cell>
     </group>
 
   </div>
@@ -96,7 +99,7 @@ export default {
       })
     },
     routeTo (status) {
-      this.$router.push({path: '/member/mission', query: {status: status}})
+      this.$router.push({ path: '/member/mission', query: { status: status } })
     }
   }
 }
@@ -125,8 +128,7 @@ export default {
   .menu-item {
     width: 20%;
     text-align: center;
-    padding: 10px 0;
-    // img {
+    padding: 10px 0; // img {
     //   width: 30px;
     //   height: 24px;
     // }
@@ -136,9 +138,10 @@ export default {
     }
   }
 }
-.cell-icon{
+
+.cell-icon {
   width: 18px;
-  vertical-align:middle;
+  vertical-align: middle;
   margin-right: 4px;
 }
 </style>
