@@ -19,7 +19,7 @@
 
     <group gutter="4px">
       <cell title="基本费用">
-        <span class="text-danger">￥ 10.00</span>
+        <span class="text-danger">￥ {{settings.price.toFixed(2)}}</span>
       </cell>
       <cell primary="content">
         <span slot="title">增加 <span class="text-danger" style="font-size:20px;">{{formData.bounty}}</span> 元运费</span>
@@ -111,6 +111,7 @@ export default {
       extraCostsList: [
         { key: 'upstairs_price', value: '送到宿舍(上楼)' }
       ],
+      settings: {},
       formData: {
         arrive_time: '',
         express_com: '',
@@ -166,6 +167,7 @@ export default {
         this.arriveTimes = data.arriveTimes
         this.expressTypes = data.expressTypes
         this.expressWeights = data.expressWeights
+        this.settings = data.settings
 
         // 回填缓存中的信息
         if (!this.expressMissionInfo) {
