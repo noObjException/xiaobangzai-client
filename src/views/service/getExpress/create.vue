@@ -14,12 +14,12 @@
     </group>
 
     <group gutter="4px">
-      <x-textarea placeholder="备注:若有其他特别注意事项请在此说明" :show-counter="false" :rows="4" v-model="formData.remark"></x-textarea>
+      <x-textarea placeholder="备注:若有其他特别注意事项请在此说明" :show-counter="false" :rows="3" v-model="formData.remark"></x-textarea>
     </group>
 
     <group gutter="4px">
       <cell title="基本费用">
-        <span class="text-danger">￥ {{settings.price.toFixed(2)}}</span>
+        <span class="text-danger">￥ {{Number(this.settings.price).toFixed(2)}}</span>
       </cell>
       <cell primary="content">
         <span slot="title">增加 <span class="text-danger" style="font-size:20px;">{{formData.bounty}}</span> 元运费</span>

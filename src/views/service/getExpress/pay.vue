@@ -74,9 +74,11 @@ export default {
   },
   computed: {
     totalPrice () {
-      let price = 0
-      price = this.info.total_price - this.deduction
-      return price.toFixed(2)
+      let price = this.info.total_price
+      if (this.formData.is_use_credit) {
+        price -= this.deduction
+      }
+      return price
     },
     deductionTitle () {
       if (this.deduction > 0) {
