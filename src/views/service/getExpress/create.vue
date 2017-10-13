@@ -211,16 +211,17 @@ export default {
     },
     validation (data) {
       let text = ''
-      let width = '7.6em'
+      let width = '8.6em'
       if (data.express_com.length === 0) {
         text = '快递公司不能为空'
-        width = '8.6em'
       } else if (data.express_type.length === 0) {
         text = '物品类型不能为空'
       } else if (data.express_weight.length === 0) {
         text = '物品重量不能为空'
       } else if (data.address.length === 0) {
         text = '请选择收货地址'
+      } else if (data.arrive_time.length === 0) {
+        text = '送达时间不能为空'
       } else {
         return true
       }

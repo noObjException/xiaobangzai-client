@@ -25,7 +25,8 @@
       <cell title="备注信息:" :value="info.remark" value-align="right">{{info.remark||'无'}}</cell>
     </group>
 
-    <group>
+    <group labelWidth="150px"> 
+      <x-switch :title="deductionTitle" v-model="formData.is_use_credit" :disabled="deductionDisabled"></x-switch>
       <cell title="应付金额:">
         <span class="text-danger">￥ {{totalPrice}}</span>
       </cell>
@@ -42,7 +43,7 @@
 </template>
 
 <script>
-import { Group, Cell, XButton, Box, ToastPlugin, Actionsheet } from 'vux'
+import { Group, Cell, XButton, Box, ToastPlugin, Actionsheet, XSwitch } from 'vux'
 import Vue from 'vue'
 import mixin from 'src/mixins/expressMission.js'
 
@@ -53,6 +54,11 @@ export default {
     return {
       info: {},
       showPayType: false,
+      formData: {
+        is_use_credit: true
+      },
+      member: {},
+      settings: {},
       payTypes: [{
         label: '微信支付',
         value: 'WECHAT_PAY'
@@ -64,13 +70,30 @@ export default {
   },
   mixins: [mixin],
   components: {
-    Group, Cell, XButton, Box, Actionsheet
+    Group, Cell, XButton, Box, Actionsheet, XSwitch
   },
   computed: {
     totalPrice () {
       let price = 0
-      price = this.info.total_price
-      return price
+      price = this.info.total_price - this.deduction
+      return price.toFixed(2)
+    },
+    deductionTitle () {
+      if (this.deduction > 0) {
+        return '使用积分抵扣 <span class=text-danger>￥ ' + this.deduction + '</span>'
+      }
+      return '<span class=text-danger>积分不足, 无法抵扣</span>'
+    },
+    deductionDisabled () {
+      if (this.deduction <= 0) {
+        this.formData.is_use_credit = false
+        return true
+      }
+      return false
+    },
+    deduction () {
+      let deduction = this.member.credit / this.settings.credit_to_money
+      return deduction.toFixed(2)
     }
   },
   created () {
@@ -81,10 +104,14 @@ export default {
       let id = this.$route.query.id
       await this.$http.get('/getExpress/' + id).then(res => {
         this.info = res.data
+        this.member = res.meta.member
+        this.settings = res.meta.settings
       })
     },
     async handlePay (payType) {
-      this.pay(this.info.id, payType)
+      let data = this.formData
+      data['pay_type'] = payType
+      this.pay(this.info.id, data)
     }
   }
 }

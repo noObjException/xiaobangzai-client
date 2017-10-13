@@ -25,9 +25,9 @@ export default {
       })
     },
     // 支付订单
-    async pay (id, payType) {
+    async pay (id, data) {
       let that = this
-      await this.$http.put('/expressMission/pay/' + id, {pay_type: payType}).then(res => {
+      await this.$http.put('/expressMission/pay/' + id, data).then(res => {
         this.$vux.toast.show({
           text: '支付成功',
           onShow () {

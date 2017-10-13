@@ -126,7 +126,8 @@ export default {
       this.payId = id
     },
     async handlePay (payType) {
-      this.pay(this.payId, payType)
+      let data = {pay_type: payType}
+      this.pay(this.payId, data)
     }
   }
 }
