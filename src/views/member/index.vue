@@ -43,7 +43,7 @@
     </group>
 
     <group>
-      <cell title="个人认证" link="/staff/identify">
+      <cell title="个人认证" link="/staff/identify" v-if="settings.identify">
         <x-icon slot="icon" type="android-clipboard" class="cell-icon"></x-icon>
       </cell>
       <cell title="我的地址" is-link>
@@ -73,7 +73,8 @@ export default {
       avatar: '../../../static/logo.png',
       nickname: '',
       balance: 0.00,
-      credit: 0
+      credit: 0,
+      settings: ''
     }
   },
   created () {
@@ -90,6 +91,8 @@ export default {
         this.nickname = data.nickname
         this.balance = data.balance
         this.credit = data.credit
+
+        this.settings = res.meta.settings
       })
     },
     routeTo (status) {
