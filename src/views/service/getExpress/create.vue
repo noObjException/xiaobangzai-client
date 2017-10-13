@@ -2,7 +2,7 @@
   <div>
     <group gutter="4px">
       <cell v-if="!choosedAddress" link="/address" inline-desc="请选择您的收货地址"></cell>
-      <cell v-else link="/address" :title="choosedAddress.realname+ ' '+choosedAddress.mobile" :inline-desc="choosedAddress.college+ ' ' +choosedAddress.area">
+      <cell v-else link="/address" :title="choosedAddress.realname+ ' '+choosedAddress.mobile" :inline-desc="choosedAddress.college+ ' ' +choosedAddress.area + ' '+choosedAddress.detail">
         <x-icon slot="icon" type="ios-location-outline"></x-icon>
       </cell>
     </group>
@@ -18,8 +18,12 @@
     </group>
 
     <group gutter="4px">
-      <cell :title="'增加 '+formData.bounty+' 元运费'" primary="content">
-        <range v-model="formData.bounty" :min="0" :max="10" :step="0.5"></range>
+      <cell title="基本费用">
+        <span class="text-danger">￥ 10.00</span>
+      </cell>
+      <cell primary="content">
+        <span slot="title">增加 <span class="text-danger" style="font-size:20px;">{{formData.bounty}}</span> 元运费</span>
+        <range v-model="formData.bounty" :min="0" :max="10" :step="0.5" :rangeBarHeight='6'></range>
       </cell>
     </group>
 

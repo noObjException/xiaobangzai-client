@@ -1,7 +1,6 @@
 <template>
     <div style="height: 100%;">
         <view-box ref="viewBox">
-        <x-header slot="header">youbang</x-header>
 
             <router-view></router-view>
 
