@@ -7,17 +7,27 @@
     </tab>
 
     <div v-infinite-scroll="loadMore" :infinite-scroll-disabled="allLoaded" :infinite-scroll-immediate-check='false' :infinite-scroll-distance='10'>
-      <group :title="'下单时间: '+item.created_at" label-width="5em" v-for="(item, index) in lists" :key="index">
+      <group :title="'下单时间: '+item.created_at" label-width="5em" v-for="(item, index) in lists" :key="index" labelWidth="180px">
         <router-link :to="'mission/detail?id='+item.id" style="color: #000;">
-          <cell title="订单状态:">
-            <span class="text-danger">{{item.status}}</span>
+          <cell :title="item.status" :inline-desc="'订单编号: '+item.order_num">
+            <x-icon slot="icon" type="ios-email-outline" class="big-icon" size="50"></x-icon>
+            <span slot="title" class="text-danger">{{item.status}}</span>
           </cell>
-          <cell title="订单编号:" :value="item.order_num"></cell>
-          <cell title="快递公司:" :value="item.express_com"></cell>
-          <cell title="货物信息:" :value="item.express_type"></cell>
-          <cell title="收货地址:" :value="item.college+' '+item.area+' '+item.detail" value-align="right" align-items="flex-start"></cell>
-          <cell title="订单金额:" :value="'￥ '+item.total_price"></cell>
+
+          <cell :title="item.express_com+'  '+item.express_type">
+            <x-icon slot="icon" type="ios-information-outline" class="cell-icon" style="fill:rgb(65, 194, 215)"></x-icon>
+          </cell>
+
+          <cell :title="item.college+' '+item.area+' '+item.detail">
+            <x-icon slot="icon" type="ios-location-outline" class="cell-icon"></x-icon>
+          </cell>
+
+          <cell>
+            <x-icon slot="icon" type="social-usd-outline" class="cell-icon" style="fill:rgb(6255, 90, 0)"></x-icon>
+            <span slot="title" class="text-danger">￥ {{item.total_price}}</span>
+          </cell>
         </router-link>
+
         <cell>
           <div>
             <x-button mini v-if="item.status === '待支付'" @click.native="cancel(item.id)">取消订单</x-button>
@@ -132,4 +142,16 @@ export default {
   }
 }
 </script>
+
+<style lang="less" scoped>
+.big-icon{
+  fill: rgb(255, 90, 0);
+  margin-right: 2px;
+}
+.cell-icon{
+  width: 20px;
+  vertical-align:middle;
+  margin:0 16px;
+}
+</style>
 
