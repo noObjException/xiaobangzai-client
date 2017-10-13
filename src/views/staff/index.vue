@@ -1,18 +1,18 @@
 <template>
   <div>
     <div class="avatar">
-      <img src="../../../static/logo.png" />
-      <p>陈总</p>
+      <img :src="member.avatar" />
+      <p>{{member.nickname}}</p>
     </div>
     <group gutter="0">
       <grid :cols='2'>
-        <grid-item label="余额: 999.00"></grid-item>
+        <grid-item :label="'余额: '+member.credit"></grid-item>
         <grid-item label="信誉点:59"></grid-item>
       </grid>
     </group>
 
     <group gutter="6px">
-      <cell title="任务大厅" value="全部任务" link="/staff/mission/list"></cell>
+      <cell title="任务大厅" value="去接单" link="/staff/mission/list"></cell>
       <grid :cols='4' class="menus">
         <grid-item label="67">
           <p class="menu-item">已接单</p>
@@ -28,12 +28,11 @@
         </grid-item>
       </grid>
 
-      <grid :cols='2' class="menus">
-        <grid-item label="3"><p class="menu-item">已取消</p></grid-item>
-        <grid-item label="66"><p class="menu-item">评价管理</p></grid-item>
-      </grid>
     </group>
 
+    <group gutter="6px">
+      <cell title="评价管理" value="0" is-link></cell>
+    </group>
   </div>
 </template>
 
@@ -43,11 +42,21 @@ import { Grid, GridItem, Group, Cell } from 'vux'
 export default {
   data () {
     return {
-
+      member: {}
     }
   },
   components: {
     Grid, GridItem, Group, Cell
+  },
+  created () {
+    this.initData()
+  },
+  methods: {
+    async initData () {
+      this.$http.get('/members').then(res => {
+        this.member = res.data
+      })
+    }
   }
 }
 </script>
