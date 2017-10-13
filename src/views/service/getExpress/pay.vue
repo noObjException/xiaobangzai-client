@@ -16,8 +16,8 @@
       <cell title="上楼加价:" v-if="info.upstairs_price">
         <span class="text-danger">￥ {{info.upstairs_price}}</span>
       </cell>
-      <cell title="超重加价:" v-if="info.over_weight_price">
-        <span class="text-danger">￥ {{info.over_weight_price}}</span>
+      <cell title="超重加价:" v-if="info.overweight_price">
+        <span class="text-danger">￥ {{info.overweight_price}}</span>
       </cell>
        <cell title="跑腿赏金:">
         <span class="text-danger">￥ {{info.bounty}}</span>
