@@ -26,7 +26,7 @@
     </group>
 
     <group labelWidth="150px"> 
-      <x-switch :title="deductionTitle" v-model="formData.is_use_credit" :disabled="deductionDisabled"></x-switch>
+      <x-switch :title="deductionTitle" v-model="formData.is_use_credit" :disabled="deductionDisabled" v-if="settings.credit_to_money_switch"></x-switch>
       <cell title="应付金额:">
         <span class="text-danger">￥ {{totalPrice}}</span>
       </cell>
@@ -55,7 +55,7 @@ export default {
       info: {},
       showPayType: false,
       formData: {
-        is_use_credit: true
+        is_use_credit: false
       },
       member: {},
       settings: {},
@@ -107,7 +107,11 @@ export default {
       await this.$http.get('/getExpress/' + id).then(res => {
         this.info = res.data
         this.member = res.meta.member
+
         this.settings = res.meta.settings
+        if (this.settings.credit_to_money_switch) {
+          this.formData.is_use_credit = true
+        }
       })
     },
     async handlePay (payType) {
