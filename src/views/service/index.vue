@@ -4,7 +4,7 @@
             <tab-item disabled @click.native="routeTo('/member')">
                 <x-icon type="android-person" class="avatar"></x-icon>
             </tab-item>
-            <tab-item :selected="index === 0" v-for="(item, index) in services" @click.native="chooseService(item.url)" :key="index">{{item.title}}</tab-item>
+            <tab-item :selected="active === item.url" v-for="(item, index) in services" @click.native="chooseService(item.url)" :key="index">{{item.title}}</tab-item>
         </tab>
 
         <router-view></router-view>
@@ -27,6 +27,11 @@ export default {
         { title: '自由市场', url: '' },
         { title: '二手书籍', url: '' }
       ]
+    }
+  },
+  computed: {
+    active () {
+      return this.$route.path
     }
   },
   methods: {
