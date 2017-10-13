@@ -1,22 +1,23 @@
 <template>
     <div>
         <group v-for="(item, index) in lists" :key="index">
-            <router-link :to="'detail?id='+item.id" style="color: #000;">
-                <cell :title="item.realname+' '+item.mobile" :inline-desc="'下单时间: ' + item.created_at">
-                    <img slot="icon" :src="item.avatar" class="avatar" />
-                </cell>
+            <cell :title="item.realname" :inline-desc="'下单时间: ' + item.created_at" style="border-bottom: 1px solid #D9D9D9;">
+                <img slot="icon" :src="item.avatar" class="avatar" />
+                <a :href="'tel:'+item.mobile">{{item.mobile}}</a>
+            </cell>
 
+            <router-link :to="'detail?id='+item.id" style="color: #000;">
                 <cell :title="item.express_com+' '+item.express_type">
-                    <x-icon slot="icon" type="android-plane" class="g-icon" size="20"></x-icon>
+                    <x-icon slot="icon" type="android-plane" class="g-icon" size="20" style="fill: rgb(65, 194, 215)"></x-icon>
                 </cell>
                 <cell :title="item.college+' '+item.area+' '+item.detail">
                     <x-icon slot="icon" type="location" class="g-icon" size="20"></x-icon>
                 </cell>
                 <cell :title="'送达时间: '+item.arrive_time">
-                    <x-icon slot="icon" type="ios-clock-outline" class="g-icon" size="20"></x-icon>
+                    <x-icon slot="icon" type="ios-clock-outline" class="g-icon" size="20" style="fill: rgb(255, 49, 0)"></x-icon>
                 </cell>
             </router-link>
-            
+
             <cell>
                 <x-icon slot="icon" type="cash" class="g-icon" size="20"></x-icon>
                 <span slot="title" class="text-danger">￥{{item.total_price}}</span>
@@ -66,7 +67,7 @@ export default {
 
 <style lang="less" scoped>
 .avatar {
-    width: 50px;
+    width: 40px;
     margin-right: 6px;
     border-radius: 50%;
 }

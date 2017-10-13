@@ -16,8 +16,11 @@
         <group labelWidth="90px">
             <cell title="订单编号:" :value="info.order_num"></cell>
             <cell title="快递公司:" :value="info.express_com"></cell>
-            <cell title="物品信息:" :value="info.express_type+'/'+info.express_weight"></cell>
+            <cell title="物品信息:" :value="info.express_type+' '+info.express_weight"></cell>
             <cell title="送达时间:" :value="info.arrive_time"></cell>
+            <cell title="配送费用:">
+                <span class="text-danger">￥ {{info.price}}</span>
+            </cell>
             <cell title="跑腿赏金:">
                 <span class="text-danger">￥ {{info.bounty}}</span>
             </cell>
