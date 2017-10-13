@@ -1,7 +1,9 @@
 <template>
   <div>
     <group>
-      <cell :title="info.realname+ ' '+info.mobile" :inline-desc="info.college+ ' ' +info.area"></cell>
+      <cell :title="info.realname+ ' '+info.mobile" :inline-desc="info.college+ ' ' +info.area">
+        <x-icon slot="icon" type="ios-location-outline"></x-icon>
+      </cell>
     </group>
 
     <group labelWidth="90px">
@@ -11,11 +13,14 @@
       <cell title="配送费用:">
         <span class="text-danger">￥ {{info.price}}</span>
       </cell>
-      <cell title="跑腿赏金:">
-        <span class="text-danger">￥ {{info.bounty}}</span>
-      </cell>
       <cell title="上楼加价:" v-if="info.upstairs_price">
         <span class="text-danger">￥ {{info.upstairs_price}}</span>
+      </cell>
+      <cell title="超重加价:" v-if="info.over_weight_price">
+        <span class="text-danger">￥ {{info.over_weight_price}}</span>
+      </cell>
+       <cell title="跑腿赏金:">
+        <span class="text-danger">￥ {{info.bounty}}</span>
       </cell>
       <cell title="备注信息:" :value="info.remark" value-align="right">{{info.remark||'无'}}</cell>
     </group>
