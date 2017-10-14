@@ -29,7 +29,7 @@ $ npm install
 # 开启开发热重载环境, 访问8080端口
 $ npm run dev
 
-# 生产环境, 编译代码
+# 生产环境, 编译代码(线上才运行)
 $ npm run build
 
 ```
