@@ -34,6 +34,14 @@ $ npm run build
 
 ```
 
+## 使用的第三方库
+
+* axios: 用于发送api请求
+* vux: 基于weui的ui库
+* mint-ui: 饿了么出的ui库, 只用了其中的无限加载组件
+* vue-router: 前端控制路由
+* vuex: 状态管理
+
 ## 目录说明
 
 - build　　　　　　　　　　　　　　　　　　　　　　# webpack配置
@@ -55,7 +63,7 @@ $ npm run build
   - router　　　　　　　　　　　　　　　　　　　　# 路由文件
   - styles
     - commons.less　　　　　　　　　　　　　# 放一些公共的,基础的样式
-    - theme.less　　　　　　　　　　　　　　# vux ui库可定制的样式
+    - theme.less　　　　　　　　　　　　　　# vux ui库可定制的样式(要重新运行npm run dev才会生效)
   - stores　　　　　　　　　　　　　　　　　　# vuex状态管理, 类似session的作用, 不能保持, 刷新就没有了
   - views　　　　　　　　　　　　　　　　　　　# 页面文件
   - App.vue　　　　　　　　　　　　　　　　　　# 根组件
