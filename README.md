@@ -26,6 +26,9 @@ $ npm config set registry https://registry.npm.taobao.org
 # 安装依赖
 $ npm install
 
+# 复制 dev.env.example 为 dev.env.js 作为开发环境配置
+$ cp dev.env.example dev.env.js
+
 # 开启开发热重载环境, 访问8080端口
 $ npm run dev
 
