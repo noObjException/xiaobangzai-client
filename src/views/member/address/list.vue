@@ -4,7 +4,7 @@
             <swipeout-item transition-mode="follow" v-for="(item, index) in addresses" :key="index">
                 <div slot="right-menu">
                     <swipeout-button @click.native="setDefaultAddress(item.id)" type="primary">设为默认</swipeout-button>
-                    <swipeout-button @click.native="routeTo()" type="default">编辑</swipeout-button>
+                    <swipeout-button @click.native="routeTo('/member/address/edit', {id: item.id})" type="default">编辑</swipeout-button>
                     <swipeout-button @click.native="handleDelete(item.id)" type="warn">删除</swipeout-button>
                 </div>
                 <div slot="content" class="demo-content vux-1px-t">
@@ -16,7 +16,7 @@
                 </div>
             </swipeout-item>
         </swipeout>
-        <x-button type="warn" class="button-bottom" style="position: fixed;bottom: 0;border-radius:0;" @click.native="addAddress">添加新收货地址</x-button>
+        <x-button type="warn" class="button-bottom" style="position: fixed;bottom: 0;border-radius:0;" @click.native="routeTo('/member/address/edit')">添加新收货地址</x-button>
     </div>
 </template>
 

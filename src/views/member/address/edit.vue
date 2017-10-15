@@ -45,10 +45,16 @@ export default {
     }
   },
   created () {
-    this.getAddressLists()
+    this.initData()
   },
   methods: {
-    async getAddressLists () {
+    async initData () {
+      let id = this.$route.query.id
+      if (id) {
+        await this.$http.get('/memberAddress/' + id).then(res => {
+          this.formData = res.data
+        })
+      }
       await this.$http.get('/memberAddress/create').then(res => {
         this.addresses = res.data
       })
