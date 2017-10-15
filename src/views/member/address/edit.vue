@@ -12,7 +12,7 @@
     </group>
 
     <box gap="10px 10px">
-      <x-button type="primary" @click.native="createAddress()">保存</x-button>
+      <x-button type="primary" @click.native="handleSubmit()">保存</x-button>
     </box>
   </div>
 </template>
@@ -59,10 +59,36 @@ export default {
         this.addresses = res.data
       })
     },
+    handleSubmit () {
+      let id = this.$route.query.id
+      if (id) {
+        this.updateAddress(id)
+      } else {
+        this.createAddress()
+      }
+    },
     async createAddress () {
       await this.$http.post('/memberAddress', this.formData).then(res => {
         this.$vux.toast.show({
           text: '添加成功',
+          onShow () {
+            history.go(-1)
+          }
+        })
+      })
+    },
+    async updateAddress (id) {
+      let formData = this.formData
+      let data = {
+        realname: formData.realname,
+        mobile: formData.mobile,
+        detail: formData.detail,
+        is_default: formData.is_default,
+        address: formData.address
+      }
+      await this.$http.put('/memberAddress/' + id, data).then(res => {
+        this.$vux.toast.show({
+          text: '修改成功',
           onShow () {
             history.go(-1)
           }
