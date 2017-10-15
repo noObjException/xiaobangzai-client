@@ -3,6 +3,7 @@
         <group>
             <cell :title="item.realname+ ' ' +item.mobile" @click.native="chooseAddress(item)" :inline-desc="item.college+' '+item.area+' '+item.detail" is-link v-for="(item, index) in addresses" :key="index">
                 <icon type="success-circle" v-if="choosedAddress&&item.id === choosedAddress.id"></icon>
+                <x-icon slot="icon" type="ios-location-outline" class="g-icon"></x-icon>
             </cell>
         </group>
         <x-button type="warn" class="button-bottom" style="position: fixed;bottom: 0;border-radius:0;" @click.native="addAddress">添加新收货地址</x-button>
@@ -27,7 +28,6 @@ export default {
   },
   computed: {
     ...mapGetters([
-      'openid',
       'choosedAddress'
     ])
   },

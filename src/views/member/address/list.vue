@@ -8,7 +8,7 @@
                     <swipeout-button @click.native="handleDelete(item.id)" type="warn">删除</swipeout-button>
                 </div>
                 <div slot="content" class="demo-content vux-1px-t">
-                    <group gutter="6px">
+                    <group gutter="0px">
                         <cell :title="item.realname+' '+item.mobile" :inline-desc="item.college+ ' ' +item.area+' '+item.detail">
                             <x-icon slot="icon" type="ios-location-outline" class="g-icon"></x-icon>
                         </cell>
