@@ -152,6 +152,7 @@ export default {
     // 未提交时离开页面都缓存订单信息, 然后回填, 提交后清空缓存
     if (this.isSubmitted) {
       this.$store.dispatch('saveExpressMissionInfo', null)
+      this.$store.dispatch('choosedAddress', null)
     } else {
       let data = this.formData
       data['address'] = this.choosedAddress
@@ -162,12 +163,15 @@ export default {
   methods: {
     async initData () {
       await this.$http.get('/getExpress/create').then(res => {
-        let data = res.data
-        this.expressCompanys = data.expressCompanys
-        this.arriveTimes = data.arriveTimes
-        this.expressTypes = data.expressTypes
-        this.expressWeights = data.expressWeights
-        this.settings = data.settings
+        let defaultAddress = res.data
+        let meta = res.meta
+        this.expressCompanys = meta.expressCompanys
+        this.arriveTimes = meta.arriveTimes
+        this.expressTypes = meta.expressTypes
+        this.expressWeights = meta.expressWeights
+        this.settings = meta.settings
+
+        this.$store.dispatch('choosedAddress', defaultAddress)
 
         // 回填缓存中的信息
         if (!this.expressMissionInfo) {
