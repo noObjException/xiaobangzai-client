@@ -35,6 +35,10 @@ export default [
     component: Utils.getPath('member/mission/detail')
   },
   {
+    path: '/member/address/list',
+    component: Utils.getPath('member/address/list')
+  },
+  {
     path: '/member/profile',
     component: Utils.getPath('member/profile')
   },

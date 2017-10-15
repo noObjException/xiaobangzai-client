@@ -1,7 +1,7 @@
 <template>
     <div>
         <group>
-            <cell :title="item.realname+ ' ' +item.mobile" @click.native="chooseAddress(item)" :inline-desc="item.college+ ' ' +item.area" is-link v-for="(item, index) in addresses" :key="index">
+            <cell :title="item.realname+ ' ' +item.mobile" @click.native="chooseAddress(item)" :inline-desc="item.college+' '+item.area+' '+item.detail" is-link v-for="(item, index) in addresses" :key="index">
                 <icon type="success-circle" v-if="choosedAddress&&item.id === choosedAddress.id"></icon>
             </cell>
         </group>

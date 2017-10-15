@@ -46,7 +46,7 @@
       <cell title="个人认证" link="/staff/identify" v-if="settings.identify">
         <x-icon slot="icon" type="android-clipboard" class="cell-icon"></x-icon>
       </cell>
-      <cell title="我的地址" is-link>
+      <cell title="我的地址" link="/member/address/list">
         <x-icon slot="icon" type="ios-location" class="cell-icon"></x-icon>
       </cell>
       <cell title="关于我们" is-link>
