@@ -47,31 +47,32 @@ $ npm run build
 
 ## 目录说明
 
-- build　　　　　　　　　　　　　　　　　　　　　　# webpack配置
-  - webpack.base.conf.js　　　　　　　　　　　　# 主要改动这个文件
-- config　　　　　　　　　　　　　　　　　　　　　# 配置文件
-  - dev.env.example　　　　　　　　　　　　　　　# 开发配置示例
-  - dev.env.js　　　　　　　　　　　　　　　　　　# 开发环境配置文
-  - prod.env.js　　　　　　　　　　　　　　　　　　# 生产环境配置文件
-- dist　　　　　　　　　　　　　　　　　　　　　　# 编译后的生产代码
+```base
+- build　　　　　　　　　　　　　　　　　　　　　　// webpack配置
+  - webpack.base.conf.js　　　　　　　　　　　 // 主要改动这个文件
+- config　　　　　　　　　　　　　　　　　　　　　// 配置文件
+  - dev.env.example　　　　　　　　　　　　　　 // 开发配置示例
+  - dev.env.js　　　　　　　　　　　　　　　　　 // 开发环境配置文
+  - prod.env.js　　　　　　　　　　　　　　　　  // 生产环境配置文件
+- dist　　　　　　　　　　　　　　　　　　　　　　 // 编译后的生产代码
 - src
-  - assets　　　　　　　　　　　　　　　　　　　　# 图片等资源
-  - components　　　　　　　　　　　　　　　　　　# 自定义的组件
-  - libs　　　　　　　　　　　　　　　　　　　　　　# 工具库
-    - fetch.js　　　　　　　　　　　　　　　　　＃ 用于发送api请求
-    - utils.js　　　　　　　　　　　　　　　　　　# 工具函数
-  - mixins　　　　　　　　　　　　　　　　　　　　# mixin是可复用部分, 类似于trait
-    - expressMission.js　　　　　　　　　　　　# 取快递任务的支付, 接单等业务逻辑
-  - plugins　　　　　　　　　　　　　　　　　　　# 放js插件
-  - router　　　　　　　　　　　　　　　　　　　　# 路由文件
+  - assets　　　　　　　　　　　　　　　　　　　 // 图片等资源
+  - components　　　　　　　　　　　　　　　　　// 自定义的组件
+  - libs　　　　　　　　　　　　　　　　　　　　 // 工具库
+    - fetch.js　　　　　　　　　　　　　　　　　// 用于发送api请求
+    - utils.js　　　　　　　　　　　　　　　　　// 工具函数
+  - mixins　　　　　　　　　　　　　　　　　　　 // mixin是可复用部分, 类似于trait
+    - expressMission.js　　　　　　　　　　　 // 取快递任务的支付, 接单等业务逻辑
+  - plugins　　　　　　　　　　　　　　　　　　　// 放js插件
+  - router　　　　　　　　　　　　　　　　　　　 // 路由文件
   - styles
-    - commons.less　　　　　　　　　　　　　# 放一些公共的,基础的样式
-    - theme.less　　　　　　　　　　　　　　# vux ui库可定制的样式(要重新运行npm run dev才会生效)
-  - stores　　　　　　　　　　　　　　　　　　# vuex状态管理, 类似session的作用, 不能保持, 刷新就没有了
-  - views　　　　　　　　　　　　　　　　　　　# 页面文件
-  - App.vue　　　　　　　　　　　　　　　　　　# 根组件
-  - main.js　　　　　　　　　　　　　　　　　　# 入口文件
-
+    - commons.less　　　　　　　　　　　　　   // 放一些公共的,基础的样式
+    - theme.less　　　　　　　　　　　　　　   // vux ui库可定制的样式(要重新运行npm run dev才会生效)
+  - stores　　　　　　　　　　　　　　　　　　  // vuex状态管理, 类似session的作用, 不能保持, 刷新就没有了
+  - views　　　　　　　　　　　　　　　　　　　 // 页面文件
+  - App.vue　　　　　　　　　　　　　　　　　　 // 根组件
+  - main.js　　　　　　　　　　　　　　　　　　 // 入口文件
+```
 ## vs code 配置
 
 ### 插件
