@@ -163,15 +163,14 @@ export default {
   methods: {
     async initData () {
       await this.$http.get('/getExpress/create').then(res => {
-        let defaultAddress = res.data
-        let meta = res.meta
-        this.expressCompanys = meta.expressCompanys
-        this.arriveTimes = meta.arriveTimes
-        this.expressTypes = meta.expressTypes
-        this.expressWeights = meta.expressWeights
-        this.settings = meta.settings
+        let data = res.data
+        this.expressCompanys = data.expressCompanies
+        this.arriveTimes = data.arriveTimes
+        this.expressTypes = data.expressTypes
+        this.expressWeights = data.expressWeights
+        this.settings = data.settings
 
-        this.$store.dispatch('choosedAddress', defaultAddress)
+        this.$store.dispatch('choosedAddress', data.defaultAddress)
 
         // 回填缓存中的信息
         if (!this.expressMissionInfo) {
