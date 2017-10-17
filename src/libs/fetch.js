@@ -37,19 +37,25 @@ fetch.interceptors.response.use(
     let message = data.message
     // 临时处理token超时
     if (data.message === 'Token has expired') {
-      cookie.remove('token')
-      Utils.removeLocalStorage('memberInfo')
-      message = '登录超时'
-      window.location.reload()
+      Vue.$vux.toast.show({
+        type: 'text',
+        text: '登录超时',
+        position: 'middle',
+        isShowMask: true,
+        onHide () {
+          cookie.remove('token')
+          Utils.removeLocalStorage('memberInfo')
+          window.location.reload()
+        }
+      })
+    } else {
+      Vue.$vux.toast.show({
+        type: 'text',
+        text: message,
+        position: 'middle',
+        isShowMask: true
+      })
     }
-
-    Vue.$vux.toast.show({
-      type: 'text',
-      text: message,
-      position: 'middle',
-      isShowMask: true
-    })
-
     console.log(error.response)
     return Promise.reject(error)
   }
