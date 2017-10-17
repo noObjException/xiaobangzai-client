@@ -190,7 +190,7 @@ export default {
     async createMission () {
       this.isSubmitted = true
 
-      if (!await this.identifyConfirm()) {
+      if (!this.identifyConfirm()) {
         return false
       }
 
@@ -210,7 +210,7 @@ export default {
           position: 'middle',
           isShowMask: true,
           onShow () {
-            that.$router.push({ path: '/service/getExpress/pay', query: { id: id } })
+            that.routeTo('/service/getExpress/pay', { id: id })
           }
         })
       })

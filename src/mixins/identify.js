@@ -5,7 +5,7 @@ Vue.use(ConfirmPlugin)
 export default {
   methods: {
     async identifyConfirm () {
-      const that = this
+      let that = this
       await this.$http.get('/authMember').then(res => {
         let isIdentify = res.data.is_identify
         if (!isIdentify) {
