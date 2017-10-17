@@ -35,6 +35,7 @@ fetch.interceptors.response.use(
     let data = error.response.data
     // let status = error.response.code
     let message = data.message
+
     // 临时处理token超时
     if (data.message === 'Token has expired') {
       Vue.$vux.toast.show({

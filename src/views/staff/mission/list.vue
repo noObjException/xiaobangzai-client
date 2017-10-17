@@ -6,7 +6,7 @@
                 <a :href="'tel:'+item.mobile">{{item.mobile}}</a>
             </cell>
 
-            <router-link :to="'detail?id='+item.id" style="color: #000;">
+            <router-link :to="'/staff/mission/detail?id='+item.id" style="color: #000;">
                 <cell :title="item.express_com+' '+item.express_type">
                     <x-icon slot="icon" type="android-plane" class="g-icon" size="20" style="fill: rgb(65, 194, 215)"></x-icon>
                 </cell>
