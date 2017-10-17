@@ -1,30 +1,27 @@
 <template>
   <div>
     <div class="avatar">
-      <img :src="member.avatar" />
-      <p>{{member.nickname}}</p>
+      <img :src="staff.avatar" />
+      <p>{{staff.nickname}}</p>
     </div>
     <group gutter="0">
       <grid :cols='2'>
-        <grid-item :label="'余额: '+member.credit"></grid-item>
+        <grid-item :label="'余额: '+staff.credit"></grid-item>
         <grid-item label="信誉点:59"></grid-item>
       </grid>
     </group>
 
     <group gutter="6px">
       <cell title="任务大厅" value="去接单" link="/staff/mission/list"></cell>
-      <grid :cols='4' class="menus">
-        <grid-item label="67">
-          <p class="menu-item">已接单</p>
-        </grid-item>
-        <grid-item label="34">
-          <p class="menu-item">待取货</p>
-        </grid-item>
-        <grid-item label="45">
+      <grid :cols='3' class="menus">
+        <grid-item :label="order_counts.processing || '0'">
           <p class="menu-item">配送中</p>
         </grid-item>
-        <grid-item label="3">
+        <grid-item :label="order_counts.completed || '0'">
           <p class="menu-item">已完成</p>
+        </grid-item>
+        <grid-item :label="order_counts.canceled || '0'">
+          <p class="menu-item">已取消</p>
         </grid-item>
       </grid>
 
@@ -42,7 +39,8 @@ import { Grid, GridItem, Group, Cell } from 'vux'
 export default {
   data () {
     return {
-      member: {}
+      staff: {},
+      order_counts: {}
     }
   },
   components: {
@@ -53,8 +51,9 @@ export default {
   },
   methods: {
     async initData () {
-      this.$http.get('/members').then(res => {
-        this.member = res.data
+      this.$http.get('/staffs/0').then(res => {
+        this.staff = res.data
+        this.order_counts = res.meta.order_counts
       })
     }
   }
