@@ -1,8 +1,8 @@
 <template>
   <div>
     <div class="avatar">
-      <img :src="avatar" />
-      <p>{{nickname}}</p>
+      <img :src="member.avatar" />
+      <p>{{member.nickname}}</p>
     </div>
     <group>
       <cell title="我的订单" value="查看全部任务" link="/member/mission?status=all">
@@ -34,17 +34,20 @@
     </div>
 
     <group>
-      <cell title="我的余额" :value="balance" is-link>
+      <cell title="我的余额" :value="member.balance" is-link>
         <x-icon slot="icon" type="social-usd-outline" class="cell-icon"></x-icon>
       </cell>
-      <cell title="我的积分" :value="credit" link="/member/credit">
+      <cell title="我的积分" :value="member.credit" link="/member/credit">
         <x-icon slot="icon" type="social-euro-outline" class="cell-icon"></x-icon>
       </cell>
     </group>
 
     <group>
-      <cell title="个人认证" link="/staff/identify" v-if="settings.identify">
+      <cell title="申请成为有帮人" link="/staff/identify" v-if="settings.switch_staff_identify">
         <x-icon slot="icon" type="android-clipboard" class="cell-icon"></x-icon>
+      </cell>
+      <cell title="学生认证" link="/member/identify" v-if="settings.switch_member_identify">
+        <x-icon slot="icon" type="clipboard" class="cell-icon"></x-icon>
       </cell>
       <cell title="我的地址" link="/member/address/list">
         <x-icon slot="icon" type="ios-location" class="cell-icon"></x-icon>
@@ -52,7 +55,7 @@
       <cell title="关于我们" is-link>
         <x-icon slot="icon" type="android-alert" class="cell-icon"></x-icon>
       </cell>
-      <cell title="服务端" link="/staff">
+      <cell title="服务端" link="/staff" v-if="member.is_staff">
         <x-icon slot="icon" type="ios-people-outline" class="cell-icon"></x-icon>
       </cell>
     </group>
@@ -65,18 +68,16 @@ import { Badge, Group, Cell, Grid, GridItem } from 'vux'
 
 export default {
   components: {
-    Badge,
-    Group,
-    Cell,
-    Grid,
-    GridItem
+    Badge, Group, Cell, Grid, GridItem
   },
   data () {
     return {
-      avatar: '../../../static/logo.png',
-      nickname: '',
-      balance: 0.00,
-      credit: 0,
+      member: {
+        avatar: '../../../static/logo.png',
+        nickname: '',
+        balance: 0.00,
+        credit: 0
+      },
       settings: ''
     }
   },
@@ -86,14 +87,10 @@ export default {
   methods: {
     async initData () {
       await this.$http.get('/members').then(res => {
-        let data = res.data
-
-        if (data.avatar.length !== 0) {
-          this.avatar = data.avatar
+        this.member = res.data
+        if (!res.data.avatar) {
+          this.member.avatar = '../../../static/logo.png'
         }
-        this.nickname = data.nickname
-        this.balance = data.balance
-        this.credit = data.credit
 
         this.settings = res.meta.settings
       })
@@ -128,10 +125,7 @@ export default {
   .menu-item {
     width: 20%;
     text-align: center;
-    padding: 10px 0; // img {
-    //   width: 30px;
-    //   height: 24px;
-    // }
+    padding: 10px 0; 
     p {
       font-size: 12px;
       color: #000;
