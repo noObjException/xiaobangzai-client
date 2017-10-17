@@ -47,6 +47,10 @@ export default [
     component: Utils.getPath('member/profile')
   },
   {
+    path: '/member/identify',
+    component: Utils.getPath('member/identify')
+  },
+  {
     path: '/service',
     component: serviceLayout,
     children: [

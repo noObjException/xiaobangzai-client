@@ -83,22 +83,11 @@ import { Selector, PopupRadio, XButton, Popup, Group, Cell, XInput, XTextarea, R
 import { mapGetters } from 'vuex'
 import Vue from 'vue'
 Vue.use(ToastPlugin)
+import mixin from 'src/mixins/identify.js'
 
 export default {
   components: {
-    Selector,
-    PopupRadio,
-    XButton,
-    Popup,
-    Group,
-    Cell,
-    XInput,
-    XTextarea,
-    Range,
-    Box,
-    LoadMore,
-    Checklist,
-    XDialog
+    Selector, PopupRadio, XButton, Popup, Group, Cell, XInput, XTextarea, Range, Box, LoadMore, ToastPlugin, Checklist, XDialog
   },
   data () {
     return {
@@ -125,6 +114,7 @@ export default {
       isSubmitted: false
     }
   },
+  mixins: [mixin],
   created () {
     this.initData()
   },
@@ -199,6 +189,11 @@ export default {
     },
     async createMission () {
       this.isSubmitted = true
+
+      if (!await this.identifyConfirm()) {
+        return false
+      }
+
       let data = this.formData
       data['address'] = this.choosedAddress
       if (!this.validation(data)) {

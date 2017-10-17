@@ -8,11 +8,13 @@
         </tab>
 
         <router-view></router-view>
+
     </div>
 </template>
 
 <script>
 import { Tab, TabItem } from 'vux'
+import mixin from 'src/mixins/identify.js'
 
 export default {
   components: {
@@ -29,6 +31,10 @@ export default {
       ]
     }
   },
+  created () {
+    this.identifyConfirm()
+  },
+  mixins: [mixin],
   computed: {
     active () {
       return this.$route.path
