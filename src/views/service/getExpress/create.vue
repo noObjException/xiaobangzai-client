@@ -160,7 +160,7 @@ export default {
         this.expressWeights = data.expressWeights
         this.settings = data.settings
 
-        if (data.defaultAddress) {
+        if (data.defaultAddress && !this.choosedAddress) {
           this.$store.dispatch('choosedAddress', data.defaultAddress)
         }
 
