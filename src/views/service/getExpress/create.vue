@@ -170,7 +170,9 @@ export default {
         this.expressWeights = data.expressWeights
         this.settings = data.settings
 
-        this.$store.dispatch('choosedAddress', data.defaultAddress)
+        if (data.defaultAddress.length > 0) {
+          this.$store.dispatch('choosedAddress', data.defaultAddress)
+        }
 
         // 回填缓存中的信息
         if (!this.expressMissionInfo) {
