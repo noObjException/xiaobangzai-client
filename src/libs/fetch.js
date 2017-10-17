@@ -1,6 +1,9 @@
 import axios from 'axios'
 import store from 'src/stores/'
 import Utils from 'src/libs/utils.js'
+import { ToastPlugin, cookie } from 'vux'
+import Vue from 'vue'
+Vue.use(ToastPlugin)
 
 const fetch = axios.create({
   baseURL: process.env.BASE_API,
@@ -31,15 +34,22 @@ fetch.interceptors.response.use(
   error => {
     let data = error.response.data
     // let status = error.response.code
-
+    let message = data.message
     // 临时处理token超时
     if (data.message === 'Token has expired') {
-      console.log('token 超时')
-      Utils.removeSessionStorage('token')
+      cookie.remove('token')
       Utils.removeLocalStorage('memberInfo')
+      message = '登录超时'
       window.location.reload()
     }
-    alert(data.message)
+
+    Vue.$vux.toast.show({
+      type: 'text',
+      text: message,
+      position: 'middle',
+      isShowMask: true
+    })
+
     console.log(error.response)
     return Promise.reject(error)
   }

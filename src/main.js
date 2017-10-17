@@ -8,7 +8,6 @@ import App from './App'
 import store from './stores'
 import Http from 'src/libs/fetch.js'
 import Utils from './libs/utils.js'
-import { cookie } from 'vux'
 import { request } from './libs/fetch.js'
 
 Vue.use(Http)
@@ -19,13 +18,6 @@ const router = new VueRouter({
 })
 router.beforeEach((to, from, next) => {
   store.commit('UPDATE_LOADING_STATUS', {isLoading: true})
-
-  // 把token转移到sessionStorage中
-  let token = cookie.get('token')
-  if (token) {
-    Utils.setSessionStorage('token', token)
-    cookie.remove('token')
-  }
 
   // 没有token就跳转到服务端做微信授权, 利用授权得到的信息生成token
   if (!store.getters.token) {
