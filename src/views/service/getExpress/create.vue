@@ -1,10 +1,10 @@
 <template>
   <div>
     <group gutter="4px">
-      <cell v-if="!choosedAddress" link="/address" inline-desc="请选择您的收货地址"></cell>
-      <cell v-else link="/address" :title="choosedAddress.realname+ ' '+choosedAddress.mobile" :inline-desc="choosedAddress.college+ ' ' +choosedAddress.area + ' '+choosedAddress.detail">
+      <cell v-if="choosedAddress"  link="/address" :title="choosedAddress.realname+ ' '+choosedAddress.mobile" :inline-desc="choosedAddress.college+ ' ' +choosedAddress.area + ' '+choosedAddress.detail">
         <x-icon slot="icon" type="ios-location-outline"></x-icon>
       </cell>
+      <cell v-else link="/address" inline-desc="请选择您的收货地址"></cell>
     </group>
 
     <group gutter="4px">
