@@ -41,10 +41,9 @@
       <load-more background-color="#fbf9fe" :show-loading="false" tip="没有更多了" v-if="allLoaded"></load-more>
     </div>
 
-    <div v-else class="no-order">
+    <no-content title="暂无订单" v-else>
       <x-icon type="ios-cart-outline" size="160"></x-icon>
-      <p>暂无订单</p>
-    </div>
+    </no-content>
 
     <actionsheet v-model="showPayType" :menus="payTypes" @on-click-menu="handlePay" show-cancel>
       <p slot="header">请选择支付方式</p>
@@ -54,6 +53,7 @@
 
 <script>
 import { Tab, TabItem, Group, Cell, XButton, ConfirmPlugin, ToastPlugin, Actionsheet, LoadMore } from 'vux'
+import NoContent from 'src/components/NoContent'
 import { InfiniteScroll } from 'mint-ui'
 import Vue from 'vue'
 Vue.use(InfiniteScroll)
@@ -64,7 +64,7 @@ Vue.use(ToastPlugin)
 
 export default {
   components: {
-    Tab, TabItem, Group, Cell, XButton, ConfirmPlugin, ToastPlugin, Actionsheet, LoadMore
+    Tab, TabItem, Group, Cell, XButton, ConfirmPlugin, ToastPlugin, Actionsheet, LoadMore, NoContent
   },
   mixins: [mixin],
   data () {
@@ -155,12 +155,6 @@ export default {
   width: 20px;
   vertical-align:middle;
   margin:0 16px;
-}
-.no-order{
-  text-align: center;
-  fill:rgb(206, 206, 206);
-  color: rgb(206, 206, 206);
-  padding: 30% 0;
 }
 </style>
 
