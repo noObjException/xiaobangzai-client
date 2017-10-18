@@ -73,6 +73,10 @@ export default [
     component: Utils.getPath('service/getExpress/result')
   },
   {
+    path: '/service/getExpress/acceptResult',
+    component: Utils.getPath('service/getExpress/acceptResult')
+  },
+  {
     path: '/address',
     component: Utils.getPath('address/list')
   },

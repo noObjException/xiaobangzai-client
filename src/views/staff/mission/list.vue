@@ -22,7 +22,7 @@
                 <x-icon slot="icon" type="cash" class="g-icon" size="20"></x-icon>
                 <span slot="title" class="text-danger">￥{{item.total_price}}</span>
                 <span>
-                    <x-button mini type="warn" @click.native="acceptOrder(item.id, {openid: openid})">立即接单</x-button>
+                    <x-button mini type="warn" @click.native="acceptOrder(item.id)">立即接单</x-button>
                 </span>
             </cell>
         </group>
