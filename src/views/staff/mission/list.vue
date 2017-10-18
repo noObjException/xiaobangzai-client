@@ -1,6 +1,6 @@
 <template>
     <div>
-        <group v-for="(item, index) in lists" :key="index" v-if="lists">
+        <group v-for="(item, index) in lists" :key="index" v-if="lists.length > 0">
             <cell :title="item.realname" :inline-desc="'下单时间: ' + item.created_at" style="border-bottom: 1px solid #D9D9D9;">
                 <img slot="icon" :src="item.avatar" class="avatar" />
                 <a :href="'tel:'+item.mobile">{{item.mobile}}</a>
