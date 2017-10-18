@@ -31,7 +31,7 @@
             </cell>
             <cell>
                 <span>
-                    <x-button mini type="warn" @click.native="acceptOrder(info.id)">立即接单</x-button>
+                    <x-button mini type="warn" @click.native="acceptOrder(info.id)" v-if="info.status === '待接单'">立即接单</x-button>
                 </span>
             </cell>
         </group>
