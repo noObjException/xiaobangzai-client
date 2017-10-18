@@ -1,6 +1,6 @@
 <template>
     <div>
-        <group v-for="(item, index) in lists" :key="index">
+        <group v-for="(item, index) in lists" :key="index" v-if="lists">
             <cell :title="item.realname" :inline-desc="'下单时间: ' + item.created_at" style="border-bottom: 1px solid #D9D9D9;">
                 <img slot="icon" :src="item.avatar" class="avatar" />
                 <a :href="'tel:'+item.mobile">{{item.mobile}}</a>
@@ -26,11 +26,17 @@
                 </span>
             </cell>
         </group>
+
+        <no-content title="暂无订单" v-else>
+            <x-icon type="ios-cart-outline" size="160"></x-icon>
+        </no-content>
     </div>
 </template>
 
+
 <script>
 import { Group, Cell, XButton } from 'vux'
+import NoContent from 'src/components/NoContent'
 import { mapGetters } from 'vuex'
 import mixin from 'src/mixins/expressMission.js'
 import { InfiniteScroll } from 'mint-ui'
@@ -44,7 +50,7 @@ export default {
     }
   },
   components: {
-    Group, Cell, XButton
+    Group, Cell, XButton, NoContent
   },
   computed: {
     ...mapGetters([
