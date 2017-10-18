@@ -1,12 +1,12 @@
 <template>
   <div>
-    <tab :line-width="2">
+    <tab :line-width="2" :animate='false'>
       <tab-item :selected="item.value === currentStatus" v-for="(item, index) in status" @on-item-click="switchStatus" :key="index">
         {{item.label}}
       </tab-item>
     </tab>
 
-    <div v-infinite-scroll="loadMore" :infinite-scroll-disabled="allLoaded" :infinite-scroll-immediate-check='false' :infinite-scroll-distance='10'>
+    <div v-infinite-scroll="loadMore" :infinite-scroll-disabled="allLoaded" :infinite-scroll-immediate-check='false' :infinite-scroll-distance='10' v-if="lists.length > 0">
       <group :title="'下单时间: '+item.created_at" label-width="5em" v-for="(item, index) in lists" :key="index" labelWidth="180px">
         <router-link :to="'mission/detail?id='+item.id" style="color: #000;">
           <cell :title="item.status" :inline-desc="'订单编号: '+item.order_num">
@@ -41,6 +41,11 @@
       <load-more background-color="#fbf9fe" :show-loading="false" tip="没有更多了" v-if="allLoaded"></load-more>
     </div>
 
+    <div v-else class="no-order">
+      <x-icon type="ios-cart-outline" size="160"></x-icon>
+      <p>暂无订单</p>
+    </div>
+
     <actionsheet v-model="showPayType" :menus="payTypes" @on-click-menu="handlePay" show-cancel>
       <p slot="header">请选择支付方式</p>
     </actionsheet>
@@ -59,13 +64,7 @@ Vue.use(ToastPlugin)
 
 export default {
   components: {
-    Tab,
-    TabItem,
-    Group,
-    Cell,
-    XButton,
-    Actionsheet,
-    LoadMore
+    Tab, TabItem, Group, Cell, XButton, ConfirmPlugin, ToastPlugin, Actionsheet, LoadMore
   },
   mixins: [mixin],
   data () {
@@ -116,6 +115,8 @@ export default {
       }
     },
     async getMissionLists (index = -1) {
+      this.$store.commit('UPDATE_LOADING_STATUS', {isLoading: true})
+
       this.currentPage = 1
       let status = this.$route.query.status
       if (index >= 0) {
@@ -127,6 +128,8 @@ export default {
         this.lists = res.data
         this.totalPages = res.meta.pagination.total_pages
       })
+
+      this.$store.commit('UPDATE_LOADING_STATUS', {isLoading: false})
     },
     async switchStatus (index) {
       this.getMissionLists(index)
@@ -152,6 +155,12 @@ export default {
   width: 20px;
   vertical-align:middle;
   margin:0 16px;
+}
+.no-order{
+  text-align: center;
+  fill:rgb(206, 206, 206);
+  color: rgb(206, 206, 206);
+  padding: 30% 0;
 }
 </style>
 
