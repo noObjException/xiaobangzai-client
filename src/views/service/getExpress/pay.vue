@@ -26,7 +26,7 @@
     </group>
 
     <group labelWidth="150px"> 
-      <x-switch :title="deductionTitle" v-model="formData.is_use_credit" :disabled="deductionDisabled" v-if="settings.credit_to_money_switch"></x-switch>
+      <x-switch :title="deductionTitle" v-model="formData.is_use_credit" :disabled="deductionDisabled" v-if="settings.switch_credit_to_money"></x-switch>
       <cell title="应付金额:">
         <span class="text-danger">￥ {{totalPrice}}</span>
       </cell>
@@ -109,7 +109,7 @@ export default {
         this.member = res.meta.member
 
         this.settings = res.meta.settings
-        if (this.settings.credit_to_money_switch) {
+        if (this.settings.switch_credit_to_money) {
           this.formData.is_use_credit = true
         }
       })
