@@ -33,7 +33,7 @@ fetch.interceptors.response.use(
   },
   error => {
     let data = error.response.data
-    // let status = error.response.code
+    let status = error.response.status
     let message = data.message
 
     // 临时处理token超时
@@ -48,6 +48,19 @@ fetch.interceptors.response.use(
           Utils.removeLocalStorage('memberInfo')
           window.location.reload()
         }
+      })
+    } else if (status === 422) {
+      let error = ''
+      for (let key in data.errors) {
+        error = data.errors[key]
+        break
+      }
+      Vue.$vux.toast.show({
+        type: 'text',
+        text: error[0],
+        width: '8.6rem',
+        position: 'middle',
+        isShowMask: true
       })
     } else {
       Vue.$vux.toast.show({
