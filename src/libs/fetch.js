@@ -44,9 +44,11 @@ fetch.interceptors.response.use(
         position: 'middle',
         isShowMask: true,
         onHide () {
-          cookie.remove('token')
-          Utils.removeLocalStorage('memberInfo')
-          window.location.reload()
+          setTimeout(() => {
+            cookie.remove('token')
+            Utils.removeLocalStorage('memberInfo')
+            window.location.reload()
+          }, 1500)
         }
       })
     } else if (status === 422) {
