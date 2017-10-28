@@ -1,7 +1,7 @@
 <template>
   <div>
     <group>
-      <cell :title="info.realname+ ' '+info.mobile" :inline-desc="info.college+ ' ' +info.area">
+      <cell :title="info.realname+ ' '+info.mobile" :inline-desc="info.college+ ' ' +info.area+' '+info.detail">
         <x-icon slot="icon" type="ios-location-outline"></x-icon>
       </cell>
     </group>

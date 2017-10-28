@@ -22,7 +22,7 @@
         <span class="text-danger">￥ {{Number(this.settings.price).toFixed(2)}}</span>
       </cell>
       <cell primary="content">
-        <span slot="title">增加 <span class="text-danger" style="font-size:20px;">{{formData.bounty}}</span> 元运费</span>
+        <span slot="title">增加 <span class="text-danger" style="font-size:20px;">{{formData.bounty}}</span> 元赏金</span>
         <range v-model="formData.bounty" :min="0" :max="10" :step="0.5" :rangeBarHeight='6'></range>
       </cell>
     </group>
