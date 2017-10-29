@@ -31,6 +31,8 @@ export default {
       await this.$http.get('/jsSDKConfig', {params: {request_url: location.href.split('#')[0]}}).then(res => {
         this.$wechat.config(res.data)
 
+        alert(res.data)
+
         this.$wechat.ready(() => {
           console.log('配置成功')
         })
