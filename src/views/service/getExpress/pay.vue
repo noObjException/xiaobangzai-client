@@ -33,7 +33,7 @@
     </group>
 
     <box gap="40px 6px">
-      <x-button type="primary" @click.native="showPayType = true">立即支付</x-button>
+      <x-button type="primary" @click.native="wxPay">立即支付</x-button>
     </box>
 
     <actionsheet v-model="showPayType" :menus="payTypes" @on-click-menu="handlePay" show-cancel>
@@ -124,6 +124,25 @@ export default {
       let data = this.formData
       data['pay_type'] = payType
       this.pay(this.info.id, data)
+    },
+    wxPay () {
+      this.$http.get('/jsSDKConfig', {params: {request_url: location.href.split('#')[0]}}).then(res => {
+        this.$wechat.config(res.data)
+
+        alert(res.data)
+
+        this.$wechat.ready(() => {
+          console.log('配置成功')
+        })
+
+        this.$wechat.error(() => {
+          console.log('配置失败')
+        })
+      })
+
+      this.$http.post('/wxPay').then(res => {
+        this.$wechat.chooseWXPay(res.data)
+      })
     }
   }
 }
