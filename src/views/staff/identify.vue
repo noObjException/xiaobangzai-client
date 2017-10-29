@@ -47,7 +47,8 @@ export default {
     },
     upload () {
       console.log('上传')
-      this.$http.get('/jsSDKConfig').then(res => {
+
+      this.$http.get('/jsSDKConfig', {params: {request_url: this.$route.fullPath}}).then(res => {
         this.$wechat.config(res.data)
 
         this.$wechat.uploadImage({
