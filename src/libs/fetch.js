@@ -1,11 +1,11 @@
-import axios from 'axios'
 import store from 'src/stores/'
 import Utils from 'src/libs/utils.js'
-import { ToastPlugin, cookie } from 'vux'
+import { ToastPlugin, cookie, AjaxPlugin } from 'vux'
 import Vue from 'vue'
 Vue.use(ToastPlugin)
+Vue.use(AjaxPlugin)
 
-const fetch = axios.create({
+const fetch = Vue.http.create({
   baseURL: process.env.BASE_API,
   timeout: 5000,
   headers: {

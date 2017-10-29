@@ -9,8 +9,10 @@ import store from './stores'
 import Http from 'src/libs/fetch.js'
 import Utils from './libs/utils.js'
 import { request } from './libs/fetch.js'
+import { WechatPlugin } from 'vux'
 
 Vue.use(Http)
+Vue.use(WechatPlugin)
 
 Vue.use(VueRouter)
 const router = new VueRouter({
