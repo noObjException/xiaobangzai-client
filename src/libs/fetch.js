@@ -43,15 +43,17 @@ fetch.interceptors.response.use(
         text: '登录超时',
         position: 'middle',
         isShowMask: true,
+        onShow () {
+          cookie.remove('token')
+          Utils.removeLocalStorage('memberInfo')
+        },
         onHide () {
           setTimeout(() => {
-            cookie.remove('token')
-            Utils.removeLocalStorage('memberInfo')
             window.location.reload()
           }, 1500)
         }
       })
-    } else if (status === 422) {
+    } else if (status === 422) { // 服务端表单验证失败提示
       let error = ''
       for (let key in data.errors) {
         error = data.errors[key]
