@@ -8,7 +8,8 @@ import Utils from 'src/libs/utils.js'
 
 export default {
   [UPDATE_LOADING_STATUS] (state, payload) {
-    state.isLoading = payload.isLoading
+    state.isLoading.status = payload.status
+    state.isLoading.title = payload.title
   },
   [CHOOSED_ADDRESS] (state, address) {
     state.choosedAddress = address

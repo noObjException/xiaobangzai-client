@@ -17,7 +17,7 @@ const router = new VueRouter({
   routes
 })
 router.beforeEach((to, from, next) => {
-  store.commit('UPDATE_LOADING_STATUS', {isLoading: true})
+  store.commit('UPDATE_LOADING_STATUS', {title: '加载中...', status: true})
 
   // 没有token就跳转到服务端做微信授权, 利用授权得到的信息生成token
   if (!store.getters.token) {
@@ -51,7 +51,7 @@ router.beforeEach((to, from, next) => {
 })
 
 router.afterEach((to) => {
-  store.commit('UPDATE_LOADING_STATUS', {isLoading: false})
+  store.commit('UPDATE_LOADING_STATUS', {status: false})
 })
 
 FastClick.attach(document.body)

@@ -13,7 +13,7 @@ const state = {
   token: cookie.get('token'), // api请求token
   memberInfo: Utils.getLocalStorage('memberInfo'), // 用户信息
   choosedAddress: Utils.getLocalStorage('choosedAddress'),
-  isLoading: false,
+  isLoading: { title: '加载中...', status: false },
   expressMissionInfo: Utils.getLocalStorage('expressMissionInfo')
 }
 export default new Vuex.Store({
