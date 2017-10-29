@@ -27,6 +27,11 @@ export default {
     // 支付订单
     async pay (id, data) {
       let that = this
+
+      await this.$http.post('/wxPay').then(res => {
+        this.$wechat.chooseWXPay(res.data)
+      })
+
       await this.$http.put('/expressMission/pay/' + id, data).then(res => {
         this.$vux.toast.show({
           text: '支付成功',
