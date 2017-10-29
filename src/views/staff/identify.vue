@@ -7,7 +7,7 @@
       </group>
 
       <group gutter="6px">
-        <uploader title="学生证拍照(参考照片)"></uploader>
+        <x-button @click.native="upload">上传</x-button>
       </group>
 
       <box gap="30px 6px">
@@ -43,6 +43,29 @@ export default {
     async initData () {
       await this.$http.get('/staffs').then(res => {
         this.schools = res.data
+      })
+    },
+    upload () {
+      console.log('上传')
+      this.$http.get('/jsSDKConfig').then(res => {
+        this.$wechat.config(res.data)
+
+        this.$wechat.uploadImage({
+          localId: '', // 需要上传的图片的本地ID，由chooseImage接口获得
+          isShowProgressTips: 1, // 默认为1，显示进度提示
+          success: function (res) {
+            let serverId = res.serverId // 返回图片的服务器端ID
+            console.log(serverId)
+          }
+        })
+
+        this.$wechat.ready(() => {
+          console.log('配置成功')
+        })
+
+        this.$wechat.error(() => {
+          console.log('配置失败')
+        })
       })
     }
   }
