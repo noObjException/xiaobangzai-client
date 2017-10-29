@@ -12,6 +12,9 @@ import { Loading } from 'vux'
 import { mapGetters } from 'vuex'
 
 export default {
+  created () {
+    this.initJsSDK()
+  },
   components: {
     Loading
   },
@@ -19,6 +22,21 @@ export default {
     ...mapGetters([
       'isLoading'
     ])
+  },
+  methods: {
+    initJsSDK () {
+      this.$http.get('/jsSDKConfig', {params: {request_url: location.href.split('#')[0]}}).then(res => {
+        this.$wechat.config(res.data)
+
+        this.$wechat.ready(() => {
+          console.log('配置成功')
+        })
+
+        this.$wechat.error(() => {
+          console.log('配置失败')
+        })
+      })
+    }
   }
 }
 </script>
