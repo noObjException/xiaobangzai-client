@@ -129,7 +129,7 @@ export default {
       let _this = this
       let jsApiParameters = {}
       let onBridgeReady = function () {
-        WeixinJSBridge.invoke(
+        this.$wechat.WeixinJSBridge.invoke(
                     'getBrandWCPayRequest',
                     jsApiParameters,
                     (res) => {
