@@ -126,7 +126,7 @@ export default {
       this.pay(this.info.id, data)
     },
     wxPay () {
-      this.$http.post('wxPay').then(res => {
+      this.$http.post('wxPay', {order_id: this.info.id}).then(res => {
         this.$wechat.chooseWXPay(res.data)
       })
     }
