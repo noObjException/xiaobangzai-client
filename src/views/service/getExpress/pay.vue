@@ -126,42 +126,9 @@ export default {
       this.pay(this.info.id, data)
     },
     wxPay () {
-      let jsApiParameters = {}
-      let onBridgeReady = function () {
-        this.$wechat.WeixinJSBridge.invoke(
-                    'getBrandWCPayRequest',
-                    jsApiParameters,
-                    (res) => {
-                      alert(res.err_msg)
-                      if (res.err_msg === 'get_brand_wcpay_request:ok') {
-                        alert('支付成功')
-                        window.location.reload()
-                      }
-                      if (res.err_msg === 'get_brand_wcpay_request:cancel') {
-                        alert('取消支付')
-                        window.location.reload()
-                      }
-                    }
-            )
-      }
-      let callpay = function () {
-        if (typeof WeixinJSBridge === 'undefined') {
-          if (document.addEventListener) {
-            document.addEventListener('WeixinJSBridgeReady', onBridgeReady, false)
-          } else if (document.attachEvent) {
-            document.attachEvent('WeixinJSBridgeReady', onBridgeReady)
-            document.attachEvent('onWeixinJSBridgeReady', onBridgeReady)
-          }
-        } else {
-          onBridgeReady()
-        }
-      }
-        // 请求支付数据
-      this.$http.post('/wxPay')
-                .then((response) => {
-                  jsApiParameters = response.data
-                  callpay()
-                })
+      this.$http.post('wxPay').then(res => {
+        this.$wechat.chooseWXPay(res.data)
+      })
     }
   }
 }
