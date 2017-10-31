@@ -128,7 +128,7 @@ export default {
     wxPay () {
       let jsApiParameters = {}
       let onBridgeReady = function () {
-        this.$wechat.WeixinJSBridge.invoke(
+        WeixinJSBridge.invoke(
                     'getBrandWCPayRequest',
                     jsApiParameters,
                     (res) => {
