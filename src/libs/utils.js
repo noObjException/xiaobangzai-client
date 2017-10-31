@@ -80,10 +80,10 @@ Util.getPath = path => {
  * 生成随机字符串
  */
 Util.random_str = len => {
-  var chars = 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890'
-  var max = chars.length
-  var str = ''
-  for (var i = 0; i < len; i++) {
+  let chars = 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890'
+  let max = chars.length
+  let str = ''
+  for (let i = 0; i < len; i++) {
     str += chars.charAt(Math.floor(Math.random() * max))
   }
   return str

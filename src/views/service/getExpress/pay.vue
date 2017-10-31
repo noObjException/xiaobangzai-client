@@ -33,7 +33,7 @@
     </group>
 
     <box gap="40px 6px">
-      <x-button type="primary" @click.native="showPayType = true">立即支付</x-button>
+      <x-button type="primary" @click.native="wxPay">立即支付</x-button>
     </box>
 
     <actionsheet v-model="showPayType" :menus="payTypes" @on-click-menu="handlePay" show-cancel>
@@ -124,6 +124,44 @@ export default {
       let data = this.formData
       data['pay_type'] = payType
       this.pay(this.info.id, data)
+    },
+    wxPay () {
+      let jsApiParameters = {}
+      let onBridgeReady = function () {
+        this.$wechat.WeixinJSBridge.invoke(
+                    'getBrandWCPayRequest',
+                    jsApiParameters,
+                    (res) => {
+                      alert(res.err_msg)
+                      if (res.err_msg === 'get_brand_wcpay_request:ok') {
+                        alert('支付成功')
+                        window.location.reload()
+                      }
+                      if (res.err_msg === 'get_brand_wcpay_request:cancel') {
+                        alert('取消支付')
+                        window.location.reload()
+                      }
+                    }
+            )
+      }
+      let callpay = function () {
+        if (typeof WeixinJSBridge === 'undefined') {
+          if (document.addEventListener) {
+            document.addEventListener('WeixinJSBridgeReady', onBridgeReady, false)
+          } else if (document.attachEvent) {
+            document.attachEvent('WeixinJSBridgeReady', onBridgeReady)
+            document.attachEvent('onWeixinJSBridgeReady', onBridgeReady)
+          }
+        } else {
+          onBridgeReady()
+        }
+      }
+        // 请求支付数据
+      this.$http.post('/wxPay')
+                .then((response) => {
+                  jsApiParameters = response.data
+                  callpay()
+                })
     }
   }
 }
