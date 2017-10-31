@@ -126,19 +126,19 @@ export default {
       this.pay(this.info.id, data)
     },
     wxPay () {
-      let _this = this
       let jsApiParameters = {}
       let onBridgeReady = function () {
         this.$wechat.WeixinJSBridge.invoke(
                     'getBrandWCPayRequest',
                     jsApiParameters,
                     (res) => {
+                      alert(res.err_msg)
                       if (res.err_msg === 'get_brand_wcpay_request:ok') {
-                        _this.alert('支付成功')
+                        alert('支付成功')
                         window.location.reload()
                       }
                       if (res.err_msg === 'get_brand_wcpay_request:cancel') {
-                        _this.alert('取消支付')
+                        alert('取消支付')
                         window.location.reload()
                       }
                     }
