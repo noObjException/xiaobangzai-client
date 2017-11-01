@@ -21,7 +21,15 @@
 </template>
 
 <script>
-import { Swipeout, SwipeoutItem, SwipeoutButton, Group, Cell, XButton } from 'vux'
+import {
+  Swipeout,
+  SwipeoutItem,
+  SwipeoutButton,
+  Group,
+  Cell,
+  XButton
+} from 'vux'
+import { mapGetters } from 'vuex'
 
 export default {
   data () {
@@ -30,10 +38,20 @@ export default {
     }
   },
   components: {
-    Swipeout, SwipeoutItem, SwipeoutButton, Group, Cell, XButton
+    Swipeout,
+    SwipeoutItem,
+    SwipeoutButton,
+    Group,
+    Cell,
+    XButton
   },
   created () {
     this.initData()
+  },
+  computed: {
+    ...mapGetters([
+      'choosedAddress'
+    ])
   },
   methods: {
     async initData () {
@@ -60,6 +78,12 @@ export default {
     async handleDelete (id) {
       this.$http.delete('/memberAddress/' + id).then(res => {
         let that = this
+
+        // 删掉了缓存中的地址就清空地址缓存
+        if (id === this.choosedAddress.id) {
+          console.log('删除地址缓存')
+          this.$store.dispatch('choosedAddress', null)
+        }
 
         this.$vux.toast.show({
           type: 'text',

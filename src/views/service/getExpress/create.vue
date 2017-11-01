@@ -1,7 +1,7 @@
 <template>
   <div>
     <group gutter="4px">
-      <cell v-if="choosedAddress"  link="/address" :title="choosedAddress.realname+ ' '+choosedAddress.mobile" :inline-desc="choosedAddress.college+ ' ' +choosedAddress.area + ' '+choosedAddress.detail">
+      <cell v-if="choosedAddress"  link="/address" :title="choosedAddress.realname+ ' '+choosedAddress.mobile" :inline-desc="address">
         <x-icon slot="icon" type="ios-location-outline"></x-icon>
       </cell>
       <cell v-else link="/address" inline-desc="请选择您的收货地址"></cell>
@@ -123,6 +123,9 @@ export default {
       'choosedAddress',
       'expressMissionInfo'
     ]),
+    address () {
+      return this.choosedAddress.college + ' ' + this.choosedAddress.area + ' ' + (this.choosedAddress.detail || '')
+    },
     info () {
       let type = this.formData.express_type
       let weight = this.formData.express_weight
@@ -160,7 +163,7 @@ export default {
         this.expressWeights = data.expressWeights
         this.settings = data.settings
 
-        if (data.defaultAddress && !this.choosedAddress) {
+        if (data.defaultAddress.length > 0 && !this.choosedAddress) {
           this.$store.dispatch('choosedAddress', data.defaultAddress)
         }
 
