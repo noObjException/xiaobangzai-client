@@ -137,7 +137,6 @@ export default {
           signType: config.signType,
           paySign: config.paySign,
           success: res => {
-            alert('支付成功')
             that.$router.push({path: '/service/getExpress/result', query: {id: this.info.id}})
           }
         })
