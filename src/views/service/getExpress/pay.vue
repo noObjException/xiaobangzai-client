@@ -127,7 +127,19 @@ export default {
     },
     wxPay () {
       this.$http.post('wxPay', {order_id: this.info.id}).then(res => {
-        this.$wechat.chooseWXPay(res.data)
+        let that = this
+        const config = res.data
+
+        this.$wechat.chooseWXPay({
+          timestamp: config.timestamp,
+          nonceStr: config.nonceStr,
+          package: config.package,
+          signType: config.signType,
+          paySign: config.paySign,
+          success: function (res) {
+            that.$router.push({path: '/service/getExpress/result', query: {id: this.info.id}})
+          }
+        })
       })
     }
   }
