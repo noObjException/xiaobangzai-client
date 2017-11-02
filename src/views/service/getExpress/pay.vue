@@ -33,12 +33,8 @@
     </group>
 
     <box gap="40px 6px">
-      <x-button type="primary" @click.native="wxPay">立即支付</x-button>
+      <x-button type="primary" @click.native="wxPay(formData)">立即支付</x-button>
     </box>
-
-    <actionsheet v-model="showPayType" :menus="payTypes" @on-click-menu="handlePay" show-cancel>
-      <p slot="header">请选择支付方式</p>
-    </actionsheet>
   </div>
 </template>
 
@@ -55,17 +51,11 @@ export default {
       info: {},
       showPayType: false,
       formData: {
+        order_id: 0,
         is_use_credit: false
       },
       member: {},
-      settings: {},
-      payTypes: [{
-        label: '微信支付',
-        value: 'WECHAT_PAY'
-      }, {
-        label: '余额支付',
-        value: 'BALANCE_PAY'
-      }]
+      settings: {}
     }
   },
   mixins: [mixin],
@@ -114,32 +104,12 @@ export default {
         this.info = res.data
         this.member = res.meta.member
 
+        this.formData.order_id = res.data.id
+
         this.settings = res.meta.settings
         if (this.settings.switch_credit_to_money) {
           this.formData.is_use_credit = true
         }
-      })
-    },
-    async handlePay (payType) {
-      let data = this.formData
-      data['pay_type'] = payType
-      this.pay(this.info.id, data)
-    },
-    wxPay () {
-      this.$http.post('wxPay', {order_id: this.info.id}).then(res => {
-        let that = this
-        const config = res.data
-
-        this.$wechat.chooseWXPay({
-          timestamp: config.timestamp,
-          nonceStr: config.nonceStr,
-          package: config.package,
-          signType: config.signType,
-          paySign: config.paySign,
-          success: res => {
-            that.$router.push({path: '/service/getExpress/result', query: {id: this.info.id}})
-          }
-        })
       })
     }
   }

@@ -35,7 +35,7 @@
             <cell>
                 <x-button mini v-if="info.status === '待支付'" @click.native="cancel(info.id)">取消订单</x-button>
                 <x-button mini type="warn" v-if="info.status === '待接单'" @click.native="addBounty(info.id)">追加赏金</x-button>
-                <x-button mini type="warn" v-if="info.status === '待支付'" @click.native="showPayType = true">立即支付</x-button>
+                <x-button mini type="warn" v-if="info.status === '待支付'" @click.native="wxPay({order_id: info.id})">立即支付</x-button>
                 <x-button mini type="warn" v-if="info.status === '配送中'" @click.native="completed(info.id)">确认收货</x-button>
                 <x-button mini type="warn" v-if="info.status === '已完成'" @click.native="addComment(info.id)">评价</x-button>
             </cell>
@@ -55,14 +55,7 @@ export default {
   data () {
     return {
       info: {},
-      showPayType: false,
-      payTypes: [{
-        label: '微信支付',
-        value: 'WECHAT_PAY'
-      }, {
-        label: '余额支付',
-        value: 'BALANCE_PAY'
-      }]
+      showPayType: false
     }
   },
   mixins: [mixin],
@@ -79,10 +72,6 @@ export default {
       await this.$http.get('/getExpress/' + id).then(res => {
         this.info = res.data
       })
-    },
-    async handlePay (payType) {
-      let data = {pay_type: payType}
-      this.pay(this.info.id, data)
     }
   }
 }

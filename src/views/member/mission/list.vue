@@ -31,7 +31,7 @@
         <cell>
           <div>
             <x-button mini v-if="item.status === '待支付'" @click.native="cancel(item.id)">取消订单</x-button>
-            <x-button mini type="warn" v-if="item.status === '待支付'" @click.native="payType(item.id)">立即支付</x-button>
+            <x-button mini type="warn" v-if="item.status === '待支付'" @click.native="wxPay({order_id: item.id})">立即支付</x-button>
             <x-button mini type="warn" v-else-if="item.status === '配送中'" @click.native="completed(item.id)">确认收货</x-button>
             <x-button mini type="warn" v-else-if="item.status === '待接单'" @click.native="addBounty(item.id)">追加赏金</x-button>
             <x-button mini type="warn" v-else-if="item.status === '已完成'" @click.native="addComment(item.id)">评价</x-button>
@@ -80,15 +80,7 @@ export default {
       currentPage: 1,
       totalPages: '',
       allLoaded: false,
-      showPayType: false,
-      payTypes: [{
-        label: '微信支付',
-        value: 'WECHAT_PAY'
-      }, {
-        label: '余额支付',
-        value: 'BALANCE_PAY'
-      }],
-      payId: 0
+      showPayType: false
     }
   },
   computed: {
@@ -133,14 +125,6 @@ export default {
     },
     async switchStatus (index) {
       this.getMissionLists(index)
-    },
-    async payType (id) {
-      this.showPayType = true
-      this.payId = id
-    },
-    async handlePay (payType) {
-      let data = {pay_type: payType}
-      this.pay(this.payId, data)
     }
   }
 }

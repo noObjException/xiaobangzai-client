@@ -25,30 +25,19 @@ export default {
       })
     },
     // 支付订单
-    async pay (id, data) {
-      let that = this
+    async wxPay (data) {
+      await this.$http.post('/wxPay', data).then(res => {
+        let that = this
+        const config = res.data
 
-      await this.$http.get('/jsSDKConfig', {params: {request_url: location.href.split('#')[0]}}).then(res => {
-        this.$wechat.config(res.data)
-
-        this.$wechat.ready(() => {
-          console.log('配置成功')
-        })
-
-        this.$wechat.error(() => {
-          console.log('配置失败')
-        })
-      })
-
-      await this.$http.post('/wxPay').then(res => {
-        this.$wechat.chooseWXPay(res.data)
-      })
-
-      await this.$http.put('/expressMission/pay/' + id, data).then(res => {
-        this.$vux.toast.show({
-          text: '支付成功',
-          onShow () {
-            that.$router.push({path: '/service/getExpress/result', query: {id: id}})
+        this.$wechat.chooseWXPay({
+          timestamp: config.timestamp,
+          nonceStr: config.nonceStr,
+          package: config.package,
+          signType: config.signType,
+          paySign: config.paySign,
+          success: res => {
+            that.$router.push({path: '/service/getExpress/result', query: {id: data.order_id}})
           }
         })
       })
