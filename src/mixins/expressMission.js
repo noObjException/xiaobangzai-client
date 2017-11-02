@@ -26,7 +26,7 @@ export default {
     },
     // 支付订单
     async wxPay (data) {
-      await this.$http.post('/wxPay', data).then(res => {
+      await this.$http.post('/expressMission/wxPay', data).then(res => {
         let that = this
         const config = res.data
 
