@@ -61,6 +61,14 @@ export default [
       {
         path: 'getExpress/list',
         component: Utils.getPath('staff/mission/list')
+      },
+      {
+        path: 'freeMarket',
+        component: Utils.getPath('service/freeMarket/index')
+      },
+      {
+        path: 'usedBook',
+        component: Utils.getPath('service/usedBook/index')
       }
     ]
   },
