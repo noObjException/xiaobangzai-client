@@ -94,6 +94,9 @@ export default {
     },
     deduction () {
       let deduction = this.member.credit / this.settings.credit_to_money
+      if (deduction > this.info.total_price) {
+        deduction = this.info.total_price
+      }
       return deduction.toFixed(2)
     }
   },
