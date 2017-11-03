@@ -10,18 +10,12 @@
       <cell title="快递公司:" :value="info.express_com"></cell>
       <cell title="物品信息:" :value="info.express_type+'/'+info.express_weight"></cell>
       <cell title="送达时间:" :value="info.arrive_time"></cell>
-      <cell title="配送费用:">
-        <span class="text-danger">￥ {{info.price}}</span>
+      <cell title="配送费用:" is-link :arrow-direction="showPriceDetail ? 'up' : 'down'" @click.native="showPriceDetail = !showPriceDetail">
+        <span class="text-danger">￥ {{info.total_price}}</span>
       </cell>
-      <cell title="上楼加价:" v-if="info.upstairs_price">
-        <span class="text-danger">￥ {{info.upstairs_price}}</span>
-      </cell>
-      <cell title="超重加价:" v-if="info.overweight_price">
-        <span class="text-danger">￥ {{info.overweight_price}}</span>
-      </cell>
-       <cell title="跑腿赏金:">
-        <span class="text-danger">￥ {{info.bounty}}</span>
-      </cell>
+      <template v-if="showPriceDetail">
+        <cell-form-preview :list="priceDetail"></cell-form-preview>
+      </template>
       <cell title="备注信息:" :value="info.remark" value-align="right">{{info.remark||'无'}}</cell>
     </group>
 
@@ -39,7 +33,15 @@
 </template>
 
 <script>
-import { Group, Cell, XButton, Box, ToastPlugin, Actionsheet, XSwitch } from 'vux'
+import {
+  Group,
+  Cell,
+  XButton,
+  Box,
+  ToastPlugin,
+  XSwitch,
+  CellFormPreview
+} from 'vux'
 import Vue from 'vue'
 import mixin from 'src/mixins/expressMission.js'
 
@@ -55,12 +57,19 @@ export default {
         is_use_credit: false
       },
       member: {},
-      settings: {}
+      settings: {},
+      showPriceDetail: false,
+      priceDetail: []
     }
   },
   mixins: [mixin],
   components: {
-    Group, Cell, XButton, Box, Actionsheet, XSwitch
+    Group,
+    Cell,
+    XButton,
+    Box,
+    XSwitch,
+    CellFormPreview
   },
   computed: {
     totalPrice () {
@@ -97,7 +106,7 @@ export default {
       await this.$http.get('/getExpress/' + id).then(res => {
         // 从支付成功页点返回的时候跳到详情页
         if (res.data.status !== '待支付') {
-          this.routeTo('/member/mission/detail', {id: id})
+          this.routeTo('/member/mission/detail', { id: id })
           return false
         }
 
@@ -110,6 +119,19 @@ export default {
         if (this.settings.switch_credit_to_money) {
           this.formData.is_use_credit = true
         }
+
+        this.priceDetail = [
+          {
+            label: '上楼加价:',
+            value: '￥ ' + res.data.upstairs_price
+          }, {
+            label: '超重加价:',
+            value: '￥ ' + res.data.overweight_price
+          }, {
+            label: '跑腿赏金:',
+            value: '￥ ' + res.data.bounty
+          }
+        ]
       })
     }
   }
