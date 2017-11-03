@@ -18,8 +18,8 @@
     </group>
 
     <group gutter="4px">
-      <cell title="基本费用">
-        <span class="text-danger">￥ {{Number(this.settings.price).toFixed(2)}}</span>
+      <cell title="配送费用">
+        <span class="text-danger">￥ {{ total_price }}</span>
       </cell>
       <cell primary="content">
         <span slot="title">增加 <span class="text-danger" style="font-size:20px;">{{formData.bounty}}</span> 元赏金</span>
@@ -109,7 +109,8 @@ export default {
         express_weight: '',
         bounty: 0,
         remark: '',
-        extra_costs: []
+        extra_costs: [],
+        total_price: 0
       },
       isSubmitted: false
     }
@@ -139,6 +140,27 @@ export default {
         }
         return true
       }
+    },
+    // 计算配送费用
+    total_price () {
+      let price = this.settings.price
+      // 赏金
+      price += this.formData.bounty
+      // 超重
+      if (this.settings.switch_overweight_price) {
+        const diff = parseFloat(this.formData.express_weight) - parseFloat(this.settings.base_weight)
+        if (diff > 0) {
+          price += diff * this.settings.overweight_price
+        }
+      }
+      // 额外收费(上楼加价)
+      if (this.settings.switch_upstairs_price) {
+        const extraCosts = Object.values(this.formData.extra_costs)
+        if (extraCosts.indexOf('upstairs_price') !== -1) {
+          price += this.settings.upstairs_price
+        }
+      }
+      return price.toFixed(2)
     }
   },
   beforeRouteLeave (to, from, next) {
@@ -152,6 +174,8 @@ export default {
       this.$store.dispatch('saveExpressMissionInfo', data)
     }
     next()
+  },
+  watch: {
   },
   methods: {
     async initData () {

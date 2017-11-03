@@ -44,10 +44,6 @@
     <no-content title="暂无订单" v-else>
       <x-icon type="ios-cart-outline" size="160"></x-icon>
     </no-content>
-
-    <actionsheet v-model="showPayType" :menus="payTypes" @on-click-menu="handlePay" show-cancel>
-      <p slot="header">请选择支付方式</p>
-    </actionsheet>
   </div>
 </template>
 
