@@ -97,7 +97,7 @@ export default {
       if (deduction > this.info.total_price) {
         deduction = this.info.total_price
       }
-      return deduction.toFixed(2)
+      return Number(deduction).toFixed(2)
     }
   },
   created () {

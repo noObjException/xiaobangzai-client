@@ -51,7 +51,7 @@ fetch.interceptors.response.use(
         },
         onHide () {
           setTimeout(() => {
-            // window.location.reload()
+            window.location.reload()
           }, 1500)
         }
       })
