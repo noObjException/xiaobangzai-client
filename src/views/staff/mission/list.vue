@@ -1,32 +1,34 @@
 <template>
     <div>
-        <group v-for="(item, index) in lists" :key="index" v-if="lists.length > 0">
-            <cell :title="item.realname" :inline-desc="'下单时间: ' + item.created_at" style="border-bottom: 1px solid #D9D9D9;">
-                <img slot="icon" :src="item.avatar" class="avatar" />
-                <a :href="'tel:'+item.mobile">{{item.mobile}}</a>
-            </cell>
-
-            <router-link :to="'/staff/mission/detail?id='+item.id" style="color: #000;">
-                <cell :title="item.express_com+' '+item.express_type">
-                    <x-icon slot="icon" type="android-plane" class="g-icon" size="20" style="fill: rgb(65, 194, 215)"></x-icon>
+        <template  v-if="lists.length > 0">
+            <group v-for="(item, index) in lists" :key="index" gutter="8px">
+                <cell :title="item.realname" :inline-desc="'下单时间: ' + item.created_at" style="border-bottom: 1px solid #D9D9D9;">
+                    <img slot="icon" :src="item.avatar" class="avatar" />
+                    <a :href="'tel:'+item.mobile">{{item.mobile}}</a>
                 </cell>
-                <cell :title="item.college+' '+item.area+' '+item.detail">
-                    <x-icon slot="icon" type="location" class="g-icon" size="20"></x-icon>
-                </cell>
-                <cell :title="'送达时间: '+item.arrive_time">
-                    <x-icon slot="icon" type="ios-clock-outline" class="g-icon" size="20" style="fill: rgb(255, 49, 0)"></x-icon>
-                </cell>
-            </router-link>
 
-            <cell>
-                <x-icon slot="icon" type="cash" class="g-icon" size="20"></x-icon>
-                <span slot="title" class="text-danger">￥{{item.total_price}}</span>
-                <span>
-                    <x-button mini type="warn" @click.native="acceptOrder(item.id)">立即接单</x-button>
-                </span>
-            </cell>
-        </group>
+                <group gutter="0" @click.native="toDetail(item.id)">
+                    <cell :title="item.express_com+' '+item.express_type">
+                        <x-icon slot="icon" type="android-plane" class="g-icon" size="20" style="fill: rgb(65, 194, 215)"></x-icon>
+                    </cell>
+                    <cell :title="item.college+' '+item.area+' '+item.detail">
+                        <x-icon slot="icon" type="location" class="g-icon" size="20"></x-icon>
+                    </cell>
+                    <cell :title="'送达时间: '+item.arrive_time">
+                        <x-icon slot="icon" type="ios-clock-outline" class="g-icon" size="20" style="fill: rgb(255, 49, 0)"></x-icon>
+                    </cell>
+                </group>
 
+                <cell>
+                    <x-icon slot="icon" type="cash" class="g-icon" size="20"></x-icon>
+                    <span slot="title" class="text-danger">￥{{item.total_price}}</span>
+                    <span v-if="isStaff">
+                        <x-button mini type="warn" @click.native="acceptOrder(item.id)">立即接单</x-button>
+                    </span>
+                </cell>
+            </group>
+        </template>
+        
         <no-content title="暂无订单" v-else>
             <x-icon type="ios-cart-outline" size="160"></x-icon>
         </no-content>
@@ -46,11 +48,15 @@ Vue.use(InfiniteScroll)
 export default {
   data () {
     return {
-      lists: []
+      lists: [],
+      isStaff: false
     }
   },
   components: {
-    Group, Cell, XButton, NoContent
+    Group,
+    Cell,
+    XButton,
+    NoContent
   },
   computed: {
     ...mapGetters([
@@ -64,8 +70,32 @@ export default {
   methods: {
     async initData () {
       await this.$http.get('/missions').then(res => {
-        this.lists = res.data
+        const member = res.meta.member
+        if (member.is_staff) {
+          this.lists = res.data
+          this.isStaff = true
+        } else {
+          this.lists = res.data.map(item => ({
+            id: item.id,
+            realname: item.realname.slice(0, 1) + '**',
+            mobile: '',
+            created_at: item.created_at,
+            avatar: item.avatar,
+            express_com: item.express_com,
+            express_type: item.express_type,
+            college: item.college,
+            area: item.area,
+            detail: item.detail,
+            arrive_time: item.arrive_time,
+            total_price: item.total_price
+          }))
+        }
       })
+    },
+    toDetail (id) {
+      if (this.isStaff) {
+        this.$router.push({path: '/staff/mission/detail', query: {id: id}})
+      }
     }
   }
 }
@@ -73,9 +103,9 @@ export default {
 
 <style lang="less" scoped>
 .avatar {
-    width: 40px;
-    margin-right: 6px;
-    border-radius: 50%;
+  width: 40px;
+  margin-right: 6px;
+  border-radius: 50%;
 }
 </style>
 
