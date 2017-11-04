@@ -23,8 +23,8 @@ export default [
     component: Utils.getPath('member/index')
   },
   {
-    path: '/member/credit',
-    component: Utils.getPath('member/credit')
+    path: '/member/point',
+    component: Utils.getPath('member/point')
   },
   {
     path: '/member/mission',

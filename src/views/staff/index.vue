@@ -6,7 +6,7 @@
     </div>
     <group gutter="0">
       <grid :cols='2'>
-        <grid-item :label="'余额: '+staff.credit"></grid-item>
+        <grid-item :label="'余额: '+staff.point"></grid-item>
         <grid-item label="信誉点:59"></grid-item>
       </grid>
     </group>

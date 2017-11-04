@@ -23,6 +23,7 @@ router.beforeEach((to, from, next) => {
 
   // 没有token就跳转到服务端做微信授权, 利用授权得到的信息生成token
   if (!store.getters.token) {
+    console.log('获取授权')
     Utils.setLocalStorage('beforeLoginUrl', to.fullPath)
 
     let url = process.env.BASE_URL + '/token'

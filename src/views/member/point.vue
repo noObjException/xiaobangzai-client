@@ -1,8 +1,8 @@
 <template>
     <div>
-        <div class="credit">
+        <div class="point">
             <div class="title">当前积分</div>
-            <div class="content">{{totalCredit}}</div>
+            <div class="content">{{totalPoint}}</div>
         </div>
 
         <group>
@@ -24,7 +24,7 @@ import { Group, Cell } from 'vux'
 export default {
   data () {
     return {
-      totalCredit: 0,
+      totalPoint: 0,
       lists: []
     }
   },
@@ -36,9 +36,9 @@ export default {
   },
   methods: {
     async initData () {
-      await this.$http.get('/creditRecords').then(res => {
+      await this.$http.get('/pointRecords').then(res => {
         this.lists = res.data
-        this.totalCredit = res.meta.total_credit
+        this.totalPoint = res.meta.total_point
       })
     }
   }
@@ -46,7 +46,7 @@ export default {
 </script>
 
 <style lang="less" scoped>
-.credit {
+.point {
     background-color: #ef843f;
     color: #fff;
     .title {

@@ -20,7 +20,7 @@
     </group>
 
     <group labelWidth="150px"> 
-      <x-switch :title="deductionTitle" v-model="formData.is_use_credit" :disabled="deductionDisabled" v-if="settings.switch_credit_to_money"></x-switch>
+      <x-switch :title="deductionTitle" v-model="formData.is_use_point" :disabled="deductionDisabled" v-if="settings.switch_point_to_money"></x-switch>
       <cell title="应付金额:">
         <span class="text-danger">￥ {{totalPrice}}</span>
       </cell>
@@ -54,7 +54,7 @@ export default {
       showPayType: false,
       formData: {
         order_id: 0,
-        is_use_credit: false
+        is_use_point: false
       },
       member: {},
       settings: {},
@@ -74,7 +74,7 @@ export default {
   computed: {
     totalPrice () {
       let price = this.info.total_price
-      if (this.formData.is_use_credit) {
+      if (this.formData.is_use_point) {
         price -= this.deduction
       }
       return price
@@ -87,13 +87,13 @@ export default {
     },
     deductionDisabled () {
       if (this.deduction <= 0) {
-        this.formData.is_use_credit = false
+        this.formData.is_use_point = false
         return true
       }
       return false
     },
     deduction () {
-      let deduction = this.member.credit / this.settings.credit_to_money
+      let deduction = this.member.point / this.settings.point_to_money
       if (deduction > this.info.total_price) {
         deduction = this.info.total_price
       }
@@ -119,8 +119,8 @@ export default {
         this.formData.order_id = res.data.id
 
         this.settings = res.meta.settings
-        if (this.settings.switch_credit_to_money) {
-          this.formData.is_use_credit = true
+        if (this.settings.switch_point_to_money) {
+          this.formData.is_use_point = true
         }
 
         this.priceDetail = [

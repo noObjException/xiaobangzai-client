@@ -37,7 +37,7 @@
       <cell title="我的余额" :value="member.balance" is-link>
         <x-icon slot="icon" type="social-usd-outline" class="cell-icon"></x-icon>
       </cell>
-      <cell title="我的积分" :value="member.credit" link="/member/credit">
+      <cell title="我的积分" :value="member.point" link="/member/point">
         <x-icon slot="icon" type="social-euro-outline" class="cell-icon"></x-icon>
       </cell>
     </group>
@@ -76,7 +76,7 @@ export default {
         avatar: '../../../static/logo.png',
         nickname: '',
         balance: 0.00,
-        credit: 0
+        point: 0
       },
       settings: ''
     }
