@@ -96,7 +96,7 @@ export default {
       })
     },
     routeTo (status) {
-      this.$router.push({ path: '/member/mission', query: { status: status } })
+      this.$router.push({ path: '/member/mission/list', query: { status: status } })
     }
   }
 }
