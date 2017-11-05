@@ -224,7 +224,7 @@ export default {
         text = '物品类型不能为空'
       } else if (data.express_weight.length === 0) {
         text = '物品重量不能为空'
-      } else if (data.address.length === 0) {
+      } else if (!data.address) {
         text = '请选择收货地址'
       } else if (data.arrive_time.length === 0) {
         text = '送达时间不能为空'
