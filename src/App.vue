@@ -10,6 +10,7 @@
 <script>
 import { Loading } from 'vux'
 import { mapGetters } from 'vuex'
+import Utils from 'src/libs/utils.js'
 
 export default {
   created () {
@@ -25,17 +26,19 @@ export default {
   },
   methods: {
     initJsSDK () {
-      this.$http.get('/jsSDKConfig', {params: {request_url: location.href.split('#')[0]}}).then(res => {
-        this.$wechat.config(res.data)
+      if (Utils.isWechat()) {
+        this.$http.get('/jsSDKConfig', {params: {request_url: location.href.split('#')[0]}}).then(res => {
+          this.$wechat.config(res.data)
 
-        this.$wechat.ready(() => {
-          console.log('配置成功')
-        })
+          this.$wechat.ready(() => {
+            console.log('配置成功')
+          })
 
-        this.$wechat.error(() => {
-          console.log('配置失败')
+          this.$wechat.error(() => {
+            console.log('配置失败')
+          })
         })
-      })
+      }
     }
   }
 }
