@@ -1,7 +1,7 @@
 <template>
   <div>
     <group gutter="4px">
-      <cell v-if="choosedAddress"  link="/address" :title="choosedAddress.realname+ ' '+choosedAddress.mobile" :inline-desc="address">
+      <cell v-if="choosedAddress"  link="/address" :title="choosedAddress.realname+ ' '+choosedAddress.mobile" :inline-desc="choosedAddress.college+ ' ' +choosedAddress.area + ' '+choosedAddress.detail">
         <x-icon slot="icon" type="ios-location-outline"></x-icon>
       </cell>
       <cell v-else link="/address" inline-desc="请选择您的收货地址"></cell>
@@ -18,8 +18,8 @@
     </group>
 
     <group gutter="4px">
-      <cell title="配送费用">
-        <span class="text-danger">￥ {{ total_price }}</span>
+      <cell title="基本费用">
+        <span class="text-danger">￥ {{Number(this.settings.price).toFixed(2)}}</span>
       </cell>
       <cell primary="content">
         <span slot="title">增加 <span class="text-danger" style="font-size:20px;">{{formData.bounty}}</span> 元赏金</span>
@@ -109,8 +109,7 @@ export default {
         express_weight: '',
         bounty: 0,
         remark: '',
-        extra_costs: [],
-        total_price: 0
+        extra_costs: []
       },
       isSubmitted: false
     }
@@ -124,9 +123,6 @@ export default {
       'choosedAddress',
       'expressMissionInfo'
     ]),
-    address () {
-      return this.choosedAddress.college + ' ' + this.choosedAddress.area + ' ' + (this.choosedAddress.detail || '')
-    },
     info () {
       let type = this.formData.express_type
       let weight = this.formData.express_weight
@@ -140,27 +136,6 @@ export default {
         }
         return true
       }
-    },
-    // 计算配送费用
-    total_price () {
-      let price = this.settings.price
-      // 赏金
-      price += this.formData.bounty
-      // 超重
-      if (this.settings.switch_overweight_price) {
-        const diff = parseFloat(this.formData.express_weight) - parseFloat(this.settings.base_weight)
-        if (diff > 0) {
-          price += diff * this.settings.overweight_price
-        }
-      }
-      // 额外收费(上楼加价)
-      if (this.settings.switch_upstairs_price) {
-        const extraCosts = Object.values(this.formData.extra_costs)
-        if (extraCosts.indexOf('upstairs_price') !== -1) {
-          price += this.settings.upstairs_price
-        }
-      }
-      return price.toFixed(2)
     }
   },
   beforeRouteLeave (to, from, next) {
@@ -174,8 +149,6 @@ export default {
       this.$store.dispatch('saveExpressMissionInfo', data)
     }
     next()
-  },
-  watch: {
   },
   methods: {
     async initData () {
@@ -211,7 +184,7 @@ export default {
         if (this.expressWeights.indexOf(expressWeight) !== -1) {
           this.formData.express_weight = expressWeight
         }
-        this.formData.to_where = this.expressMissionInfo.to_where
+//        this.formData.to_where = this.expressMissionInfo.to_where
       })
     },
     async createMission () {
@@ -283,6 +256,7 @@ export default {
     cencel () {
       this.formData.express_type = ''
       this.formData.express_weight = ''
+//      this.formData.to_where = ''
       this.showInfo = false
     }
   }
