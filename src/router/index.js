@@ -27,7 +27,7 @@ export default [
     component: Utils.getPath('member/point')
   },
   {
-    path: '/member/mission',
+    path: '/member/mission/list',
     component: Utils.getPath('member/mission/list')
   },
   {

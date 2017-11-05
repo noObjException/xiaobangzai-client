@@ -5,7 +5,7 @@
       <p>{{member.nickname}}</p>
     </div>
     <group>
-      <cell title="我的订单" value="查看全部任务" link="/member/mission?status=all">
+      <cell title="我的订单" value="查看全部任务" link="/member/mission/list?status=all">
         <x-icon slot="icon" type="android-list" class="cell-icon"></x-icon>
       </cell>
     </group>
@@ -43,10 +43,10 @@
     </group>
 
     <group>
-      <cell title="申请成为有帮人" link="/staff/identify" v-if="settings.switch_staff_identify">
+      <cell title="申请成为有帮人" link="/staff/identify" v-if="settings.switch_staff_identify && !member.is_staff">
         <x-icon slot="icon" type="android-clipboard" class="cell-icon"></x-icon>
       </cell>
-      <cell title="学生认证" link="/member/identify" v-if="settings.switch_member_identify">
+      <cell title="学生认证" link="/member/identify" v-if="settings.switch_member_identify && !member.is_identify">
         <x-icon slot="icon" type="clipboard" class="cell-icon"></x-icon>
       </cell>
       <cell title="我的地址" link="/member/address/list">
