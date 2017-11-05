@@ -6,28 +6,19 @@
             </div>
             <div class="weui-uploader__bd">
                 <ul class="weui-uploader__files">
-                    <li class="weui-uploader__file" style="background-image:url(https://static.vux.li/uploader_bg.png)"></li>
-                    <li class="weui-uploader__file" style="background-image:url(https://static.vux.li/uploader_bg.png)"></li>
-                    <li class="weui-uploader__file" style="background-image:url(https://static.vux.li/uploader_bg.png)"></li>
-                    <li class="weui-uploader__file" style="background-image:url(https://static.vux.li/uploader_bg.png)"></li>
-                    <li class="weui-uploader__file" style="background-image:url(https://static.vux.li/uploader_bg.png)"></li>
-                    <li class="weui-uploader__file" style="background-image:url(https://static.vux.li/uploader_bg.png)"></li>
-                    <li class="weui-uploader__file" style="background-image:url(https://static.vux.li/uploader_bg.png)"></li>
-                    <li class="weui-uploader__file" style="background-image:url(https://static.vux.li/uploader_bg.png)"></li>
+                    <li class="weui-uploader__file" :style="'background-image:url('+ BASE_IMG + item +')'" v-for="(item, index) in currentImageLists" :key="index"></li>
                 </ul>
 
                 <vue-core-image-upload class="upload-button" 
                 :crop="false" 
-                inputOfFile="picture"
-                @imageuploaded="imageuploaded" 
+                inputOfFile="image"
+                @imageuploaded="imageUploaded" 
                 :max-file-size="5242880" 
                 :url="BASE_API + '/pictures'"
-                :multiple="true"
-                :multiple-size="4"
-                :credentials="true"
+                :credentials="false"
+                :data="uploadData"
                 :headers="headers">
-                    <x-icon type="ios-camera" size="48"></x-icon>
-                    <p>添加照片</p>
+                    <x-icon type="ios-plus-empty" size="72"></x-icon>
                 </vue-core-image-upload>
             </div>
         </div>
@@ -36,27 +27,60 @@
 
 <script>
 import VueCoreImageUpload from 'vue-core-image-upload'
+import { mapGetters } from 'vuex'
+import Vue from 'vue'
+import { ToastPlugin } from 'vux'
+Vue.use(ToastPlugin)
+
 export default {
   data () {
     return {
       BASE_API: process.env.BASE_API,
-      headers: {
-        'Content-Type': 'application/json'
-      }
+      BASE_IMG: process.env.BASE_IMG,
+      uploadData: {
+        upload_dir: this.dir
+      },
+      currentImageLists: this.value
     }
   },
   components: {
     VueCoreImageUpload
   },
+  computed: {
+    ...mapGetters([
+      'token'
+    ]),
+    headers () {
+      return {
+        'Authorization': 'Bearer' + this.token
+      }
+    }
+  },
+  watch: {
+    value (val) {
+      this.currentImageLists = val
+    },
+    currentImageLists (val) {
+      this.$emit('input', val)
+    }
+  },
   props: {
     title: {
       type: String,
       default: ''
+    },
+    dir: {
+      type: String,
+      default: ''
+    },
+    value: {
+      type: Array,
+      default: () => []
     }
   },
   methods: {
-    imageuploaded (res) {
-
+    imageUploaded (res) {
+      this.currentImageLists.push(res.data)
     }
   }
 }
