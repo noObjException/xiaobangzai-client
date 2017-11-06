@@ -18,6 +18,11 @@ export default {
               text: '订单完成',
               onShow () {
                 that.$router.push({path: '/member/mission/detail', query: {id: id}})
+              },
+              onHide () {
+                if (that.$router.path === '/member/mission/detail') {
+                  window.location.reload()
+                }
               }
             })
           })
