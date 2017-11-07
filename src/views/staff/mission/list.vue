@@ -24,56 +24,56 @@
                 <x-icon slot="icon" type="cash" class="g-icon" size="20"></x-icon>
                 <span slot="title" class="text-danger">￥{{item.total_price}}</span>
                 <span v-if="isStaff">
-                        <x-button mini type="warn" @click.native="acceptOrder(item.id)">立即接单</x-button>
-                    </span>
+                    <x-button mini type="warn" @click.native="acceptOrder(item.id)">立即接单</x-button>
+                </span>
             </cell>
         </group>
     </v-loadmore>
   </div>
 </template>
 <script>
-  import {Loadmore} from 'mint-ui'
-  import { Group, Cell, XButton } from 'vux'
-  import { mapGetters } from 'vuex'
-  import mixin from 'src/mixins/expressMission.js'
+import { Loadmore } from 'mint-ui'
+import { Group, Cell, XButton } from 'vux'
+import { mapGetters } from 'vuex'
+import mixin from 'src/mixins/expressMission.js'
 
-  export default {
-    data: function () {
-      return {
-        searchCondition: {
-          page: '1',
-          pageSize: '10'
-        },
-        pageList: [],
-        allLoaded: false,
-        scrollMode: 'auto',
-        isStaff: false
-      }
-    },
-    components: {
-      'v-loadmore': Loadmore,
-      Group,
-      Cell,
-      XButton
-    },
-    created () {
-      this.more()
-    },
-    computed: {
-      ...mapGetters([
-        'openid'
-      ])
-    },
-    mixins: [mixin],
-    methods: {
-      loadBottom: function () {
-        this.more()
-        this.$refs.loadmore.onBottomLoaded()
+export default {
+  data: function () {
+    return {
+      searchCondition: {
+        page: '1',
+        pageSize: '10'
       },
-      more: function () {
-        this.searchCondition.page = parseInt(this.searchCondition.page) + 1
+      pageList: [],
+      allLoaded: false,
+      scrollMode: 'auto',
+      isStaff: false
+    }
+  },
+  components: {
+    'v-loadmore': Loadmore,
+    Group,
+    Cell,
+    XButton
+  },
+  created () {
+    this.more()
+  },
+  computed: {
+    ...mapGetters(['openid'])
+  },
+  mixins: [mixin],
+  methods: {
+    loadBottom: function () {
+      this.more()
+      this.$refs.loadmore.onBottomLoaded()
+    },
+    more: function () {
+      this.searchCondition.page = parseInt(this.searchCondition.page) + 1
 
-        this.$http.get('/missions', {params: this.searchCondition}).then(res => {
+      this.$http
+        .get('/missions', { params: this.searchCondition })
+        .then(res => {
           const member = res.meta.member
           if (member.is_staff) {
             this.pageList = this.pageList.concat(res.data)
@@ -97,29 +97,29 @@
 
           this.isHaveMore(res.data.length > 0)
         })
-      },
-      isHaveMore: function (isHaveMore) {
-        this.allLoaded = true
-        if (isHaveMore) {
-          this.allLoaded = false
-        }
-      },
-      toDetail (id) {
-        if (this.isStaff) {
-          this.$router.push({path: '/staff/mission/detail', query: {id: id}})
-        }
+    },
+    isHaveMore: function (isHaveMore) {
+      this.allLoaded = true
+      if (isHaveMore) {
+        this.allLoaded = false
+      }
+    },
+    toDetail (id) {
+      if (this.isStaff) {
+        this.$router.push({ path: '/staff/mission/detail', query: { id: id } })
       }
     }
   }
+}
 </script>
 
 <style lang="less" scoped>
-    .avatar {
-        width: 40px;
-        margin-right: 6px;
-        border-radius: 50%;
-    }
-    .mint-loadmore-bottom {
-        text-align: center;
-    }
+.avatar {
+  width: 40px;
+  margin-right: 6px;
+  border-radius: 50%;
+}
+.mint-loadmore-bottom {
+  text-align: center;
+}
 </style>

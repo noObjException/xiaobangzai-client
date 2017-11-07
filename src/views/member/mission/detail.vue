@@ -40,10 +40,6 @@
                 <x-button mini type="warn" v-if="info.status === '已完成'" @click.native="addComment(info.id)">评价</x-button>
             </cell>
         </group>
-
-        <actionsheet v-model="showPayType" :menus="payTypes" @on-click-menu="handlePay" show-cancel>
-            <p slot="header">请选择支付方式</p>
-        </actionsheet>
     </div>
 </template>
 
@@ -54,8 +50,7 @@ import mixin from 'src/mixins/expressMission.js'
 export default {
   data () {
     return {
-      info: {},
-      showPayType: false
+      info: {}
     }
   },
   mixins: [mixin],

@@ -20,7 +20,7 @@ export default {
                 that.$router.push({path: '/member/mission/detail', query: {id: id}})
               },
               onHide () {
-                if (that.$router.path === '/member/mission/detail') {
+                if (that.$route.path === '/member/mission/detail') {
                   window.location.reload()
                 }
               }
