@@ -8,7 +8,7 @@
 
     <div v-infinite-scroll="loadMore" :infinite-scroll-disabled="allLoaded" :infinite-scroll-immediate-check='false' :infinite-scroll-distance='10' v-if="lists.length > 0">
       <group :title="'下单时间: '+item.created_at" label-width="5em" v-for="(item, index) in lists" :key="index" labelWidth="180px">
-        <router-link :to="'mission/detail?id='+item.id" style="color: #000;">
+        <router-link :to="'/member/mission/detail?id='+item.id" style="color: #000;">
           <cell :title="item.status" :inline-desc="'订单编号: '+item.order_num">
             <x-icon slot="icon" type="ios-email-outline" class="big-icon" size="50"></x-icon>
             <span slot="title" class="text-danger">{{item.status}}</span>
