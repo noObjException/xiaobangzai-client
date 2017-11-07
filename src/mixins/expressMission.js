@@ -94,7 +94,7 @@ export default {
         this.$vux.toast.show({
           text: '接单成功',
           onShow () {
-            that.$router.push({path: '/service/getExpress/acceptResult', query: {id: id}})
+            that.$router.push({path: '/staff/mission/detail', query: {id: id}})
           }
         })
       })
