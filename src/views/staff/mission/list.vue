@@ -61,7 +61,7 @@ export default {
         { label: '已完成', value: 'completed' },
         { label: '已取消', value: 'canceled' }
       ],
-      currentStatus: '',
+      currentStatus: 'waitOrder',
       totalPages: '',
       currentPage: 1,
       pageList: [],
@@ -90,7 +90,7 @@ export default {
       return {
         per_page: 15,
         status: this.currentStatus,
-        page: this.currentPage
+        page: this.currentPage || 'waitOrder'
       }
     }
   },
