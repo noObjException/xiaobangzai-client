@@ -89,8 +89,8 @@ export default {
     queryParams () {
       return {
         per_page: 15,
-        status: this.currentStatus,
-        page: this.currentPage || 'waitOrder'
+        status: this.currentStatus || 'waitOrder',
+        page: this.currentPage
       }
     }
   },
