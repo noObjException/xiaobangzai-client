@@ -12,15 +12,18 @@
     </group>
 
     <group gutter="6px">
-      <cell title="任务大厅" value="去接单" link="/staff/mission/list"></cell>
-      <grid :cols='3' class="menus">
-        <grid-item :label="order_counts.processing || '0'">
+      <cell title="任务大厅" value="去接单" link="/staff/mission/list?status=all"></cell>
+      <grid :cols='4' class="menus">
+        <grid-item :label="'<span class=text-danger>'+(order_counts.waitOrder || '0')+'</span>'" link="/staff/mission/list?status=waitOrder">
+          <p class="menu-item">待接单</p>
+        </grid-item>
+        <grid-item :label="order_counts.processing || '0'" link="/staff/mission/list?status=processing">
           <p class="menu-item">配送中</p>
         </grid-item>
-        <grid-item :label="order_counts.completed || '0'">
+        <grid-item :label="order_counts.completed || '0'" link="/staff/mission/list?status=completed">
           <p class="menu-item">已完成</p>
         </grid-item>
-        <grid-item :label="order_counts.canceled || '0'">
+        <grid-item :label="order_counts.canceled || '0'" link="/staff/mission/list?status=canceled">
           <p class="menu-item">已取消</p>
         </grid-item>
       </grid>

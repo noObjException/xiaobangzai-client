@@ -75,8 +75,7 @@ export default {
       currentStatus: '',
       currentPage: 1,
       totalPages: '',
-      allLoaded: false,
-      showPayType: false
+      allLoaded: false
     }
   },
   computed: {
