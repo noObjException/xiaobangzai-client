@@ -39,16 +39,13 @@ fetch.interceptors.response.use(
     // 临时处理token超时
     if (data.message === 'Token has expired') {
       console.log('登录超时')
+      cookie.remove('token')
+      Utils.removeLocalStorage('memberInfo')
       Vue.$vux.toast.show({
         type: 'text',
         text: '登录超时',
         position: 'middle',
         isShowMask: true,
-        onShow () {
-          console.log('删除cookie')
-          cookie.remove('token')
-          Utils.removeLocalStorage('memberInfo')
-        },
         onHide () {
           setTimeout(() => {
             window.location.reload()
