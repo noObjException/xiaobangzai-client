@@ -38,7 +38,7 @@ fetch.interceptors.response.use(
 
     // 临时处理token超时
     if (data.message === 'Token has expired') {
-      cookie.remove('token', {domain: '.nokexue.com'})
+      cookie.remove('token', {domain: process.env.DOMAIN})
       Utils.removeLocalStorage('memberInfo')
       Vue.$vux.toast.show({
         type: 'text',
@@ -46,7 +46,6 @@ fetch.interceptors.response.use(
         position: 'middle',
         isShowMask: true,
         onHide () {
-          console.log(store.getters.toke)
           setTimeout(() => {
             window.location.reload()
           }, 1500)
