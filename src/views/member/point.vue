@@ -17,7 +17,7 @@
             </cell>
             <div slot="bottom" class="loadmore-bottom">
               <span v-show="bottomStatus === 'loading'">加载中<inline-loading></inline-loading></span>
-              <span></span>
+              <span v-show="allLoaded === true">没有更多了</span>
             </div>
           </mt-loadmore>
         </group>
