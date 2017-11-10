@@ -44,7 +44,7 @@ router.beforeEach((to, from, next) => {
           router.push('/')
         } else {
           router.push(url)
-          Utils.removeLocalStorage('beforeLoginUrl', '')
+          Utils.removeLocalStorage('beforeLoginUrl')
         }
       }, 1500)
     })

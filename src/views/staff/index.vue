@@ -12,7 +12,7 @@
     </group>
 
     <group gutter="6px">
-      <cell title="任务大厅" value="去接单" link="/staff/mission/list?status=all"></cell>
+      <cell title="任务大厅" value="全部" link="/staff/mission/list?status=all"></cell>
       <grid :cols='4' class="menus">
         <grid-item :label="'<span class=text-danger>'+(order_counts.waitOrder || '0')+'</span>'" link="/staff/mission/list?status=waitOrder">
           <p class="menu-item">待接单</p>

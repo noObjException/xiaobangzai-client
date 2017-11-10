@@ -15,7 +15,7 @@
             </cell>
 
             <group gutter="0" @click.native="toDetail(item.id)">
-                <cell :title="item.express_com+' '+item.express_type">
+                <cell :title="item.express_com+'  '+item.pickup_code+' '+(item.upstairs_price ? '送到宿舍' : '')">
                     <x-icon slot="icon" type="android-plane" class="g-icon" size="20" style="fill: rgb(65, 194, 215)"></x-icon>
                 </cell>
                 <cell :title="item.college+' '+item.area+' '+item.detail">
@@ -34,6 +34,11 @@
                 </span>
             </cell>
         </group>
+
+        <div slot="bottom" class="loadmore-bottom">
+              <span v-show="bottomStatus === 'loading'">加载中<inline-loading></inline-loading></span>
+              <span v-show="allLoaded === true">没有更多了</span>
+        </div>
     </mt-loadmore>
   </div>
 
@@ -45,7 +50,7 @@
 
 <script>
 import { Loadmore as MtLoadmore } from 'mint-ui'
-import { Group, Cell, XButton, Tab, TabItem } from 'vux'
+import { Group, Cell, XButton, Tab, TabItem, InlineLoading } from 'vux'
 import { mapGetters } from 'vuex'
 import mixin from 'src/mixins/expressMission.js'
 import NoContent from 'src/components/NoContent'
@@ -76,13 +81,15 @@ export default {
     XButton,
     Tab,
     TabItem,
-    NoContent
+    NoContent,
+    InlineLoading
   },
   created () {
     this.more()
   },
   computed: {
     ...mapGetters(['openid']),
+    // 用于任务大厅中隐藏状态tab
     currentUrl () {
       return this.$route.path
     },
@@ -101,7 +108,7 @@ export default {
       this.$refs.loadmore.onBottomLoaded()
     },
     async more (index = -1) {
-      this.$store.commit('UPDATE_LOADING_STATUS', {isLoading: true})
+      this.$store.commit('UPDATE_LOADING_STATUS', { isLoading: true })
 
       this.queryParams.page += 1
 
@@ -112,31 +119,33 @@ export default {
       }
       this.currentStatus = status
 
-      await this.$http.get('/missions', { params: this.queryParams }).then(res => {
-        const member = res.meta.member
+      await this.$http
+        .get('/missions', { params: this.queryParams })
+        .then(res => {
+          const member = res.meta.member
 
-        if (member.is_staff) {
-          this.pageList = this.pageList.concat(res.data)
-          this.isStaff = true
-        } else {
-          this.pageList = res.data.map(item => ({
-            id: item.id,
-            realname: item.realname.slice(0, 1) + '**',
-            mobile: '',
-            created_at: item.created_at,
-            avatar: item.avatar,
-            express_com: item.express_com,
-            express_type: item.express_type,
-            college: item.college,
-            area: item.area,
-            detail: item.detail,
-            arrive_time: item.arrive_time,
-            total_price: item.total_price
-          }))
-        }
+          if (member.is_staff) {
+            this.pageList = this.pageList.concat(res.data)
+            this.isStaff = true
+          } else {
+            this.pageList = res.data.map(item => ({
+              id: item.id,
+              realname: item.realname.slice(0, 1) + '**',
+              mobile: '',
+              created_at: item.created_at,
+              avatar: item.avatar,
+              express_com: item.express_com,
+              express_type: item.express_type,
+              college: item.college,
+              area: item.area,
+              detail: item.detail,
+              arrive_time: item.arrive_time,
+              total_price: item.total_price
+            }))
+          }
 
-        this.isHaveMore(res.data.length > 0)
-      })
+          this.isHaveMore(res.data.length > 0)
+        })
     },
     isHaveMore (isHaveMore) {
       this.allLoaded = true
@@ -164,7 +173,7 @@ export default {
   margin-right: 6px;
   border-radius: 50%;
 }
-.mint-loadmore-bottom {
+.loadmore-bottom{
   text-align: center;
 }
 </style>
