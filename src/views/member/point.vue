@@ -31,6 +31,7 @@
 <script>
 import { Group, Cell, InlineLoading } from 'vux'
 import { Loadmore as MtLoadmore } from 'mint-ui'
+import NoContent from 'src/components/NoContent'
 
 export default {
   data () {
@@ -47,7 +48,8 @@ export default {
     Group,
     Cell,
     MtLoadmore,
-    InlineLoading
+    InlineLoading,
+    NoContent
   },
   computed: {
     queryParams () {
