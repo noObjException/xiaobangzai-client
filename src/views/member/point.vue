@@ -33,7 +33,7 @@ export default {
     return {
       totalPoint: 0,
       lists: [],
-      totalPages: '',
+      totalPages: 0,
       currentPage: 0,
       allLoaded: false,
       bottomStatus: ''
@@ -54,7 +54,7 @@ export default {
     }
   },
   created () {
-    this.$store.commit('UPDATE_LOADING_STATUS', {title: '加载中...', status: true})
+    this.$store.commit('UPDATE_LOADING_STATUS', { title: '加载中...', status: true })
     this.loadData()
     this.$store.commit('UPDATE_LOADING_STATUS', { status: false })
   },

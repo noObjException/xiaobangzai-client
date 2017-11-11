@@ -1,21 +1,21 @@
 <template>
 <div>
-  <tab :line-width="2" :animate='false' v-if="currentUrl === '/staff/mission/list'">
+  <tab :line-width="2" :animate='false' v-if="showTabs">
     <tab-item :selected="item.value === currentStatus" v-for="(item, index) in status" @on-item-click="switchStatus" :key="index">
       {{item.label}}
     </tab-item>
   </tab>
 
-  <div v-if="pageList.length > 0"  class="main-body" :style="{'-webkit-overflow-scrolling': scrollMode}">
-    <mt-loadmore :bottom-method="loadBottom" :bottom-all-loaded="allLoaded" :auto-fill="false" ref="loadmore">
-        <group v-for="(item, index) in pageList" :key="index" gutter="8px">
+  <div v-if="lists.length > 0">
+    <mt-loadmore :bottom-method="loadBottom" :bottom-all-loaded="allLoaded" :auto-fill="false" ref="loadmore" @bottom-status-change="handleBottomChange">
+        <group v-for="(item, index) in lists" :key="index" gutter="8px">
             <cell :title="item.realname" :inline-desc="'下单时间: ' + item.created_at" style="border-bottom: 1px solid #D9D9D9;">
                 <img slot="icon" :src="item.avatar" class="avatar" />
                 <a :href="'tel:'+item.mobile">{{item.mobile}}</a>
             </cell>
 
             <group gutter="0" @click.native="toDetail(item.id)">
-                <cell :title="item.express_com+'  '+item.pickup_code+' '+(item.upstairs_price ? '送到宿舍' : '')">
+                <cell :title="item.express_com+'  '+item.pickup_code+' '+(item.upstairs_price > 0 ? '送到宿舍' : '')">
                     <x-icon slot="icon" type="android-plane" class="g-icon" size="20" style="fill: rgb(65, 194, 215)"></x-icon>
                 </cell>
                 <cell :title="item.college+' '+item.area+' '+item.detail">
@@ -66,12 +66,12 @@ export default {
         { label: '已完成', value: 'completed' },
         { label: '已取消', value: 'canceled' }
       ],
-      currentStatus: 'waitOrder',
-      totalPages: '',
-      currentPage: 1,
-      pageList: [],
+      currentStatus: '',
+      totalPages: 0,
+      currentPage: 0,
+      lists: [],
       allLoaded: false,
-      scrollMode: 'auto'
+      bottomStatus: ''
     }
   },
   components: {
@@ -85,73 +85,71 @@ export default {
     InlineLoading
   },
   created () {
-    this.more()
+    this.loadData(true)
   },
   computed: {
     ...mapGetters(['openid']),
     // 用于任务大厅中隐藏状态tab
-    currentUrl () {
-      return this.$route.path
+    showTabs () {
+      return this.$route.name === 'staff.mission.list'
     },
     queryParams () {
       return {
         per_page: 15,
-        status: this.currentStatus || 'waitOrder',
+        status: this.currentStatus,
         page: this.currentPage
       }
     }
   },
   mixins: [mixin],
+  beforeRouteUpdate (to, from, next) {
+    this.currentStatus = to.params.status
+    this.loadData(true)
+    next()
+  },
   methods: {
-    loadBottom () {
-      this.more()
-      this.$refs.loadmore.onBottomLoaded()
+    async loadBottom () {
+      await this.loadData()
+      await this.$refs.loadmore.onBottomLoaded()
     },
-    async more (index = -1) {
-      this.$store.commit('UPDATE_LOADING_STATUS', { isLoading: true })
+    async loadData (loading = false) {
+      this.$store.commit('UPDATE_LOADING_STATUS', { title: '加载中...', status: loading })
 
-      this.queryParams.page += 1
+      this.currentPage += 1
 
-      let status = this.$route.query.status
-
-      if (index >= 0) {
-        status = this.status[index].value
+      if (!this.currentStatus) {
+        this.currentStatus = this.$route.params.status
       }
-      this.currentStatus = status
 
-      await this.$http
-        .get('/missions', { params: this.queryParams })
-        .then(res => {
-          const member = res.meta.member
+      await this.$http.get('/missions', { params: this.queryParams }).then(res => {
+        const member = res.meta.member
 
-          if (member.is_staff) {
-            this.pageList = this.pageList.concat(res.data)
-            this.isStaff = true
-          } else {
-            this.pageList = res.data.map(item => ({
-              id: item.id,
-              realname: item.realname.slice(0, 1) + '**',
-              mobile: '',
-              created_at: item.created_at,
-              avatar: item.avatar,
-              express_com: item.express_com,
-              express_type: item.express_type,
-              college: item.college,
-              area: item.area,
-              detail: item.detail,
-              arrive_time: item.arrive_time,
-              total_price: item.total_price
-            }))
-          }
+        if (member.is_staff) {
+          this.lists = this.lists.concat(res.data)
+          this.isStaff = true
+        } else {
+          this.lists = res.data.map(item => ({
+            id: item.id,
+            realname: item.realname.slice(0, 1) + '**',
+            mobile: '',
+            created_at: item.created_at,
+            avatar: item.avatar,
+            express_com: item.express_com,
+            express_type: item.express_type,
+            college: item.college,
+            area: item.area,
+            detail: item.detail,
+            arrive_time: item.arrive_time,
+            total_price: item.total_price
+          }))
+        }
+      })
 
-          this.isHaveMore(res.data.length > 0)
-        })
-    },
-    isHaveMore (isHaveMore) {
-      this.allLoaded = true
-      if (isHaveMore) {
-        this.allLoaded = false
+      if (this.currentPage === this.totalPages) {
+        this.allLoaded = true
       }
+
+      this.$store.commit('UPDATE_LOADING_STATUS', { status: false })
     },
     // 查看任务详情, 非配送员无法进入
     toDetail (id) {
@@ -160,8 +158,12 @@ export default {
       }
     },
     async switchStatus (index) {
-      this.pageList = []
-      this.more(index)
+      this.lists = []
+      this.currentPage = 0
+      this.$router.push({ path: '/staff/mission/list/' + this.status[index].value })
+    },
+    async handleBottomChange (status) {
+      this.bottomStatus = status
     }
   }
 }

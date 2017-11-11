@@ -101,7 +101,8 @@ export default [
     component: Utils.getPath('staff/identify')
   },
   {
-    path: '/staff/mission/list',
+    path: '/staff/mission/list/:status',
+    name: 'staff.mission.list',
     component: Utils.getPath('staff/mission/list')
   },
   {
