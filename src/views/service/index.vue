@@ -25,7 +25,7 @@ export default {
     return {
       services: [
         { title: '取快递', url: '/service/getExpress/create' },
-        { title: '任务大厅', url: '/service/getExpress/list' },
+        { title: '任务大厅', url: '/service/getExpress/list/waitOrder' },
         { title: '自由市场', url: '/service/freeMarket' },
         { title: '二手书籍', url: '/service/usedBook' }
       ]
