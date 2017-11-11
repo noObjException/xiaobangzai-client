@@ -27,7 +27,7 @@ export default [
     component: Utils.getPath('member/point')
   },
   {
-    path: '/member/mission/list',
+    path: '/member/mission/list/:status',
     component: Utils.getPath('member/mission/list')
   },
   {
@@ -59,7 +59,7 @@ export default [
         component: Utils.getPath('service/getExpress/create')
       },
       {
-        path: 'getExpress/list',
+        path: 'getExpress/list/:status',
         component: Utils.getPath('staff/mission/list')
       },
       {

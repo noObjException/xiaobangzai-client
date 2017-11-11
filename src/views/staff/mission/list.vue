@@ -51,7 +51,6 @@
 <script>
 import { Loadmore as MtLoadmore } from 'mint-ui'
 import { Group, Cell, XButton, Tab, TabItem, InlineLoading } from 'vux'
-import { mapGetters } from 'vuex'
 import mixin from 'src/mixins/expressMission.js'
 import NoContent from 'src/components/NoContent'
 
@@ -88,7 +87,6 @@ export default {
     this.loadData(true)
   },
   computed: {
-    ...mapGetters(['openid']),
     // 用于任务大厅中隐藏状态tab
     showTabs () {
       return this.$route.name === 'staff.mission.list'
@@ -123,6 +121,8 @@ export default {
 
       await this.$http.get('/missions', { params: this.queryParams }).then(res => {
         const member = res.meta.member
+
+        this.totalPages = res.meta.pagination.total_pages
 
         if (member.is_staff) {
           this.lists = this.lists.concat(res.data)
@@ -160,6 +160,7 @@ export default {
     async switchStatus (index) {
       this.lists = []
       this.currentPage = 0
+      this.allLoaded = false
       this.$router.push({ path: '/staff/mission/list/' + this.status[index].value })
     },
     async handleBottomChange (status) {

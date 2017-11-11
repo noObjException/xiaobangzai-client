@@ -5,7 +5,7 @@
       <p>{{member.nickname}}</p>
     </div>
     <group>
-      <cell title="我的订单" value="查看全部任务" link="/member/mission/list?status=all">
+      <cell title="我的订单" value="查看全部任务" link="/member/mission/list/all">
         <x-icon slot="icon" type="android-list" class="cell-icon"></x-icon>
       </cell>
     </group>
@@ -96,7 +96,7 @@ export default {
       })
     },
     routeTo (status) {
-      this.$router.push({ path: '/member/mission/list', query: { status: status } })
+      this.$router.push({ path: '/member/mission/list/' + status })
     }
   }
 }

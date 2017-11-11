@@ -6,40 +6,46 @@
       </tab-item>
     </tab>
 
-    <div v-infinite-scroll="loadMore" :infinite-scroll-disabled="allLoaded" :infinite-scroll-immediate-check='false' :infinite-scroll-distance='10' v-if="lists.length > 0">
-      <group :title="'下单时间: '+item.created_at" label-width="5em" v-for="(item, index) in lists" :key="index" labelWidth="180px">
-        <router-link :to="'/member/mission/detail?id='+item.id" style="color: #000;">
-          <cell :title="item.status" :inline-desc="'订单编号: '+item.order_num">
-            <x-icon slot="icon" type="ios-email-outline" class="big-icon" size="50"></x-icon>
-            <span slot="title" class="text-danger">{{item.status}}</span>
-          </cell>
+    <template v-if="lists.length > 0"> 
+      <mt-loadmore :bottom-method="loadBottom" :bottom-all-loaded="allLoaded" :auto-fill="false" ref="loadmore" @bottom-status-change="handleBottomChange">
+        <group :title="'下单时间: '+item.created_at" label-width="5em" v-for="(item, index) in lists" :key="index" labelWidth="180px">
+          <router-link :to="'/member/mission/detail?id='+item.id" style="color: #000;">
+            <cell :title="item.status" :inline-desc="'订单编号: '+item.order_num">
+              <x-icon slot="icon" type="ios-email-outline" class="big-icon" size="50"></x-icon>
+              <span slot="title" class="text-danger">{{item.status}}</span>
+            </cell>
 
-          <cell :title="item.express_com+'  '+item.express_type">
-            <x-icon slot="icon" type="ios-information-outline" class="cell-icon" style="fill:rgb(65, 194, 215)"></x-icon>
-          </cell>
+            <cell :title="item.express_com+'  '+item.express_type">
+              <x-icon slot="icon" type="ios-information-outline" class="cell-icon" style="fill:rgb(65, 194, 215)"></x-icon>
+            </cell>
 
-          <cell :title="item.college+' '+item.area+' '+item.detail">
-            <x-icon slot="icon" type="ios-location-outline" class="cell-icon"></x-icon>
-          </cell>
+            <cell :title="item.college+' '+item.area+' '+item.detail">
+              <x-icon slot="icon" type="ios-location-outline" class="cell-icon"></x-icon>
+            </cell>
+
+            <cell>
+              <x-icon slot="icon" type="social-usd-outline" class="cell-icon" style="fill:rgb(6255, 90, 0)"></x-icon>
+              <span slot="title" class="text-danger">￥ {{item.total_price}}</span>
+            </cell>
+          </router-link>
 
           <cell>
-            <x-icon slot="icon" type="social-usd-outline" class="cell-icon" style="fill:rgb(6255, 90, 0)"></x-icon>
-            <span slot="title" class="text-danger">￥ {{item.total_price}}</span>
+            <div>
+              <x-button mini v-if="item.status === '待支付'" @click.native="cancel(item.id)">取消订单</x-button>
+              <x-button mini type="warn" v-if="item.status === '待支付'" @click.native="wxPay({order_id: item.id})">立即支付</x-button>
+              <x-button mini type="warn" v-else-if="item.status === '配送中'" @click.native="completed(item.id)">确认收货</x-button>
+              <x-button mini type="warn" v-else-if="item.status === '待接单'" @click.native="addBounty(item.id)">追加赏金</x-button>
+              <x-button mini type="warn" v-else-if="item.status === '已完成'" @click.native="addComment(item.id)">评价</x-button>
+            </div>
           </cell>
-        </router-link>
+        </group>
 
-        <cell>
-          <div>
-            <x-button mini v-if="item.status === '待支付'" @click.native="cancel(item.id)">取消订单</x-button>
-            <x-button mini type="warn" v-if="item.status === '待支付'" @click.native="wxPay({order_id: item.id})">立即支付</x-button>
-            <x-button mini type="warn" v-else-if="item.status === '配送中'" @click.native="completed(item.id)">确认收货</x-button>
-            <x-button mini type="warn" v-else-if="item.status === '待接单'" @click.native="addBounty(item.id)">追加赏金</x-button>
-            <x-button mini type="warn" v-else-if="item.status === '已完成'" @click.native="addComment(item.id)">评价</x-button>
-          </div>
-        </cell>
-      </group>
-      <load-more background-color="#fbf9fe" :show-loading="false" tip="没有更多了" v-if="allLoaded"></load-more>
-    </div>
+        <div slot="bottom" class="loadmore-bottom">
+              <span v-show="bottomStatus === 'loading'">加载中<inline-loading></inline-loading></span>
+              <span v-show="allLoaded === true">没有更多了</span>
+        </div>
+      </mt-loadmore>
+    </template>
 
     <no-content title="暂无订单" v-else>
       <x-icon type="ios-cart-outline" size="160"></x-icon>
@@ -48,19 +54,18 @@
 </template>
 
 <script>
-import { Tab, TabItem, Group, Cell, XButton, ConfirmPlugin, ToastPlugin, Actionsheet, LoadMore } from 'vux'
+import { Loadmore as MtLoadmore } from 'mint-ui'
+import { Tab, TabItem, Group, Cell, XButton, ConfirmPlugin, ToastPlugin, Actionsheet, InlineLoading } from 'vux'
 import NoContent from 'src/components/NoContent'
-import { InfiniteScroll } from 'mint-ui'
-import Vue from 'vue'
-Vue.use(InfiniteScroll)
 import mixin from 'src/mixins/expressMission.js'
+import Vue from 'vue'
 
 Vue.use(ConfirmPlugin)
 Vue.use(ToastPlugin)
 
 export default {
   components: {
-    Tab, TabItem, Group, Cell, XButton, ConfirmPlugin, ToastPlugin, Actionsheet, LoadMore, NoContent
+    Tab, TabItem, Group, Cell, XButton, ConfirmPlugin, ToastPlugin, Actionsheet, MtLoadmore, NoContent, InlineLoading
   },
   mixins: [mixin],
   data () {
@@ -73,9 +78,10 @@ export default {
         { label: '已完成', value: 'completed' }],
       lists: [],
       currentStatus: '',
-      currentPage: 1,
-      totalPages: '',
-      allLoaded: false
+      currentPage: 0,
+      totalPages: 0,
+      allLoaded: false,
+      bottomStatus: ''
     }
   },
   computed: {
@@ -88,38 +94,46 @@ export default {
     }
   },
   created () {
-    this.getMissionLists()
+    this.loadData(true)
+  },
+  beforeRouteUpdate (to, from, next) {
+    this.currentStatus = to.params.status
+    this.loadData(true)
+    next()
   },
   methods: {
-    async loadMore () {
-      if (this.currentPage === this.totalPages) {
-        this.allLoaded = true
-      } else {
-        this.currentPage += 1
-        this.$http.get('/getExpress', { params: this.queryParams }).then(res => {
-          this.lists = this.lists.concat(res.data)
-        })
-      }
+    async loadBottom () {
+      await this.loadData()
+      await this.$refs.loadmore.onBottomLoaded()
     },
-    async getMissionLists (index = -1) {
-      this.$store.commit('UPDATE_LOADING_STATUS', {isLoading: true})
+    async loadData (loading = false) {
+      this.$store.commit('UPDATE_LOADING_STATUS', { title: '加载中...', status: loading })
 
-      this.currentPage = 1
-      let status = this.$route.query.status
-      if (index >= 0) {
-        status = this.status[index].value
+      this.currentPage += 1
+
+      if (!this.currentStatus) {
+        this.currentStatus = this.$route.params.status
       }
-      this.currentStatus = status
 
       await this.$http.get('/getExpress', { params: this.queryParams }).then(res => {
-        this.lists = res.data
+        this.lists = this.lists.concat(res.data)
         this.totalPages = res.meta.pagination.total_pages
       })
 
-      this.$store.commit('UPDATE_LOADING_STATUS', {isLoading: false})
+      if (this.currentPage === this.totalPages) {
+        this.allLoaded = true
+      }
+
+      this.$store.commit('UPDATE_LOADING_STATUS', { status: false })
     },
     async switchStatus (index) {
-      this.getMissionLists(index)
+      this.lists = []
+      this.currentPage = 0
+      this.allLoaded = false
+      this.$router.push({ path: '/member/mission/list/' + this.status[index].value })
+    },
+    async handleBottomChange (status) {
+      this.bottomStatus = status
     }
   }
 }
@@ -134,6 +148,9 @@ export default {
   width: 20px;
   vertical-align:middle;
   margin:0 16px;
+}
+.loadmore-bottom{
+  text-align: center;
 }
 </style>
 
