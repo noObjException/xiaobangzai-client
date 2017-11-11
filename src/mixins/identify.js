@@ -7,8 +7,9 @@ export default {
     async identifyConfirm () {
       let that = this
       await this.$http.get('/authMember').then(res => {
-        let isIdentify = res.data.is_identify
-        if (!isIdentify) {
+        const isIdentify = res.data.is_identify
+        const memberSettings = res.meta.member_settings
+        if (!isIdentify && memberSettings.switch_member_identify) {
           this.$vux.confirm.show({
             title: '温馨提示',
             content: '为了您的快递物品信息安全, 该服务需要认证后使用!',
