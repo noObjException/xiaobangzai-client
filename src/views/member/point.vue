@@ -21,6 +21,10 @@
             </div>
           </mt-loadmore>
         </group>
+
+        <no-content title="暂无积分记录" v-else>
+          <x-icon type="sad-outline" size="160"></x-icon>
+        </no-content>
     </div>
 </template>
 
