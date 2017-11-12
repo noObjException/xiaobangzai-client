@@ -256,7 +256,6 @@ export default {
     cencel () {
       this.formData.express_type = ''
       this.formData.express_weight = ''
-//      this.formData.to_where = ''
       this.showInfo = false
     }
   }
