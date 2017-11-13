@@ -1,7 +1,7 @@
 <template>
   <div>
     <group gutter="4px">
-      <cell v-if="choosedAddress"  link="/address" :title="choosedAddress.realname+ ' '+choosedAddress.mobile" :inline-desc="choosedAddress.college+ ' ' +choosedAddress.area + ' '+choosedAddress.detail">
+      <cell v-if="choosedAddress"  link="/address" :title="choosedAddress.realname+ ' '+choosedAddress.mobile" :inline-desc="address">
         <x-icon slot="icon" type="ios-location-outline"></x-icon>
       </cell>
       <cell v-else link="/address" inline-desc="请选择您的收货地址"></cell>
@@ -18,8 +18,8 @@
     </group>
 
     <group gutter="4px">
-      <cell title="基本费用">
-        <span class="text-danger">￥ {{Number(this.settings.price).toFixed(2)}}</span>
+      <cell title="配送费用">
+        <span class="text-danger">￥ {{ totalPrice }}</span>
       </cell>
       <cell primary="content">
         <span slot="title">增加 <span class="text-danger" style="font-size:20px;">{{formData.bounty}}</span> 元赏金</span>
@@ -43,6 +43,15 @@
 
     <!-- 物品信息 -->
     <popup v-model="showInfo" height="100%">
+      <group>
+        <selector title="包裹规格:" :options="expressOptions" v-model="formData.option_id" ref="choosedOption"></selector>
+        <x-input title="取货号:" v-model="formData.pickup_code"></x-input>
+      </group>
+
+      <group>
+        <checklist title="额外收费项" :options="extraCostsList" v-model="formData.extra_costs"></checklist>
+      </group>
+
       <div class="info-container">
         <p>物品类型:</p>
 
@@ -58,15 +67,6 @@
 
       <group v-if="isOtherType" gutter="6px">
         <x-input title="其他:" v-model="formData.express_type"></x-input>
-      </group>
-
-      <group gutter="6px">
-        <selector title="物品重量:" :options="expressWeights" v-model="formData.express_weight"></selector>
-        <x-input title="取货号:" v-model="formData.pickup_code"></x-input>
-      </group>
-
-      <group>
-        <checklist title="额外收费项" :options="extraCostsList" v-model="formData.extra_costs"></checklist>
       </group>
 
       <box gap="80px 6px">
@@ -95,7 +95,7 @@ export default {
       expressCompanys: [],
       showInfo: false,
       showPriceRule: false,
-      expressWeights: [],
+      expressOptions: [],
       expressTypes: [],
       extraCostsList: [
         { key: 'upstairs_price', value: '送到宿舍(上楼)' }
@@ -106,7 +106,9 @@ export default {
         express_com: '',
         express_type: '',
         pickup_code: '',
-        express_weight: '',
+        express_option: '',
+        option_id: '',
+        option_price: 0,
         bounty: 0,
         remark: '',
         extra_costs: []
@@ -123,10 +125,13 @@ export default {
       'choosedAddress',
       'expressMissionInfo'
     ]),
+    address () {
+      return this.choosedAddress.college + ' ' + this.choosedAddress.area + ' ' + (this.choosedAddress.detail || '')
+    },
     info () {
-      let type = this.formData.express_type
-      let weight = this.formData.express_weight
-      return type || weight ? type + ' ' + weight : ''
+      const type = this.formData.express_type
+      const option = this.formData.express_option
+      return type || option ? type + ' ' + option : ''
     },
     isOtherType () {
       let expressType = this.formData.express_type
@@ -136,6 +141,22 @@ export default {
         }
         return true
       }
+    },
+    // 计算配送费用
+    totalPrice () {
+      let price = this.settings.price
+      // 赏金
+      price += this.formData.bounty
+      // 快递规格价
+      price += Number(this.formData.option_price)
+      // 额外收费(上楼加价)
+      if (this.settings.switch_upstairs_price) {
+        const extraCosts = Object.values(this.formData.extra_costs)
+        if (extraCosts.indexOf('upstairs_price') !== -1) {
+          price += this.settings.upstairs_price
+        }
+      }
+      return price.toFixed(2)
     }
   },
   beforeRouteLeave (to, from, next) {
@@ -157,9 +178,8 @@ export default {
         this.expressCompanys = data.expressCompanies
         this.arriveTimes = data.arriveTimes
         this.expressTypes = data.expressTypes
-        this.expressWeights = data.expressWeights
+        this.expressOptions = data.expressOptions
         this.settings = data.settings
-
         if (data.defaultAddress && !this.choosedAddress) {
           this.$store.dispatch('choosedAddress', data.defaultAddress)
         }
@@ -180,11 +200,10 @@ export default {
         if (this.expressTypes.indexOf(expressType) !== -1) {
           this.formData.express_type = expressType
         }
-        let expressWeight = this.expressMissionInfo.express_weight
-        if (this.expressWeights.indexOf(expressWeight) !== -1) {
-          this.formData.express_weight = expressWeight
+        let expressOption = this.expressMissionInfo.express_option
+        if (this.expressOptions.indexOf(expressOption) !== -1) {
+          this.formData.express_option = expressOption
         }
-//        this.formData.to_where = this.expressMissionInfo.to_where
       })
     },
     async createMission () {
@@ -222,8 +241,8 @@ export default {
         text = '快递公司不能为空'
       } else if (data.express_type.length === 0) {
         text = '物品类型不能为空'
-      } else if (data.express_weight.length === 0) {
-        text = '物品重量不能为空'
+      } else if (data.express_option.length === 0) {
+        text = '物品规格不能为空'
       } else if (!data.address) {
         text = '请选择收货地址'
       } else if (data.arrive_time.length === 0) {
@@ -245,6 +264,9 @@ export default {
       this.showInfo = true
     },
     fillInfo () {
+      const option = this.$refs.choosedOption.getFullValue()[0]
+      this.formData.option_price = option.price
+      this.formData.express_option = option.value
       this.showInfo = false
     },
     chooseType (name = '') {
@@ -255,7 +277,8 @@ export default {
     },
     cencel () {
       this.formData.express_type = ''
-      this.formData.express_weight = ''
+      this.formData.express_option = ''
+      this.formData.extra_costs = []
       this.showInfo = false
     }
   }
@@ -264,6 +287,7 @@ export default {
 
 <style lang="less" scoped>
 .info-container {
+  margin-top: 20px;
   padding: 12px;
   background-color: #fff;
   .info-type {

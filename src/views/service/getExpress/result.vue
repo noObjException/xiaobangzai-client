@@ -40,6 +40,11 @@ export default {
   created () {
     this.initData()
   },
+  beforeRouteLeave (to, from, next) {
+    if (to.path === '/service/getExpress/pay') {
+      next('/service/getExpress/create')
+    }
+  },
   methods: {
     async initData () {
       let id = this.$route.query.id

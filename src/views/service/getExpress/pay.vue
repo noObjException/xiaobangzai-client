@@ -8,7 +8,7 @@
 
     <group labelWidth="90px">
       <cell title="快递公司:" :value="info.express_com"></cell>
-      <cell title="物品信息:" :value="info.express_type+'/'+info.express_weight"></cell>
+      <cell title="物品信息:" :value="info.express_type+' / '+info.express_option"></cell>
       <cell title="送达时间:" :value="info.arrive_time"></cell>
       <cell title="配送费用:" is-link :arrow-direction="showPriceDetail ? 'up' : 'down'" @click.native="showPriceDetail = !showPriceDetail">
         <span class="text-danger">￥ {{info.total_price}}</span>
@@ -107,12 +107,6 @@ export default {
     async initData () {
       let id = this.$route.query.id
       await this.$http.get('/getExpress/' + id).then(res => {
-        // 从支付成功页点返回的时候跳到详情页
-        if (res.data.status !== '待支付') {
-          this.routeTo('/member/mission/detail', { id: id })
-          return false
-        }
-
         this.info = res.data
         this.member = res.meta.member
 
@@ -128,8 +122,8 @@ export default {
             label: '上楼加价:',
             value: '￥ ' + res.data.upstairs_price
           }, {
-            label: '超重加价:',
-            value: '￥ ' + res.data.overweight_price
+            label: res.data.express_option + ':',
+            value: '￥ ' + res.data.option_price
           }, {
             label: '跑腿赏金:',
             value: '￥ ' + res.data.bounty

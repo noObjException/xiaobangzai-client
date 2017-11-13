@@ -15,7 +15,7 @@
             </cell>
 
             <group gutter="0" @click.native="toDetail(item.id)">
-                <cell :title="item.express_com+'  '+item.pickup_code+' '+(item.upstairs_price > 0 ? '送到宿舍' : '')">
+                <cell :title="item.express_com+' '+item.pickup_code+' '+(item.upstairs_price > 0 ? '送到宿舍' : '')">
                     <x-icon slot="icon" type="android-plane" class="g-icon" size="20" style="fill: rgb(65, 194, 215)"></x-icon>
                 </cell>
                 <cell :title="item.college+' '+item.area+' '+item.detail">
