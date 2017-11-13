@@ -77,7 +77,7 @@ export default {
       if (this.formData.is_use_point) {
         price -= this.deduction
       }
-      return price
+      return Number(price).toFixed(2)
     },
     deductionTitle () {
       if (this.deduction > 0) {
@@ -107,6 +107,12 @@ export default {
     async initData () {
       let id = this.$route.query.id
       await this.$http.get('/getExpress/' + id).then(res => {
+        // 从支付成功页点返回的时候跳到详情页
+        if (res.data.status !== '待支付') {
+          this.routeTo('/member/mission/detail', { id: id })
+          return false
+        }
+
         this.info = res.data
         this.member = res.meta.member
 

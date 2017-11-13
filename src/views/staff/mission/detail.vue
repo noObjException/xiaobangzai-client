@@ -11,7 +11,7 @@
             <cell title="快递公司:" :value="info.express_com">
                 <x-icon slot="icon" type="android-plane" class="g-icon" size="20"></x-icon>
             </cell>
-            <cell title="物品信息:" :value="info.express_type+'/'+info.express_weight">
+            <cell title="物品信息:" :value="info.express_type+'/'+info.express_option">
                 <x-icon slot="icon" type="briefcase" class="g-icon" size="20"></x-icon>
             </cell>
             <cell title="收货地址:" :value="info.college+' '+info.area+' '+info.detail">
