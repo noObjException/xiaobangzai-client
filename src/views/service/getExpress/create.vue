@@ -27,7 +27,7 @@
       </cell>
     </group>
 
-    <load-more background-color="#fbf9fe" :show-loading="false" tip="亲,您可以加价让快递员优先配送哦"></load-more>
+    <load-more background-color="#fbf9fe" :show-loading="false" tip="亲，您可以增加赏金上快递员优先配送哦"></load-more>
 
     <box gap="0 6px">
       <x-button type="primary" @click.native="createMission">立即下单</x-button>
