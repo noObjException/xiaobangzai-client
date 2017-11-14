@@ -14,17 +14,15 @@
                 <a :href="'tel:'+item.mobile">{{item.mobile}}</a>
             </cell>
 
-            <group gutter="0" @click.native="toDetail(item.id)">
-                <cell :title="item.express_com+' '+item.pickup_code+' '+(item.upstairs_price > 0 ? '送到宿舍' : '')">
-                    <x-icon slot="icon" type="android-plane" class="g-icon" size="20" style="fill: rgb(65, 194, 215)"></x-icon>
-                </cell>
-                <cell :title="item.college+' '+item.area+' '+item.detail">
-                    <x-icon slot="icon" type="location" class="g-icon" size="20"></x-icon>
-                </cell>
-                <cell :title="'送达时间: '+item.arrive_time">
-                    <x-icon slot="icon" type="ios-clock-outline" class="g-icon" size="20" style="fill: rgb(255, 49, 0)"></x-icon>
-                </cell>
-            </group>
+            <cell :title="item.express_com+' '+item.pickup_code+' '+(item.upstairs_price > 0 ? '送到宿舍' : '')" @click.native="toDetail(item.id)">
+                <x-icon slot="icon" type="android-plane" class="g-icon" size="20" style="fill: rgb(65, 194, 215)"></x-icon>
+            </cell>
+            <cell :title="item.college+' '+item.area+' '+item.detail" @click.native="toDetail(item.id)">
+                <x-icon slot="icon" type="location" class="g-icon" size="20"></x-icon>
+            </cell>
+            <cell :title="'送达时间: '+item.arrive_time" @click.native="toDetail(item.id)">
+                <x-icon slot="icon" type="ios-clock-outline" class="g-icon" size="20" style="fill: rgb(255, 49, 0)"></x-icon>
+            </cell>
 
             <cell>
                 <x-icon slot="icon" type="cash" class="g-icon" size="20"></x-icon>
