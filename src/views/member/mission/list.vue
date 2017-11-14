@@ -6,7 +6,7 @@
       </tab-item>
     </tab>
 
-    <template v-if="lists.length > 0"> 
+    <div v-if="lists.length > 0" style="-webkit-overflow-scrolling: touch"> 
       <mt-loadmore :bottom-method="loadBottom" :bottom-all-loaded="allLoaded" :auto-fill="false" ref="loadmore" @bottom-status-change="handleBottomChange">
         <group :title="'下单时间: '+item.created_at" label-width="5em" v-for="(item, index) in lists" :key="index" labelWidth="180px">
           <router-link :to="'/member/mission/detail?id='+item.id" style="color: #000;">
@@ -45,12 +45,12 @@
               <span v-show="allLoaded === true">没有更多了</span>
         </div>
       </mt-loadmore>
-    </template>
+    </div>
 
     <no-content title="暂无订单" v-else>
       <x-icon type="ios-cart-outline" size="160"></x-icon>
     </no-content>
-  </div>
+  </template>
 </template>
 
 <script>

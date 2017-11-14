@@ -55,7 +55,7 @@ import mixin from 'src/mixins/expressMission.js'
 import NoContent from 'src/components/NoContent'
 
 export default {
-  data: function () {
+  data () {
     return {
       isStaff: false,
       status: [
