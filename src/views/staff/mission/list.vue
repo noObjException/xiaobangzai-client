@@ -6,7 +6,7 @@
     </tab-item>
   </tab>
 
-  <div v-if="lists.length > 0">
+  <div v-if="lists.length > 0" style="-webkit-overflow-scrolling: touch">
     <mt-loadmore :bottom-method="loadBottom" :bottom-all-loaded="allLoaded" :auto-fill="false" ref="loadmore" @bottom-status-change="handleBottomChange">
         <group v-for="(item, index) in lists" :key="index" gutter="8px">
             <cell :title="item.realname" :inline-desc="'下单时间: ' + item.created_at" style="border-bottom: 1px solid #D9D9D9;">

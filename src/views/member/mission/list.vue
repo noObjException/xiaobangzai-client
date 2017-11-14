@@ -50,7 +50,7 @@
     <no-content title="暂无订单" v-else>
       <x-icon type="ios-cart-outline" size="160"></x-icon>
     </no-content>
-  </template>
+  </div>
 </template>
 
 <script>
