@@ -91,7 +91,7 @@ export default {
     },
     queryParams () {
       return {
-        per_page: 15,
+        per_page: 25,
         status: this.currentStatus,
         page: this.currentPage
       }
