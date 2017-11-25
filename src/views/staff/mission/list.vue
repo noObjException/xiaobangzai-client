@@ -104,50 +104,52 @@ export default {
     next()
   },
   methods: {
-    async loadBottom () {
-      await this.loadData()
-      await this.$refs.loadmore.onBottomLoaded()
+    loadBottom () {
+      this.loadData()
+      this.$refs.loadmore.onBottomLoaded()
     },
     async loadData (loading = false) {
       this.$store.commit('UPDATE_LOADING_STATUS', { title: '加载中...', status: loading })
 
-      this.currentPage += 1
+      setTimeout(() => {
+        this.currentPage += 1
 
-      if (!this.currentStatus) {
-        this.currentStatus = this.$route.params.status
-      }
-
-      await this.$http.get('/missions', { params: this.queryParams }).then(res => {
-        const member = res.meta.member
-
-        this.totalPages = res.meta.pagination.total_pages
-
-        if (member.is_staff) {
-          this.lists = this.lists.concat(res.data)
-          this.isStaff = true
-        } else {
-          this.lists = res.data.map(item => ({
-            id: item.id,
-            realname: item.realname.slice(0, 1) + '**',
-            mobile: '',
-            created_at: item.created_at,
-            avatar: item.avatar,
-            express_com: item.express_com,
-            express_type: item.express_type,
-            college: item.college,
-            area: item.area,
-            detail: item.detail,
-            arrive_time: item.arrive_time,
-            total_price: item.total_price
-          }))
+        if (!this.currentStatus) {
+          this.currentStatus = this.$route.params.status
         }
-      })
 
-      if (this.currentPage === this.totalPages) {
-        this.allLoaded = true
-      }
+        this.$http.get('/missions', { params: this.queryParams }).then(res => {
+          const member = res.meta.member
 
-      this.$store.commit('UPDATE_LOADING_STATUS', { status: false })
+          this.totalPages = res.meta.pagination.total_pages
+
+          if (member.is_staff) {
+            this.lists = this.lists.concat(res.data)
+            this.isStaff = true
+          } else {
+            this.lists = res.data.map(item => ({
+              id: item.id,
+              realname: item.realname.slice(0, 1) + '**',
+              mobile: '',
+              created_at: item.created_at,
+              avatar: item.avatar,
+              express_com: item.express_com,
+              express_type: item.express_type,
+              college: item.college,
+              area: item.area,
+              detail: item.detail,
+              arrive_time: item.arrive_time,
+              total_price: item.total_price
+            }))
+          }
+        })
+
+        if (this.currentPage === this.totalPages) {
+          this.allLoaded = true
+        }
+
+        this.$store.commit('UPDATE_LOADING_STATUS', { status: false })
+      }, 1000)
     },
     // 查看任务详情, 非配送员无法进入
     toDetail (id) {
