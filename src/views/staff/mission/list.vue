@@ -149,7 +149,7 @@ export default {
         }
 
         this.$store.commit('UPDATE_LOADING_STATUS', { status: false })
-      }, 1000)
+      }, 500)
     },
     // 查看任务详情, 非配送员无法进入
     toDetail (id) {

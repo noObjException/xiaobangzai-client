@@ -14,8 +14,6 @@ import { WechatPlugin } from 'vux'
 Vue.use(Http)
 Vue.use(WechatPlugin)
 
-document.addEventListener('touchmove', function (e) { e.preventDefault() }, false)
-
 Vue.use(VueRouter)
 const router = new VueRouter({
   routes
