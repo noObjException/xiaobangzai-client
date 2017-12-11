@@ -20,6 +20,7 @@ export default [
   },
   {
     path: '/member',
+    meta: { keepAlive: true },
     component: Utils.getPath('member/index')
   },
   {
@@ -28,6 +29,7 @@ export default [
   },
   {
     path: '/member/mission/list/:status',
+    meta: { keepAlive: true },
     component: Utils.getPath('member/mission/list')
   },
   {
@@ -48,6 +50,7 @@ export default [
   },
   {
     path: '/member/identify',
+    meta: { keepAlive: true },
     component: Utils.getPath('member/identify')
   },
   {
@@ -56,6 +59,7 @@ export default [
     children: [
       {
         path: 'getExpress/create',
+        meta: { keepAlive: true },
         component: Utils.getPath('service/getExpress/create')
       },
       {
@@ -94,6 +98,7 @@ export default [
   },
   {
     path: '/staff',
+    meta: { keepAlive: true },
     component: Utils.getPath('staff/index')
   },
   {
@@ -103,6 +108,7 @@ export default [
   {
     path: '/staff/mission/list/:status',
     name: 'staff.mission.list',
+    meta: { keepAlive: true },
     component: Utils.getPath('staff/mission/list')
   },
   {
