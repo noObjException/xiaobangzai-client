@@ -38,7 +38,7 @@
     </div>
     
     <x-dialog v-model="showPriceRule" hide-on-blur>
-      <p>计价规则</p>
+      <div v-html="priceRule"></div>
     </x-dialog>
 
     <!-- 物品信息 -->
@@ -113,7 +113,8 @@ export default {
         remark: '',
         extra_costs: []
       },
-      isSubmitted: false
+      isSubmitted: false,
+      priceRule: ''
     }
   },
   mixins: [mixin],
@@ -180,6 +181,7 @@ export default {
         this.expressTypes = data.expressTypes
         this.expressOptions = data.expressOptions
         this.settings = data.settings
+        this.priceRule = data.priceRule
         if (data.defaultAddress && !this.choosedAddress) {
           this.$store.dispatch('choosedAddress', data.defaultAddress)
         }
