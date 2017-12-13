@@ -34,7 +34,7 @@
     </div>
 
     <group>
-      <cell title="我的余额" :value="member.balance" is-link>
+      <cell title="我的余额" :value="'￥'+member.balance" link="/member/balance">
         <x-icon slot="icon" type="social-usd-outline" class="cell-icon"></x-icon>
       </cell>
       <cell title="我的积分" :value="member.point" link="/member/point">

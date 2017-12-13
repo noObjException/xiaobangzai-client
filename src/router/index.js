@@ -54,6 +54,10 @@ export default [
     component: Utils.getPath('member/identify')
   },
   {
+    path: '/member/balance',
+    component: Utils.getPath('member/balance')
+  },
+  {
     path: '/service',
     component: serviceLayout,
     children: [
