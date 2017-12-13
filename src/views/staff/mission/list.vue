@@ -43,7 +43,7 @@
 </template>
 
 <script>
-import { Group, Cell, XButton, Tab, TabItem, InlineLoading, LoadMore } from 'vux'
+import { Group, Cell, XButton, Tab, TabItem, LoadMore } from 'vux'
 import mixin from 'src/mixins/expressMission.js'
 import NoContent from 'src/components/NoContent'
 
@@ -73,7 +73,6 @@ export default {
     Tab,
     TabItem,
     NoContent,
-    InlineLoading,
     LoadMore
   },
   created () {
