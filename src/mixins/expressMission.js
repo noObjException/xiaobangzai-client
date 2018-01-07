@@ -81,6 +81,11 @@ export default {
               position: 'middle',
               onShow () {
                 that.$router.push({path: '/member/mission/detail', query: {id: id}})
+              },
+              onHide () {
+                if (that.$route.path === '/member/mission/detail') {
+                  window.location.reload()
+                }
               }
             })
           })
@@ -95,6 +100,11 @@ export default {
           text: '接单成功',
           onShow () {
             that.$router.push({path: '/staff/mission/detail', query: {id: id}})
+          },
+          onHide () {
+            if (that.$route.path === '/staff/mission/detail') {
+              window.location.reload()
+            }
           }
         })
       })
