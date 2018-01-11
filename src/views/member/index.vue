@@ -27,10 +27,10 @@
         <x-icon slot="icon" type="ios-checkmark-outline"></x-icon>
         <p>已完成</p>
       </div>
-      <div class="menu-item" @click="routeTo('cancel')">
+      <!-- <div class="menu-item" @click="routeTo('cancel')">
         <x-icon slot="icon" type="android-cancel"></x-icon>
         <p>已取消</p>
-      </div>
+      </div> -->
     </div>
 
     <group>
@@ -123,7 +123,7 @@ export default {
   background-color: #fff;
   display: flex;
   .menu-item {
-    width: 20%;
+    width: 25%;
     text-align: center;
     padding: 10px 0; 
     p {

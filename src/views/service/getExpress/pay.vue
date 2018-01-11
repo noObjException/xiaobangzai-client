@@ -20,7 +20,13 @@
     </group>
 
     <group labelWidth="150px"> 
-      <x-switch :title="deductionTitle" v-model="formData.is_use_point" :disabled="deductionDisabled" v-if="settings.switch_point_to_money"></x-switch>
+      <x-switch 
+        :title="deductionTitle" 
+        v-model="formData.is_use_point" 
+        :disabled="deductionDisabled" 
+        v-if="settings.switch_point_to_money"
+      >
+      </x-switch>
       <cell title="应付金额:">
         <span class="text-danger">￥ {{totalPrice}}</span>
       </cell>
