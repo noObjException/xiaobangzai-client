@@ -157,7 +157,7 @@ export default {
           price += this.settings.upstairs_price
         }
       }
-      return (price || 0).toFixed(2)
+      return price >=0 ? price.toFixed(2) : 0.00
     }
   },
   beforeRouteLeave (to, from, next) {
