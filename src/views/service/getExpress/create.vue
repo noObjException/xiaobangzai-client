@@ -145,19 +145,19 @@ export default {
     },
     // 计算配送费用
     totalPrice () {
-      let price = this.settings.price
+      let price = Number(this.settings.price)
       // 赏金
-      price += this.formData.bounty
+      price += Number(this.formData.bounty)
       // 快递规格价
       price += Number(this.formData.option_price)
       // 额外收费(上楼加价)
       if (this.settings.switch_upstairs_price) {
         const extraCosts = Object.values(this.formData.extra_costs)
         if (extraCosts.indexOf('upstairs_price') !== -1) {
-          price += this.settings.upstairs_price
+          price += Number(this.settings.upstairs_price)
         }
       }
-      return price >=0 ? price.toFixed(2) : 0.00
+      return price >= 0 ? price.toFixed(2) : 0
     }
   },
   beforeRouteLeave (to, from, next) {
